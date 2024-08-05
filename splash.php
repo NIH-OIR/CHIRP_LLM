@@ -1,15 +1,17 @@
 <?php
 
-if (empty($_SESSION['user_data']) || empty($_SESSION['user_data']['userid'])) {
-    $_SESSION['splash'] = true;
+$_SESSION['splash'] = true;
+$error = '';
 
-} else if (empty($_SESSION['authorized']) || $_SESSION['authorized'] !== true) {
+#file_put_contents("mylog.log", "\$_SESSION in Splash.php BEFORE changes = ".print_r($_SESSION,1)."\n\n\n", FILE_APPEND);
+
+if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) || $_SESSION['authorized'] !== true)){
     $error = '<br>The user ' . $_SESSION['user_data']['userid'] . " is not athorized to use this tool<br>\n";
     $_SESSION['splash'] = false;
-} else {
-    $_SESSION['splash'] = true;
-    $error = '';
 }
+
+#file_put_contents("mylog.log", "\$_SESSION in Splash.php AFTER changes = ".print_r($_SESSION,1)."\n\n\n", FILE_APPEND);
+#file_put_contents("mylog.log", "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n\n\n\n\n\n", FILE_APPEND);
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -18,7 +20,7 @@ if (empty($_SESSION['user_data']) || empty($_SESSION['user_data']['userid'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $config['app']['app_title']; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="style.v1.01b.css" rel="stylesheet">
+    <link href="style.v1.02.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -55,7 +57,7 @@ echo $config['app']['disclaimer_text'];
 
                     <p class=""><a title="Open the training video in a new window" href="<?php echo $config['app']['video_link']; ?>" target="_blank">Training Video</a></p>
                     <p class="newchat" style="text-align: center;">
-                    <a title="Click here to go to authentication" href="index.php">Proceed</a></p>
+                    <a title="Click here to go to authentication" href="auth_redirect.php">Proceed</a></p>
                     <!-- Chat messages will be added here -->
                 </div>
                 <div class="footer">

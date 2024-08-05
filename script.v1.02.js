@@ -1,6 +1,34 @@
 
 var chatContainer;
 
+function resetSessionTimer(remainingTime = sessionTimeout) {
+    clearTimeout(sessionTimer);
+    sessionTimer = setTimeout(logoutUser, remainingTime);
+}
+
+function checkSessionStatus() {
+    $.ajax({
+        url: 'session_status.php',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (!response.session_active) {
+                logoutUser();
+            } else {
+                resetSessionTimer(response.remaining_time * 1000); // Adjust timer based on server's response
+            }
+        },
+        error: function() {
+            console.error('Failed to check session status.');
+        }
+    });
+}
+
+function logoutUser() {
+    alert("Your session has expired. Please log in again.");
+    window.location.href = "index.php";
+}
+
 // Modify the event listener for DOMContentLoaded
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log("DOMContentLoaded - Current chat ID: ", chatId);
@@ -40,11 +68,13 @@ function startNewChat() {
         url: "new_chat.php",
         dataType: 'json',
         success: function(response) {
+            // Reset the session timer on every successful AJAX call
+            resetSessionTimer();
+
             // The response should contain the new chat's ID
             var newChatId = response.chat_id;
             // Navigate to the new chat page
-            //window.location.href = "?chat_id=" + newChatId;
-            window.location.href = "/"+application_path+"/" + newChatId;
+            window.location.href = "/" + newChatId;
         }
     });
 }
@@ -94,9 +124,12 @@ function deleteChat(chatId) {
                 chat_id: chatId
             },
             success: function() {
+                // Reset the session timer on every successful AJAX call
+                resetSessionTimer();
+
                 // Reload the page to refresh the list of chats
                 //location.reload();
-                window.location.href = "/"+application_path+"/";
+                window.location.href = "/";
             }
         });
     }
@@ -133,6 +166,9 @@ function submitEdit(chatId) {
             title: newTitle
         },
         success: function() {
+            // Reset the session timer on every successful AJAX call
+            resetSessionTimer();
+
             // Reload the page to refresh the list of chats
             location.reload();
         }
@@ -159,6 +195,7 @@ $(document).ready(function(){
         data: { chat_id: chatId, user: user },
         dataType: 'json',
         success: function(chatMessages) {
+                resetSessionTimer(); // Reset the session timer on every successful AJAX call
 
             // Display messages from the selected chat
             chatMessages.forEach(function (message) {
@@ -267,15 +304,15 @@ $(document).ready(function(){
                     $('.waiting-indicator').hide();
 
                     console.log("This is the response - ");
-                    //console.log(response);
+                    console.log(response);
 
                     var jsonResponse = JSON.parse(response);
                     var gpt_response = jsonResponse['gpt_response'];
                     var deployment = jsonResponse['deployment'];
                     var error = jsonResponse['error'];
-                    //console.log(error)
+                    console.log(error)
                     console.log(deployment)
-                    //console.log(gpt_response)
+                    console.log(gpt_response)
 
 
                     // Check if gpt_response is a JSON string, and if so, parse it
@@ -298,7 +335,8 @@ $(document).ready(function(){
                     }
 
                     if (jsonResponse.new_chat_id) {
-                        window.location.href = "/"+application_path+"/" + jsonResponse.new_chat_id;
+                        //console.log(jsonResponse)
+                        window.location.href = "/" + jsonResponse.new_chat_id;
                     }
 
                     var userMessageDecoded = atob(messageContent);

@@ -25,7 +25,9 @@ foreach(array_keys($models) as $m) {
     <script>
         var application_path = "<?php echo $application_path; ?>";
         var deployments = <?php echo json_encode($deployments_json); ?>;
-
+        var sessionTimeout = <?php echo $sessionTimeout * 1000; ?>; // Convert seconds to milliseconds
+        var deployment = "<?php echo $deployment; ?>";
+        var temperature = "<?php echo $_SESSION['temperature']; ?>";
     </script>
 </head>
 <body>
@@ -72,7 +74,7 @@ foreach(array_keys($models) as $m) {
                     }
                     echo '<div class="chat-item '.$class.'" id="chat-' . htmlspecialchars($chat['id']) . '">';
 
-                    echo '<a class="chat-link chat-title" title="Load chat into context window" href="/'.$application_path.'/' . htmlspecialchars($chat['id']) . '">' . htmlspecialchars($chat['title']) . '</a>';
+                    echo '<a class="chat-link chat-title" title="Load chat into context window" href="' . htmlspecialchars($chat['id']) . '">' . htmlspecialchars($chat['title']) . '</a>';
                     echo '<img class="chat-icon edit-icon" src="images/chat_edit.png" alt="Edit this chat" title="Edit this chat">';
                     echo '<img class="chat-icon delete-icon" src="images/chat_delete.png" alt="Delete this chat" title="Delete this chat">';
                     echo '</div>';
@@ -87,10 +89,6 @@ foreach(array_keys($models) as $m) {
                 <p class="feedback "><?php echo $config['app']['feedback_text']; ?>
                 </br>
                 </br>
-                <a title="Open a link to the Teams interface" href="<?php echo $config['app']['teams_link']; ?>" target="_blank">Connect in Teams</a></p>
-                <p class=""><a title="Open a new window to submit feedback" href="<?php echo $config['app']['feedback_link']; ?>" target="_blank">Submit Feedback</a></p>
-                <p class=""><a title="Open the training video in a new window" href="<?php echo $config['app']['video_link']; ?>" target="_blank">Training Video</a></p>
-                <p><a title="Open the disclosure information in a new window" href="<?php echo $config['app']['disclosure_link']; ?>" target="_Blank">Vulnerability Disclosure</a></p>
             </div><!-- End Menu bottom content -->
 
 
@@ -111,12 +109,25 @@ foreach(array_keys($models) as $m) {
                     <textarea class="form-control" id="userMessage" aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
                 </form>
 
-                <form onsubmit="saveMessage()" id="model_select" action="" method="post" onsubmit="saveMessage()" style="display: inline-block; margin-left: 20px; margin-right: 10px; margin-top: 15px; border-top: 1px solid white; ">
-                    <label for="model">Select Model</label>: <select title="Choose between available chat models" name="model" onchange="document.getElementById('model_select').submit();">
+                <form onsubmit="saveMessage()" id="model_select" action="" method="post" style="display: inline-block; margin-left: 20px; margin-right: 10px; margin-top: 15px; border-top: 1px solid white; ">
+                    <label for="model" title="">Select Model</label>: <select title="Choose between available chat models" name="model" onchange="document.getElementById('model_select').submit();">
                         <?php
-                        foreach ($models as $m => $label) {
+                        foreach ($models as $m => $modelconfig) {
+                            #echo '<pre>'.print_r($modelconfig,1).'</pre>';
+                            $label = $modelconfig['label'];
+                            $tooltip = (!empty($modelconfig['tooltip'])) ? $modelconfig['tooltip'] : "";
                             $sel = ($m == $_SESSION['deployment']) ? 'selected="selected"' : '';
-                            echo '<option value="'.$m.'"'.$sel.'>'.$label.'</option>'."\n";
+                            echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
+                        }
+                        ?>
+                    </select>
+                </form>
+                <form onsubmit="saveMessage()" id="temperature_select" action="" method="post" style="display: inline-block; margin-left: 20px; margin-right: 10px; margin-top: 15px; border-top: 1px solid white; ">
+                    <label for="temperature">Temperature</label>: <select title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially." name="temperature" onchange="document.getElementById('temperature_select').submit();">
+                        <?php
+                        foreach ($temperatures as $t) {
+                            $sel = ($t == $_SESSION['temperature']) ? 'selected="selected"' : '';
+                            echo '<option value="'.$t.'"'.$sel.'>'.$t.'</option>'."\n";
                         }
                         ?>
                     </select>
@@ -130,10 +141,18 @@ foreach(array_keys($models) as $m) {
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
                         </p>
                     <?php else: ?>
-                        <input type="file" name="pdfDocument" aria-label="File upload button" accept=".pdf,.docx,.pptx,.txt,.md,.json,.xml" style="width:15em;" required onchange="this.form.submit()" />
+                        <input title="Document types accepted include PDF, XML, JSON, Word, PowerPoint, Text, and Markdown. At this time we do not support Excel or CSV files." type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.pptx,.txt,.md,.json,.xml" style="width:15em;" required onchange="this.form.submit()" />
                     <?php endif; ?>
-
                 </form>
+<?php 
+                    if(!empty($_SESSION['error'])) {
+                        echo "<script>alert('Error: ".$_SESSION['error']."');</script>";
+                        $_SESSION['error']="";
+                        unset($_SESSION['error']);
+        
+                    }
+?>
+
                 <form style="display: inline-block; float: right; margin-top: 15px; margin-right: 30px;">
                     <button title="Print the existing chat session" aria-label="Print button" onClick="printChat()" id="printButton">Print</button>
                 </form>
@@ -155,9 +174,16 @@ foreach(array_keys($models) as $m) {
             document.querySelector('.menu').classList.toggle('active');
         });
         var chatId = <?php echo json_encode(isset($_GET['chat_id']) ? $_GET['chat_id'] : null); ?>;
-        var user = <?php echo json_encode($user); ?>;
+        var user = <?php echo json_encode(isset($user) ? $user : null); ?>;
+
+
     </script>
     <script src="script.v1.02.js"></script>
+    <script>
+        //document.addEventListener('DOMContentLoaded', function() {
+            var sessionTimer = setTimeout(logoutUser, sessionTimeout);
+        //});
+    </script>
 <script>
 function printChat() {
 window.print();

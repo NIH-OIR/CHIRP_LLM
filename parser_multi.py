@@ -1,104 +1,86 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+
+import sys
+import os
 from docx import Document
+import chardet
+import fitz  # PyMuPDF
+from pptx import Presentation
 from docx.table import Table
 from docx.text.paragraph import Paragraph
-import sys
-from pdfminer.high_level import extract_text
-from pptx import Presentation
 from pptx.shapes.group import GroupShape
 from pptx.enum.shapes import MSO_SHAPE_TYPE
-import os
 
-'''
-This function will return text from a  file. Currently supports .txt, .md, .json, .xml, .docx, 
-.pptx, and .pdf files.
+#print("All modules are successfully imported.")
 
-Input:  filepath (string) - the path to the file
-Output: text (string) - the contents of the file
-'''
-def parse_doc(file, filename):
+def parse_doc(tmp_file, original_filename):
+    #print(f"Parsing file: {tmp_file} with original filename: {original_filename}")  # Debugging output
 
     # Check if file exists
-    if not os.path.exists(file):
+    if not os.path.exists(tmp_file):
         raise ValueError('File does not exist')
 
     # Check if file is not empty
-    if os.path.getsize(file) == 0:
+    if os.path.getsize(tmp_file) == 0:
         raise ValueError('File is empty')
 
-    if filename.endswith('.txt') or filename.endswith('.md') or filename.endswith('.json') or filename.endswith('.xml'):
-        return parse_txt(file, filename)
-    elif filename.endswith('.docx'):
-        return parse_docx(file, filename)
-    elif filename.endswith('.pptx'):
-        return parse_pptx(file, filename)
-    elif filename.endswith('.pdf'):
-        return parse_pdf(file, filename)
+    #print(f"File extension: {os.path.splitext(original_filename)[1]}")  # Debugging output
+
+    if original_filename.endswith('.txt') or original_filename.endswith('.md') or original_filename.endswith('.json') or original_filename.endswith('.xml'):
+        #print("File type: Text-based")  # Debugging output
+        return parse_txt(tmp_file)
+    elif original_filename.endswith('.docx'):
+        #print("File type: DOCX")  # Debugging output
+        return parse_docx(tmp_file)
+    elif original_filename.endswith('.pptx'):
+        #print("File type: PPTX")  # Debugging output
+        return parse_pptx(tmp_file)
+    elif original_filename.endswith('.pdf'):
+        #print("File type: PDF")  # Debugging output
+        return parse_pdf(tmp_file)
     else:
         raise ValueError('File type not supported')
 
+def parse_pdf(file):
+    #print("Entering parse_pdf")  # Debugging output
 
-'''
-This function will return text from a pdf file. It does not ready any images. And it does not 
-read tables intelligently. It will simply read the text in the order it appears in the pdf.
+    try:
+        doc = fitz.open(file)
+        text = ""
+        for page_num in range(len(doc)):
+            #print(f"Processing page {page_num}")  # Debugging output
+            page = doc.load_page(page_num)
+            text += page.get_text()
+    except Exception as e:
+        #print(f"Error extracting text from PDF: {str(e)}")  # Debugging output
+        return f"Error extracting text from PDF: {str(e)}"
 
-Input:  filepath (string) - the path to the file
-Output: text (string) - the contents of the file
-'''
-def parse_pdf(file, filename):   
-
-    # Check if file is a pdf
-    if not filename.endswith('.pdf'):
-        raise ValueError('File type not supported')
-
-    output = extract_text(file)    
-    if output == "":
+    if text.strip() == "":
+        #print("The file returned no content")  # Debugging output
         return "The file returned no content"
-    else: 
-        return output
+    else:
+        #print("PDF parsing completed successfully")  # Debugging output
+        return text
 
-'''
-This function will return text from a docx file. It does not ready any images or headers/footers.
+def parse_docx(file):
+    #print("Entering parse_docx")  # Debugging output
 
-Input:  filepath (string) - the path to the file
-Output: text (string) - the contents of the file
-'''
-def parse_docx(file, filename):
-
-    # Check if file is a docx
-    if not filename.endswith('.docx'):
-        raise ValueError('File type not supported')
-
-    # loads the document
     document = Document(file)
-
-    # We will build a string of the text in the document
     text = ''
-
-    # The docx package breaks the document into different parts. Here we iterate over the paragrphas
-    # and tables in the document and add them to the string. We could revisit this and how we add 
-    # whitespace, etc.
     for item in document.iter_inner_content():
         if isinstance(item, Paragraph):            
-            text +=  item.text +'\n'
+            text += item.text + '\n'
         elif isinstance(item, Table):
             text += 'Table'
             for row in item.rows:
                 for cell in row.cells:
                     text += cell.text + '\t'
-                text+='\n'  
-
-    # Potential TODO - read headers/footers
-    
+                text += '\n'
+    #print("DOCX parsing completed successfully")  # Debugging output
     return text
 
-'''
-Helper function for parse_pptx. This function will recursively check for text in a set of shapes.
-'''
 def check_recursively_for_text(this_set_of_shapes, text_run):
     for shape in this_set_of_shapes:
-
-        # If this is a group, we have to call it recursively to get down to text/tables
         if shape.shape_type == MSO_SHAPE_TYPE.GROUP:
             check_recursively_for_text(shape.shapes, text_run)
         else:
@@ -114,46 +96,42 @@ def check_recursively_for_text(this_set_of_shapes, text_run):
                     text_run.append(row_text)
     return text_run
 
-'''
-This function will return text from a pptx file
-'''
-def parse_pptx(file, filename):
+def parse_pptx(file):
+    #print("Entering parse_pptx")  # Debugging output
 
-    # Check if file is a pptx
-    if not filename.endswith('.pptx'):
-        raise ValueError('File type not supported')
-
-    # loads the presentation
     presentation = Presentation(file)
-
-    # We will build a string of the text in the presentation by iterating over slides
-    # and finding all text frames, tables, and groups. This skips images and other objects.
     text = []
     for slide in presentation.slides:
         text = check_recursively_for_text(slide.shapes, text)
-    
+    #print("PPTX parsing completed successfully")  # Debugging output
     return '\n'.join(text)
 
+def parse_txt(file):
+    #print("Entering parse_txt")  # Debugging output
 
-'''
-This function will return text from an ASCII file. Currently this accepts .txt, .md, .json, and .xml files.
+    with open(file, 'rb') as f:
+        raw_data = f.read()
+        result = chardet.detect(raw_data)
+        encoding = result['encoding']
 
-Input:  filepath (string) - the path to the file
-Output: contents (string) - the contents of the file
-'''
-def parse_txt(file, filename):
+    try:
+        with open(file, 'r', encoding=encoding) as f:
+            contents = f.read()
+    except UnicodeDecodeError:
+        with open(file, 'r', encoding='ISO-8859-1') as f:
+            contents = f.read()
 
-    # Check if file is a txt, md, json, or xml
-    if not filename.endswith('.txt') and not filename.endswith('.md') and not filename.endswith('.json') and not filename.endswith('.xml'):
-        raise ValueError('File type not supported')
-
-    # Simply read characters of the file
-    with open(file, 'r') as f:
-        contents = f.read()
+    #print("Text file parsing completed successfully")  # Debugging output
     return contents
 
 if __name__ == '__main__':
+    #print("Script started")  # Debugging output
+    if len(sys.argv) < 3:
+        #print("Usage: python3 parser_multi.py <tmp_file> <original_filename>")  # Debugging output
+        sys.exit(1)
+    #print(f"File path: {sys.argv[1]}, Original filename: {sys.argv[2]}")  # Debugging output
     text = parse_doc(sys.argv[1], sys.argv[2])
+    #print("Parsing completed")  # Debugging output
     print(text)
-    
+
 

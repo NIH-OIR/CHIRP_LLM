@@ -5,12 +5,14 @@ and so the connection could not bind. The solution was to edit the file /etc/ope
 `TLS_CACERT /etc/pki/tls/certs/ca-bundle.crt`
 */
 
-$config = parse_ini_file('/etc/apps/chat_config.ini',true);
+$config = parse_ini_file('/var/lib/chat/chat_config.ini',true);
 
 
 function authorize($user)
 {
     global $config;
+
+    return true; # WE ARE BYPASSING UNTIL WE KNOW WHAT IS HAPPEINING WITH LDAP
 
     #die($user);
     

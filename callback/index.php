@@ -2,7 +2,7 @@
 
 session_start();
 
-$config = parse_ini_file('/etc/apps/chat_config.ini',true);
+$config = parse_ini_file('/var/lib/chat/chat_config.ini',true);
 
 require_once __DIR__ . '/auth.php';
 
@@ -12,6 +12,8 @@ if (isset($_GET['error'])) {
 }
 
 if (!isset($_GET['state']) || $_SESSION['oauth2state'] !== $_GET['state']) {
+    #echo '<pre>'.print_r($_GET,1).'</pre>'; 
+    #echo '<pre>'.print_r($_SESSION,1).'</pre>'; 
     unset($_SESSION['oauth2state']);
     exit('Invalid state');
 }

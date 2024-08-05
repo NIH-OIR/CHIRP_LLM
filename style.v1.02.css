@@ -52,8 +52,8 @@ body {
     border: solid 1px lightgray;
 }
 .logo {
-    max-width: 180px;
-    width: 90%;
+    max-width: 260px;
+    width: 100%;
     margin: 10px;
     margin-right: 20px;
 }
@@ -77,7 +77,8 @@ body {
 }
 .menu {
     overflow: hidden;
-    background-color: #343a40;
+    /*background-color: #343a40;*/
+    background-color: #1e558a;
     color: white;
     padding: 15px;
     /*
@@ -174,7 +175,8 @@ body {
 }
 
 .current-chat {
-    background-color: #545a60;
+    /*background-color: #545a60;*/
+    background-color: #1d6ab8;
     min-width: 230px;
 }
 
