@@ -69,7 +69,7 @@ $application_path = (!empty($config['app']['application_path'])) ? $config['app'
 
 // Verify that there is a chat with this id for this user
 // If a 'chat_id' parameter was passed, store its value as an integer in the session variable 'chat_id'
-$chat_id = filter_input(INPUT_GET, 'chat_id', FILTER_SANITIZE_STRING);
+$chat_id = filter_input(INPUT_GET, 'chat_id', FILTER_UNSAFE_RAW);
 if (!verify_user_chat($user, $chat_id)){
     echo " -- " . $user . "<br>\n";
     die("Error: there is no chat record for the specified user and chat id. If you need assistance, please contact ".$email_help);
@@ -188,8 +188,10 @@ function get_recent_messages($chat_id, $user) {
 
 // Load configuration
 function load_configuration($deployment) {
+    // echo "lib.required line 191 deployment: ". $deployment;
     global $config;
     return [
+        'selected_model' => $deployment,
         'api_key' => trim($config[$deployment]['api_key'], '"'),
         'base_url' => $config[$deployment]['url'],
         'deployment_name' => $config[$deployment]['deployment_name'],
@@ -211,6 +213,10 @@ function get_gpt_response($message, $chat_id, $user) {
 // Call Azure OpenAI API
 function call_azure_api($config, $msg) {
     $url = $config['base_url'] . "/openai/deployments/" . $config['deployment_name'] . "/chat/completions?api-version=".$config['api_version'];
+    if ($config['selected_model'] == "azure-llama3") {
+        $url = $config['base_url'] . "/v1/chat/completions";
+    }
+    // echo "lib.required line 219 url : ". $url."</br>\n";
     $payload = [
         'messages' => $msg,
         "max_tokens" => $config['max_tokens'],
@@ -220,10 +226,19 @@ function call_azure_api($config, $msg) {
         "top_p" => 0.95,
         "stop" => ""
     ];
-    $headers = [
-        'Content-Type: application/json',
-        'api-key: ' . $config['api_key']
-    ];
+    $headers = [];
+    if ($config['selected_model'] == "azure-llama3") {
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: ' . $config['api_key'];
+
+        $payload[] = 'stop: 10000';
+    }
+    if ($config['selected_model'] == "azure-gpt4") {
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'api-key: ' . $config['api_key'];
+    }
+    // echo "lib.required line 240 payload json: ". json_encode($payload)."</br>";
+    // echo "lib.required line 241 headers : ". print_r($headers)."</br>";
     $response = execute_api_call($url, $payload, $headers);
     return $response;
 }
@@ -239,6 +254,11 @@ function execute_api_call($url, $payload, $headers) {
 
     $response = curl_exec($ch);
 
+    if ($response === FALSE) {
+        printf("cUrl error (#%d): %s<br>\n",
+        curl_errno($ch),
+        htmlspecialchars(curl_error($ch)));
+    }
     if (curl_errno($ch)) {
         error_log('Curl error: ' . curl_error($ch));
     }

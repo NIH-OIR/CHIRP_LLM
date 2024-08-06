@@ -8,7 +8,7 @@ require_once 'db.php';
 #echo "USER = $user\n";
 
 // If a 'chat_id' parameter was passed, store its value as an integer in the session variable 'chat_id'
-$chat_id = filter_input(INPUT_GET, 'chat_id', FILTER_SANITIZE_STRING);
+$chat_id = filter_input(INPUT_GET, 'chat_id', FILTER_UNSAFE_RAW);
 
 if (!$chat_id) {
     die("Invalid input");
