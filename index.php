@@ -180,9 +180,9 @@ foreach(array_keys($models) as $m) {
     </script>
     <script src="script.v1.02.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        //document.addEventListener('DOMContentLoaded', function() {
             var sessionTimer = setTimeout(logoutUser, sessionTimeout);
-        });
+        //});
     </script>
 <script>
 function printChat() {
