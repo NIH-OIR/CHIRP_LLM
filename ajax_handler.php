@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     #print_r($_POST);
 
-    $chat_id = filter_input(INPUT_POST, 'chat_id', FILTER_SANITIZE_STRING);
+    $chat_id = filter_input(INPUT_POST, 'chat_id', FILTER_UNSAFE_RAW);
 
     $new_chat_id = '';
     $document_name = (empty($_SESSION['document_name'])) ? '' : $_SESSION['document_name'];
