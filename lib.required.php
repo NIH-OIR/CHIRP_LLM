@@ -40,11 +40,20 @@ $_SESSION['user_data']['userid'] = 'azureuser';
 
 // Handle the splash screen
 if (empty($_SESSION['splash'])) $_SESSION['splash'] = '';
+#error_log("\$_SESSION in lib.required.php line 42 = ".print_r($_SESSION,1));
+#error_log("\$_SESSION authorized in lib.required.php line 43 = ".$_SESSION['authorized']);
+if (!isset($_SESSION['authorized']) || $_SESSION['authorized'] !== true) {
+    // error_log("\$INFO in lib.required.php line 45 before call auth_redirect.php ");
+    require_once "auth_redirect.php";
+} else {
+    if (empty($_SESSION['splash'])) {
+        // error_log("\$INFO in lib.required.php line 49 before call splash.php ");
+        require_once "splash.php";
+        exit;
+    }
+} 
 
-if ( (!empty($_SESSION['user_data']['userid']) && $_SESSION['authorized'] !== true) || empty($_SESSION['splash']) ) {
-    require_once 'splash.php';
-    exit;
-}
+
 
 // Start the PHP session to enable session variables
 $sessionTimeout = $config['session']['timeout'];  // Load session timeout from config
@@ -167,7 +176,7 @@ function logout() {
             $params["secure"], $params["httponly"]
         );
     }
-
+    if (!empty($_SESSION['splash'])) $_SESSION['splash'] = '';
     // Finally, destroy the session.
     session_destroy();
 
@@ -216,7 +225,7 @@ function call_azure_api($config, $msg) {
     if ($config['selected_model'] == "azure-llama3") {
         $url = $config['base_url'] . "/v1/chat/completions";
     }
-    // echo "lib.required line 219 url : ". $url."</br>\n";
+    // error_log("INFO: lib.required line 219 url : ". $url."\n");
     $payload = [
         'messages' => $msg,
         "max_tokens" => $config['max_tokens'],
@@ -237,8 +246,8 @@ function call_azure_api($config, $msg) {
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'api-key: ' . $config['api_key'];
     }
-    // echo "lib.required line 240 payload json: ". json_encode($payload)."</br>";
-    // echo "lib.required line 241 headers : ". print_r($headers)."</br>";
+    #error_log("INFO: lib.required line 240 payload json: ". json_encode($payload)."\n");
+    #error_log("INFO: lib.required line 241 headers : ". var_dump($headers)."\n");
     $response = execute_api_call($url, $payload, $headers);
     return $response;
 }
