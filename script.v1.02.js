@@ -49,12 +49,12 @@ document.getElementById('userMessage').addEventListener('input', (event) => {
     console.log("Saved draft message for chat ID " + chatId + ": ", event.target.value);
 });
 
-$('#messageForm').submit(function(e) {
-    console.log("Form submission for chat ID " + chatId);
-    // Rest of the code...
-    localStorage.removeItem('chatDraft_' + chatId);
-    console.log("Cleared draft message for chat ID " + chatId);
-});
+// $('#messageForm').submit(function(e) {
+//     console.log("Form submission for chat ID " + chatId);
+//     // Rest of the code...
+//     localStorage.removeItem('chatDraft_' + chatId);
+//     console.log("Cleared draft message for chat ID " + chatId);
+// });
 
 function sanitizeString(str) {
     var div = document.createElement('div');
@@ -189,7 +189,7 @@ $(document).ready(function(){
         $('.logout-link').hide();
     });
     */
-    console.log(chatId)
+    console.log(chatId);
     $.ajax({
         url: "get_messages.php",
         data: { chat_id: chatId, user: user },
@@ -303,16 +303,16 @@ $(document).ready(function(){
                     // Hide the waiting indicator
                     $('.waiting-indicator').hide();
 
-                    console.log("This is the response - ");
-                    console.log(response);
+                    //console.log("This is the response - ");
+                    //console.log(response);
 
                     var jsonResponse = JSON.parse(response);
                     var gpt_response = jsonResponse['gpt_response'];
                     var deployment = jsonResponse['deployment'];
                     var error = jsonResponse['error'];
-                    console.log(error)
-                    console.log(deployment)
-                    console.log(gpt_response)
+                    //console.log(error)
+                    //console.log(deployment)
+                    //console.log(gpt_response)
 
 
                     // Check if gpt_response is a JSON string, and if so, parse it

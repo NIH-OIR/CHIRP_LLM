@@ -95,7 +95,7 @@ foreach(array_keys($models) as $m) {
         </nav> <!-- End the menu column -->
 
         <main id="main-content" class="col-12 col-md-10 d-flex align-items-start flex-column main-content">
-            <h1 class="print-title"><?php echo $chatTitle;?></h1>
+            <h1 class="print-title"><?php print isset($chatTitle) ?  $chatTitle : "";?></h1>
 
 
 
