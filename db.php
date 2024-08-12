@@ -153,4 +153,84 @@ function update_chat_document($user, $chat_id, $document_name, $document_text) {
     $stmt->execute(['document_name' => $document_name, 'document_text' => $document_text, 'id' => $chat_id]);
 }
 
+// Check if a user with the given userid exists in the users table
+function user_exists($userid) {
+    global $pdo;
+
+    try {
+        // Prepare the SQL statement to check if the user exists
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE userid = :userid");
+        
+        // Execute the statement with the provided userid
+        $stmt->execute(['userid' => $userid]);
+        
+        // Fetch the result
+        $count = $stmt->fetchColumn();
+        
+        // Return true if the user exists, false otherwise
+        return $count > 0;
+    } catch (PDOException $e) {
+        error_log('Failed to check if user exists: ' . $e->getMessage());
+        return false;
+    }
+}
+
+
+// Insert user data into the users table
+function insert_user_data($first_name, $last_name, $preferred_username, $userid, $role) {
+    global $pdo;
+
+    // Check if the user data exists in the session
+    if (empty($first_name) || empty($last_name) || empty($preferred_username) || empty($userid) || empty($role) ) {
+        error_log("User data not found in session.");
+        return false;
+    }
+
+    // Extract user data from the session
+    // $name = $_SESSION['user_data']['name'];
+    // $first_name = $_SESSION['user_data']['first_name'];
+    // $last_name = $_SESSION['user_data']['last_name'];
+    // $preferred_username = $_SESSION['user_data']['preferred_username'];
+    // $userid = $_SESSION['user_data']['userid'];
+    // $role = $_SESSION['user_data']['role'];  // Use the role from the session
+    $ic = ''; // Replace with actual Institutional Component (IC) value
+    $pilot_api_keys = ''; // Placeholder, can be modified based on your logic
+    $llms_permitted = ''; // Placeholder, can be modified based on your logic
+
+    try {
+        // Prepare the SQL statement to insert the user data
+        $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, preferred_username, userid, role, ic, pilot_api_keys, llms_permitted, updated_at) 
+                                VALUES (:first_name, :last_name, :preferred_username, :userid, :role, :ic, :pilot_api_keys, :llms_permitted, NOW())");
+
+        // Execute the statement with the session data
+        $stmt->execute([
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'preferred_username' => $preferred_username,
+            'userid' => $userid,
+            'role' => $role,
+            'ic' => $ic,
+            'pilot_api_keys' => $pilot_api_keys,
+            'llms_permitted' => $llms_permitted,
+        ]);
+
+        return true; // Indicate success
+    } catch (PDOException $e) {
+        error_log('Failed to insert user data: ' . $e->getMessage());
+        return false;
+    }
+}
+
+if (isset($_POST['callInsertUserData'])) {
+    error_log("Calling function insert_user_data().");
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
+    $preferred_username = $_POST['preferred_username'];
+    $userid = $_POST['userid'];
+    $role = $_POST['selectedRole']; 
+    $returnData = insert_user_data($first_name, $last_name, $preferred_username, $userid, $role);
+    echo $returnData;
+}
+
+
 

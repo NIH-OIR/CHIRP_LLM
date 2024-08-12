@@ -17,7 +17,7 @@ if (!isset($_GET['state']) || $_SESSION['oauth2state'] !== $_GET['state']) {
     unset($_SESSION['oauth2state']);
     exit('Invalid state');
 }
-
+// error_log("INFO: GET['code']: ".$_GET['code']);
 if (isset($_GET['code'])) {
     $clientId = $config['openid']['clientId'];
     $client_secret = $config['openid']['client_secret'];
@@ -44,7 +44,7 @@ if (isset($_GET['code'])) {
 
     $response = curl_exec($ch);
     $responseData = json_decode($response, true);
-    
+    // error_log("INFO: responseData:".print_r($responseData, true));
     if (isset($responseData['access_token'])) {
         // Store the tokens securely! Maybe in your session or a secure cookie
         $_SESSION['tokens'] = $responseData;
@@ -60,7 +60,7 @@ if (isset($_GET['code'])) {
         curl_close($ch);
 
         $_SESSION['user_data'] = $userinfoData;
-
+        error_log("INFO callback/index.php: userinfoData = ".print_r($userinfoData, true));
         #$_SESSION['authorized'] = true;
         #/*
         if (authorize($userinfoData['preferred_username'])) {
@@ -68,6 +68,7 @@ if (isset($_GET['code'])) {
         } else {
             $_SESSION['authorized'] = false;
         }
+        error_log("INFO callback/index.php: SESSION['authorized'] = ".$_SESSION['authorized']);
         #*/
         // Redirect to your app's main page, or wherever you'd like
         header('Location: '.$config['openid']['header_url']);

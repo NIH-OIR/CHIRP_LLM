@@ -10,9 +10,11 @@ session_start();
 session_unset();
 session_destroy();
 */
+
 logout(); 
 
-header("Location: index.php");
+// header("Location: index.php");
+echo "<script>myWin = window.open('','_self'); window.close();</script>";
 
 exit();
 
