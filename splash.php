@@ -108,7 +108,7 @@ echo $config['app']['disclaimer_text'];
                 {
                     text: "Accept",
                     click: function() {
-                        var selectedRole = $("input[name=userRole]").val();
+                        var selectedRole = $("input[name=userRole]:checked").val();
                         var firstName = "<?php if (!empty($_SESSION['user_data']['first_name'])) echo $_SESSION['user_data']['first_name']; else echo ""; ?>";
                         var lastName = "<?php if (!empty($_SESSION['user_data']['last_name'])) echo $_SESSION['user_data']['last_name']; else echo ""; ?>";
                         var preferredUsername = "<?php if (!empty($_SESSION['user_data']['preferred_username'])) echo $_SESSION['user_data']['preferred_username']; else echo ""; ?>";
