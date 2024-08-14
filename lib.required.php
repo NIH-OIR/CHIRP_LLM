@@ -240,7 +240,7 @@ function call_azure_api($config, $msg) {
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'Authorization: ' . $config['api_key'];
 
-        $payload["stop"] = "10000";
+        $payload["stop"] = "None";
     }
     if ($config['selected_model'] == "azure-gpt4") {
         $headers[] = 'Content-Type: application/json';
