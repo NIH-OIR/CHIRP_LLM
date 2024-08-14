@@ -1,5 +1,8 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; 
+    height: 100%; 
+    overflow: hidden;
 }
 .p-2 {
     width: 100%;
@@ -13,9 +16,7 @@ body {
 .maincol-bottom {
     margin-bottom: auto;
 }
-.chat-container {
-    /*padding: 10px;*/
-}
+
 .skip-link {
     position: absolute;
     top: -40px;
@@ -84,7 +85,6 @@ body {
     /*
     width: 275px !important;
     flex: none !important; /* This prevents the column from growing or shrinking */
-    */
 }
 
 .menu a {
@@ -100,7 +100,12 @@ body {
     text-decoration: underline;
 }
 .menu p {
-    min-width: 230px;
+    width: 14%;
+    font-size: 12px;
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    margin-left: 0;
 }
 .maincolumn {
     width: 100%;
@@ -130,17 +135,25 @@ body {
     margin: 0px;
     margin-right: 6px;
 }
+
+.left-nav-chat-list {
+    width: 100%;
+    height: 60%;
+    overflow-y: auto;   
+    overflow-x: hidden;
+}
 .newchat {
     border: solid gray 1px;
     border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px; 
-    min-width: 230px;
+    padding: 5px;
+    margin: 10px 10px 10px 0px;
+    display: inline-block;
+    width: 100%;
 }
 .chat-item {
     position: relative;
     width: 100%;
-    padding: 10px 10px;
+    padding: 5px 10px;
     border-radius: 5px;
 }
 
@@ -177,7 +190,12 @@ body {
 .current-chat {
     /*background-color: #545a60;*/
     background-color: #1d6ab8;
-    min-width: 230px;
+    min-width: 100%;
+}
+
+.left-nav-bottom {
+    width: 100%;
+    height: 15%;
 }
 
 .logout-link {
@@ -200,9 +218,9 @@ body {
     display: none;
 }
 
-#printButton {
+/*#printButton {
 }
-
+*/
 /* Show the navbar with the hamburger menu on small screens */
 @media (max-width: 767.98px) { 
     .navbar {
@@ -245,25 +263,42 @@ body {
 }
 
 @media print {
-/* Hide elements not required in print view */
-form, #printButton, .header, .navbar, .menu, .maincol-bottom  {
-display: none !Important;
-}
-/* Adjust chat content to fill page */
-.main-content {
-width: 100%;
-margin: 0;
-padding: 0;
-}
-.maincol-top {
-display: block !important;
-overflow: visible !important;
+    /* Hide elements not required in print view */
+    form, #printButton, .header, .navbar, .menu, .maincol-bottom  {
+    display: none !Important;
+    }
+    /* Adjust chat content to fill page */
+    .main-content {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    }
+    .maincol-top {
+    display: block !important;
+    overflow: visible !important;
 
-}
-    
-.print-title {
-    display: block;
-    font-size: 14pt;
-}
+    }
+        
+    .print-title {
+        display: block;
+        font-size: 14pt;
+    }
 }
 
+.left-nav-top {
+    width: 100%;
+}
+
+/*style for tooltip*/
+.tooltip {
+    width : 60%;
+    --bs-tooltip-bg: #4b4343;
+    --bs-tooltip-arrow-height: 0.9rem;
+}
+.tooltip-inner {
+    max-width: 100% !important;
+}
+.tooltip-content {
+    text-align: left;
+    padding: 10px 15px;
+}

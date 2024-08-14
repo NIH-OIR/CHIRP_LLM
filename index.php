@@ -40,7 +40,7 @@ foreach(array_keys($models) as $m) {
 </nav>
 
 <div class="container-fluid"> <!-- start the Container-fluid -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <!-- <a href="#main-content" class="skip-link">Skip to main content</a> -->
     
 
     <div class="row header d-flex align-items-center"> <!-- Header Row -->
@@ -58,12 +58,18 @@ foreach(array_keys($models) as $m) {
 
 
     <div class="row flex-grow-1"> <!-- Begin the Content Row -->
-
+        <!-- Start the menu column -->
         <nav class="col-12 col-md-2 d-flex align-items-start flex-column menu">
 
-            <!-- Menu content here -->
-            <div class="p-2 "><!-- Start Menu top content -->
-                <p class="newchat"><a title="Create new chat" href="javascript:void(0);" onclick="startNewChat()">+&nbsp;&nbsp;New Chat</a></p>
+             <!-- Start Menu top content -->
+            <div class="left-nav-top">
+                <button type="button" class="btn btn-secondary" data-tip="about-content" data-toggle="tooltip" data-placement="right" style="width:100%;" id="aboutBtn" title="">
+                    About
+                </button>
+                <span class="newchat"><a title="Create new chat" href="javascript:void(0);" onclick="startNewChat()">+&nbsp;&nbsp;New Chat</a></span>
+            </div> <!-- End Menu top content -->
+            <!-- Chat List in Left Nav -->
+            <div class="left-nav-chat-list">
                 <?php
                 $path = get_path();
                 foreach ($all_chats as $chat) {
@@ -80,15 +86,12 @@ foreach(array_keys($models) as $m) {
                     echo '</div>';
                 }
                 ?>
-
-            </div> <!-- End Menu top content -->
+            </div>
     
-
-            <div class="mt-auto p-2"><!-- Start Menu bottom content -->
+            <!-- Start Menu bottom content -->
+            <div class="mt-auto left-nav-bottom">
                 <!-- Adding the feedback link -->
-                <p class="feedback "><?php echo $config['app']['feedback_text']; ?>
-                </br>
-                </br>
+                <p class="feedback"><?php echo $config['app']['feedback_text']; ?>
             </div><!-- End Menu bottom content -->
 
 
@@ -153,18 +156,37 @@ foreach(array_keys($models) as $m) {
                     }
 ?>
 
-                <form style="display: inline-block; float: right; margin-top: 15px; margin-right: 30px;">
+                <form style="display: block; float: right; margin-top: 15px; margin-right: 30px;">
                     <button title="Print the existing chat session" aria-label="Print button" onClick="printChat()" id="printButton">Print</button>
                 </form>
             </div><!-- End Chat body bottom -->
         </main> <!-- End the main-content column -->
 
     </div> <!-- end the Content Row -->
+
 </div> <!-- end the Container-fluid -->
     <div class="waiting-indicator" style="display: none;">
         <img src="images/Ripple-1s-59px.gif" alt="Loading...">
     </div>
 
+<!-- Tooltip Content -->
+<div class="tooltip bs-tooltip-top" role="tooltip" id="about-content" style="width:600px">
+  <div class="tooltip-content" style="max-width: 100%;text-align: left;">
+        <p>The Large Language Model (LLM) pilot, funded by the Office of Data Science and Strategy and led by the Office of Intramural Research (OIR), aims to establish a secure LLM environment for NIH Staff. The focus is primarily on IRP programs, allowing exploration of Generative Artificial Intelligence (GenAI) technology specifically LLMs, and their potential impact on our biomedical research enterprise. Ethical and responsible use of LLMs in support of NIH missions is a key consideration to balance the innovation and protection aspects of the technology. The pilot is governed by the IRP AI Task Force, chaired by Dr. Richard Scheuermann.
+        </p>
+        <p>To achieve its objectives, the pilot will collect limited demographic information, including IC (Institute/Center), user roles, and user prompts and responses from each LLM. This data will inform policy decisions and guide future implementations of similar technologies. Importantly, the collected information will be used solely for usage and statistical reporting purposes.   
+        </p>
+        <p>For more information on GenAI technology and resources at NIH, please reference to:</p>
+        <ul>
+            <li><a href="https://teams.microsoft.com/l/team/19%3awtMbBDK8XbVfyehH9C9tTJI6Sm7QPb5m_SLm9aeMiM41%40thread.tacv2/conversations?groupId=00b270d4-5cb5-4523-b7e6-352797cbcb85&tenantId=14b77578-9773-42d5-8507-251ca2dc2b06">NIH GenAI Community</a></li>
+            <li><a href="https://cloud.nih.gov/">NIH STRIDES Initiative</a></li>
+            <li>NIH OD <a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8YWxpY2lhLmxpbGxpY2hAbmloLmdvdnw0YzU5YjczN2ExZTc0YjAwMTc2ODA4ZGM4NGQ0OGU3N3wxNGI3NzU3ODk3NzM0MmQ1ODUwNzI1MWNhMmRjMmIwNnwwfDB8NjM4NTMxMjk1NjU5NjY1MTE3fFVua25vd258VFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wPXwwfHx8&sdata=eU1FclhNRERXbU9wVWVSekRDSDBUcHU3RHlSTUlRVEZvR1pBRUgwYnFDZz0%3d&clickparams=eyAiWC1BcHBOYW1lIiA6ICJNaWNyb3NvZnQgT3V0bG9vayIsICJYLUFwcFZlcnNpb24iIDogIjE2LjAuMTY3MzEuMjA2NzQiLCAiT1MiIDogIldpbmRvd3MiIH0%3d&SafelinksUrl=https%3a%2f%2fnih.sharepoint.com%2fsites%2fOD-CDATechnologyAvailabilityGuideCTAG%2fSitePages%2fAIGuidance_FoundationalInformationGenerativeAIRisks.aspx">AI Guidance - Foundational Information, Generative AI and Risks</a></li>
+        </ul>
+        <p>Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
+        <p>Notes: The following NIH and HHS <a href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
+  </div>
+</div>
+<!-- End Tooltip Content -->
 <!-- Include Bootstrap JS and its dependencies-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -176,13 +198,21 @@ foreach(array_keys($models) as $m) {
         var chatId = <?php echo json_encode(isset($_GET['chat_id']) ? $_GET['chat_id'] : null); ?>;
         var user = <?php echo json_encode(isset($user) ? $user : null); ?>;
 
-
     </script>
     <script src="script.v1.02.js"></script>
     <script>
         //document.addEventListener('DOMContentLoaded', function() {
             var sessionTimer = setTimeout(logoutUser, sessionTimeout);
         //});
+        $(document).ready(function(){
+            $("#aboutBtn").prop("title", )
+            $('[data-toggle="tooltip"]').tooltip({
+                html : true,
+                placement : "right",
+                trigger : "click",
+                title : $('#about-content').html()
+            });
+        });
     </script>
 <script>
 function printChat() {
