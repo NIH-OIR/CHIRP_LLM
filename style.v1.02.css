@@ -302,3 +302,10 @@ body {
     text-align: left;
     padding: 10px 15px;
 }
+
+#messageList {
+    height: 70%;
+    min-height: 70%;
+    width: 100%;
+    margin-top: 10px;
+}

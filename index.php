@@ -106,14 +106,14 @@ foreach(array_keys($models) as $m) {
             <div id="messageList" class="p-2 maincolumn maincol-top chat-container"><!-- Flex item chat body top -->
                     <!-- Chat messages will be added here -->
            </div><!-- End Flex item chat body top -->
-
+           <div id="thumbnails"></div>
             <div class="maincolumn maincol-bottom"><!-- Chat body bottom -->
                 <form id="messageForm">
                     <textarea class="form-control" id="userMessage" aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
                 </form>
 
                 <form onsubmit="saveMessage()" id="model_select" action="" method="post" style="display: inline-block; margin-left: 20px; margin-right: 10px; margin-top: 15px; border-top: 1px solid white; ">
-                    <label for="model" title="">Select Model</label>: <select title="Choose between available chat models" name="model" onchange="document.getElementById('model_select').submit();">
+                    <label for="model" title="">Select Model</label>: <select title="Choose between available chat models" id="model" name="model" onchange="document.getElementById('model_select').submit();">
                         <?php
                         foreach ($models as $m => $modelconfig) {
                             #echo '<pre>'.print_r($modelconfig,1).'</pre>';
@@ -144,7 +144,7 @@ foreach(array_keys($models) as $m) {
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
                         </p>
                     <?php else: ?>
-                        <input title="Document types accepted include PDF, XML, JSON, Word, PowerPoint, Text, and Markdown. At this time we do not support Excel or CSV files." type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.pptx,.txt,.md,.json,.xml" style="width:15em;" required onchange="this.form.submit()" />
+                        <input title="Document types accepted include PDF, XML, JSON, Word, PowerPoint, Text, and Markdown. At this time we do not support Excel or CSV files." type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.pptx,.txt,.md,.json,.xml,.png,.jpeg,.jpg" style="width:15em;" required onchange="this.form.submit()" />
                     <?php endif; ?>
                 </form>
 <?php 
@@ -199,11 +199,13 @@ foreach(array_keys($models) as $m) {
         var user = <?php echo json_encode(isset($user) ? $user : null); ?>;
 
     </script>
+    <script type="module" src="gemini_handler.js"></script>
     <script src="script.v1.02.js"></script>
     <script>
         //document.addEventListener('DOMContentLoaded', function() {
             var sessionTimer = setTimeout(logoutUser, sessionTimeout);
         //});
+
         $(document).ready(function(){
             $("#aboutBtn").prop("title", )
             $('[data-toggle="tooltip"]').tooltip({

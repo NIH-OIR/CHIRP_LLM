@@ -249,14 +249,43 @@ $(document).ready(function(){
         submitEdit(chatId);
     });
 
-    // Event listener for the Enter key press
-    userMessage.on("keydown", function (e) {
-        if (e.keyCode == 13 && !e.shiftKey) {
-            e.preventDefault();
-            $('#messageForm').submit();
-        }
+    var fileInputEl = $("input[type=file]");
+    var thumbnailsEl = $("#thumbnails");
+
+    fileInputEl.bind("input", () => {
+      thumbnailsEl.innerHTML = "";
+      for (const file of fileInputEl.files) {
+        const url = URL.createObjectURL(file);
+        thumbnailsEl.innerHTML += `<img class="thumb" src="${url}" onload="window.URL.revokeObjectURL(this.src)" />`;
+      }
     });
 
+    async function submitFormGemini() {
+        var result = await updateUIFromGemini(
+            document.querySelector("#messageList"),
+             () => getResultFromGemini($("#userMessage").val(), fileInputEl.prop('files')),
+             true,
+        ); 
+
+        $('#messageForm').append("<input type='hidden' name='geminiResult' id='geminiResult' value='"+result +"' />");
+        console.log("gemini return msg: "+result);
+        $('#messageForm').submit();
+    }
+
+    // Event listener for the Enter key press
+    $("#userMessage").on("keydown", function (e) {
+        if (e.keyCode == 13 && !e.shiftKey) {
+            e.preventDefault();
+            var selectedModel = $("#model option:selected").val(); console.log("selected model: "+selectedModel);           
+            if(selectedModel == 'gemini-1.5-flash') {
+                submitFormGemini();
+            } else {
+                $('#messageForm').submit();
+            }
+            
+            
+        }
+    });
     // Event listener for form submission
     $('#messageForm').submit(function(e) {
         e.preventDefault();
