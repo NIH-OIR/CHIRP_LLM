@@ -15,8 +15,10 @@ body {
     width: 100%;
 }
 .maincol-bottom {
-    margin-bottom: auto;
+    margin-bottom: 5px;
     width: 100%;
+    position: absolute;
+    bottom: 0;
 }
 
 .skip-link {
@@ -312,5 +314,8 @@ body {
 }
 
 .messageBox {
-    width: 100%;
+    width: 82%;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 40px;
 }

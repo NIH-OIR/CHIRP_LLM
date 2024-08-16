@@ -156,9 +156,10 @@ foreach(array_keys($models) as $m) {
                     }
 ?>
 
-                <form style="display: block; float: right; margin-top: 15px; margin-right: 30px;">
-                    <button title="Print the existing chat session" aria-label="Print button" onClick="printChat()" id="printButton">Print</button>
-                </form>
+
+                    <input type="button" value="Print" title="Print the existing chat session" aria-label="Print button" onClick="printChat()" 
+                            id="printButton" style = "width: 80px;margin-left: 100px;"/>
+
             </div><!-- End Chat body bottom -->
         </main> <!-- End the main-content column -->
 
