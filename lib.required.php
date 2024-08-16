@@ -222,10 +222,10 @@ function get_gpt_response($message, $chat_id, $user) {
 // Call Azure OpenAI API
 function call_azure_api($config, $msg) {
     $url = $config['base_url'] . "/openai/deployments/" . $config['deployment_name'] . "/chat/completions?api-version=".$config['api_version'];
-    if ($config['selected_model'] == "azure-llama3") {
+    if ($config['selected_model'] == "azure-llama3" || $config['selected_model'] == "mistral-nemo") {
         $url = $config['base_url'] . "/v1/chat/completions";
     }
-    // error_log("INFO: lib.required line 219 url : ". $url."\n");
+    #error_log("INFO: lib.required line 219 url : ". $url."\n");
     $payload = [
         'messages' => $msg,
         "max_tokens" => $config['max_tokens'],
@@ -236,18 +236,29 @@ function call_azure_api($config, $msg) {
         "stop" => ""
     ];
     $headers = [];
-    if ($config['selected_model'] == "azure-llama3") {
+    if ($config['selected_model'] == "azure-llama3" || $config['selected_model'] == "mistral-nemo") {
         $headers[] = 'Content-Type: application/json';
-        $headers[] = 'Authorization: ' . $config['api_key'];
+        $headers[] = 'Authorization: Bearer ' . $config['api_key'];
 
         $payload["stop"] = "None";
+    }
+    if ($config['selected_model'] == "mistral-nemo") {
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: Bearer ' . $config['api_key'];
+
+        unset($payload["frequency_penalty"]);
+        unset($payload["presence_penalty"]);
+        unset($payload["stop"]); 
+
+        $payload["safe_prompt"] = "false";
+        $payload["stream"] = false;
     }
     if ($config['selected_model'] == "azure-gpt4") {
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'api-key: ' . $config['api_key'];
     }
     #error_log("INFO: lib.required line 240 payload json: ". json_encode($payload)."\n");
-    #error_log("INFO: lib.required line 241 headers : ". var_dump($headers)."\n");
+    #error_log("INFO: lib.required line 241 headers json: ". json_encode($headers)."\n");
     $response = execute_api_call($url, $payload, $headers);
     return $response;
 }

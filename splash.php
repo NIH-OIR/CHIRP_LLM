@@ -43,7 +43,7 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
 ?>
             </div>
         </div>
-        <div id="roleSelectionDlg">
+        <div id="roleSelectionDlg" style="display:hidden">
             <div>
             Welcome to Chirp (Chat for IRP), a secure Large Language Models (LLMs) Environment Pilot.<br>
             Please indicate your main responsibility (functional role) at NIH:</br>
