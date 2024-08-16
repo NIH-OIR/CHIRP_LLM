@@ -12,9 +12,11 @@ body {
     overflow-y: scroll;
     margin-bottom: 10px;
     border: solid 0px blue;
+    width: 100%;
 }
 .maincol-bottom {
     margin-bottom: auto;
+    width: 100%;
 }
 
 .skip-link {
@@ -304,8 +306,11 @@ body {
 }
 
 #messageList {
-    height: 70%;
-    min-height: 70%;
+    min-height: 60%;
     width: 100%;
     margin-top: 10px;
+}
+
+.messageBox {
+    width: 100%;
 }
