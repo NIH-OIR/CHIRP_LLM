@@ -75,7 +75,7 @@ body {
     display: none; /* Hide by default */
 }
 .main-content {
-    /*height: calc(100vh - 140px);*/
+    height: calc(100vh - 70px);
     display: flex;
 }
 .menu {
