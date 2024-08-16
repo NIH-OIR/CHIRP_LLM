@@ -351,7 +351,7 @@ $(document).ready(function(){
     async function submitFormGemini() {
         var result = await updateUIFromGemini(
             document.querySelector("#messageList"),
-             () => getResultFromGemini($("#userMessage").val(), fileInputEl.prop('files')),
+             () => getResultFromGemini($("#userMessage").val(), $("input[type='file']").prop('files')),
              true,
         ); 
 
