@@ -64,7 +64,7 @@ foreach(array_keys($models) as $m) {
              <!-- Start Menu top content -->
             <div class="left-nav-top">
                 <button type="button" class="btn btn-secondary" data-tip="about-content" data-toggle="tooltip" data-placement="right" style="width:100%;" id="aboutBtn" title="">
-                    About
+                    About Chirp
                 </button>
                 <span class="newchat"><a title="Create new chat" href="javascript:void(0);" onclick="startNewChat()">+&nbsp;&nbsp;New Chat</a></span>
             </div> <!-- End Menu top content -->
