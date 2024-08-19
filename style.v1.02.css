@@ -16,7 +16,7 @@ body {
 }
 .maincol-bottom {
     margin-bottom: 5px;
-    width: 100%;
+    width: 82%;
     position: absolute;
     bottom: 0;
 }
@@ -317,5 +317,26 @@ body {
     width: 82%;
     position: absolute;
     bottom: 0;
-    margin-bottom: 40px;
+    margin-bottom: 80px;
+}
+
+.contactAcknowledgeTr{
+    height: 30px; 
+    font-size:small;
+    background-color: #f3e9e9
+}
+
+.contactAcknowledgeDiv{
+    float: right;
+    margin: 5px 30px 0 0;
+}
+
+.contactBtn {
+    width: 80px; 
+    margin-right: 20px; 
+    background-color: white;
+}
+.acknowledgement-tooltip {
+    width : 30%;
+    --bs-tooltip-bg: #4b4343;
 }
