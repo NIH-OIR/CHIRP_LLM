@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('userMessage').value = "";
         console.log("No saved message found for chat ID " + chatId);
     }
+    updateFileUploadByModel();
 });
 
 // Modify the event listener for the userMessage input
@@ -175,6 +176,81 @@ function submitEdit(chatId) {
     });
 }
 
+/*handle file upload for Gemini */
+function updateFileUploadByModel() {
+    var selectedModel = $("#model option:selected").val();
+    if (selectedModel == 'gemini-1.5-flash') {
+        $("input[type='file']").prop("accept", ".png,.jpeg,.jpg,.bmp,.gif");
+        $("input[type='file']").prop("title", "Gemini only accepted image file with following format: PNG, JPEG, JPG, BMP and GIF.");
+        $("input[type='file']").prop("multiple", true);
+    } else {
+        $("input[type='file']").prop("accept", ".pdf,.docx,.pptx,.txt,.md,.json,.xml");
+        $("input[type='file']").prop("title", "Document types accepted include PDF, XML, JSON, Word, PowerPoint, Text, and Markdown. At this time we do not support Excel or CSV files.");
+        $("input[type='file']").prop("multiple", false);
+    }
+}
+
+function fileUpload() {
+    var selectedModel = $("#model option:selected").val();
+    if (selectedModel == 'gemini-1.5-flash') { // handle file upload for Gemini
+        $("#userMessage").val("");
+        const fileInputEl = document.querySelector("input[type=file]");
+        const messageListEl = document.querySelector("#messageList");
+
+        console.log("file number:"+fileInputEl.files.length);
+        var i = 0;
+        for (const file of fileInputEl.files) {            
+            if (/\.(jpe?g|png|bmp|gif)$/i.test(file.name)) {
+                const reader = new FileReader();
+                reader.addEventListener("load",() => {
+                        const image = new Image();
+                        image.height = 100;
+                        image.title = file.name;
+                        image.src = reader.result;
+                        messageListEl.appendChild(image);
+                        scrollToBottom();
+                        i++;
+                        if (i == fileInputEl.files.length) {
+                            saveUploadedImgGemini();
+                        }                              
+                    },
+                    false,
+                );
+                reader.readAsDataURL(file);
+            }
+        }
+    } else {
+        $("#fileUpload").submit();
+    }
+}
+function saveUploadedImgGemini() { //save file to DB for Gemini
+    var uploadedImgArr = Array();
+    $("#messageList > img").each(function(){
+        var imgTitle = $(this).prop("title");
+        var imgSrc = $(this).prop("src");
+
+        var imgObj = {};
+        imgObj["title"] = imgTitle;
+        imgObj["source"] = imgSrc;
+        uploadedImgArr.push(imgObj);
+    });
+    // console.log("chat_id: "+chatId+" user: "+user+" images: "+JSON.stringify(uploadedImgArr));
+    $.ajax({
+        type: "POST",
+        url: "ajax_handler.php",
+        data: {
+            message: "",
+            chat_id: chatId,
+            user: user,
+            geminiResult: base64EncodeUnicode(JSON.stringify(uploadedImgArr))
+        },
+        success: function (response) {
+            // Hide the waiting indicator
+            console.log("save gemini uploaded images");
+        }
+    });
+}
+
 $(document).ready(function(){
     chatContainer = $(".chat-container");
     var userMessage = $("#userMessage");
@@ -202,26 +278,47 @@ $(document).ready(function(){
                 // Sanitize the received data
                 var sanitizedPrompt = sanitizeString(message.prompt).replace(/\n/g, '<br>');
                 var sanitizedReply = sanitizeString(message.reply).replace(/\n/g, '<br>');
-
-                // Display the user message (prompt)
-                var userMessageElement = $('<div class="message user-message"></div>').html(sanitizedPrompt);
-                userMessageElement.prepend('<img src="images/user.png" class="user-icon">'); // Add user icon
-                chatContainer.append(userMessageElement);
                 
+                if(sanitizedPrompt.length){
+                    // Display the user message (prompt)
+                    var userMessageElement = $('<div class="message user-message"></div>').html(sanitizedPrompt);
+                    userMessageElement.prepend('<img src="images/user.png" class="user-icon">'); // Add user icon
+                    chatContainer.append(userMessageElement);
+                }
+
                 // Check if the deployment configuration exists
                 if (deployments[message.deployment]) {
                     var imgSrc = 'images/' + deployments[message.deployment].image;
                     var imgAlt = deployments[message.deployment].image_alt;
 
-                    // Display the assistant message (reply)
-                    var assistantMessageElement = $('<div class="message assistant-message"></div>').html(sanitizedReply);
-                    assistantMessageElement.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" class="openai-icon">');
-                    chatContainer.append(assistantMessageElement);
+                    if (message.deployment != 'gemini-1.5-flash' || sanitizedPrompt.length > 0) { // text chat
+                        // Display the assistant message (reply)
+                        var assistantMessageElement = $('<div class="message assistant-message"></div>').html(sanitizedReply);
+                        assistantMessageElement.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" class="openai-icon">');
+                        chatContainer.append(assistantMessageElement);
+                    } else { // image uploaded for Gemini
+                        // console.log("image sanitizedReply: "+sanitizedReply);
+                        var uploadedImgArr = JSON.parse(sanitizedReply);
+                        chatContainer.append("<br>");
+                        var assistantMessageElement = $('<div class="message assistant-message"></div>');
+                        $.each(uploadedImgArr, function(key, imgObj) {
+                            var image = new Image();
+                            image.title = imgObj["title"];
+                            image.src = imgObj["source"];
+                            image.height = 100;
+                            assistantMessageElement.append(image);
+                        });
+                        assistantMessageElement.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" class="openai-icon">');
+                        chatContainer.append(assistantMessageElement);
+                    }
+                    
+
                 }
             });
 
             // Scroll to bottom after displaying messages
             scrollToBottom();
+            updateFileUploadByModel();
         }
     });
 
@@ -249,14 +346,62 @@ $(document).ready(function(){
         submitEdit(chatId);
     });
 
+
+
+    async function submitFormGemini() {
+        var result = await updateUIFromGemini(
+            document.querySelector("#messageList"),
+             () => getResultFromGemini($("#userMessage").val(), $("input[type='file']").prop('files')),
+             true,
+        ); 
+
+        $('#messageForm').append("<input type='hidden' name='geminiResult' id='geminiResult' value='"+result +"' />");
+        console.log("gemini return msg: "+result);
+
+        var rawMessageContent = userMessage.val().trim();
+        var sanitizedMessageContent = replaceNonAsciiCharacters(rawMessageContent);
+        var messageContent = base64EncodeUnicode(sanitizedMessageContent); // Encode in Base64 UTF-8
+
+        var rawGeminiResult = result.trim();
+        var sanitizedGeminiResult = replaceNonAsciiCharacters(rawGeminiResult);
+        var geminiResult = base64EncodeUnicode(sanitizedGeminiResult);
+
+
+        // Clear the textarea and localStorage right after form submission
+        userMessage.val("");
+        localStorage.removeItem('chatDraft_' + chatId);
+        console.log("Gemini chat submitted and message cleared for chat ID " + chatId);
+        if (messageContent !== "" && geminiResult !== "") {
+            userMessage.val("");
+            $.ajax({
+                type: "POST",
+                url: "ajax_handler.php",
+                data: {
+                    message: messageContent,
+                    chat_id: chatId,
+                    user: user,
+                    geminiResult: geminiResult
+                },
+                success: function (response) {
+                    console.log("save gemini response");
+                }
+            });
+        }
+
+    }
+
     // Event listener for the Enter key press
-    userMessage.on("keydown", function (e) {
+    $("#userMessage").on("keydown", function (e) {
         if (e.keyCode == 13 && !e.shiftKey) {
             e.preventDefault();
-            $('#messageForm').submit();
+            var selectedModel = $("#model option:selected").val();           
+            if(selectedModel == 'gemini-1.5-flash') {
+                submitFormGemini();
+            } else {
+                $('#messageForm').submit();
+            }            
         }
     });
-
     // Event listener for form submission
     $('#messageForm').submit(function(e) {
         e.preventDefault();
@@ -273,11 +418,10 @@ $(document).ready(function(){
         var messageContent = base64EncodeUnicode(sanitizedMessageContent); // Encode in Base64 UTF-8
 
 
-
-    // Clear the textarea and localStorage right after form submission
-    userMessage.val("");
-    localStorage.removeItem('chatDraft_' + chatId);
-    console.log("Form submitted and message cleared for chat ID " + chatId);
+        // Clear the textarea and localStorage right after form submission
+        userMessage.val("");
+        localStorage.removeItem('chatDraft_' + chatId);
+        console.log("Form submitted and message cleared for chat ID " + chatId);
 
 
 

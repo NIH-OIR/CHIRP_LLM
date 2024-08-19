@@ -210,13 +210,19 @@ function load_configuration($deployment) {
     ];
 }
 
-function get_gpt_response($message, $chat_id, $user) {
-    $config = load_configuration($GLOBALS['deployment']);
-    $msg = get_chat_thread($message, $chat_id, $user);
+function get_gpt_response($message, $chat_id, $user, $geminiResult) {
+    $selectedModel = $GLOBALS['deployment'];
+    #error_log("DEBUG lib.required.php get_gpt_response() selected model: ".$selectedModel);
+    if ($selectedModel == 'gemini-1.5-flash') {
+        return process_api_response($geminiResult, $selectedModel, $chat_id, $message);
+    } else {
+        $config = load_configuration($selectedModel);
+        $msg = get_chat_thread($message, $chat_id, $user);
 
-    $response = call_azure_api($config, $msg);
+        $response = call_azure_api($config, $msg);
 
-    return process_api_response($response, $GLOBALS['deployment'], $chat_id, $message);
+        return process_api_response($response, $selectedModel, $chat_id, $message);
+    }
 }
 
 // Call Azure OpenAI API
@@ -225,7 +231,7 @@ function call_azure_api($config, $msg) {
     if ($config['selected_model'] == "azure-llama3" || $config['selected_model'] == "mistral-nemo") {
         $url = $config['base_url'] . "/v1/chat/completions";
     }
-    #error_log("INFO: lib.required line 219 url : ". $url."\n");
+    #error_log("INFO: lib.required call_azure_api() url : ". $url."\n");
     $payload = [
         'messages' => $msg,
         "max_tokens" => $config['max_tokens'],
@@ -289,21 +295,32 @@ function execute_api_call($url, $payload, $headers) {
 
 // Process API Response
 function process_api_response($response, $deployment, $chat_id, $message) {
-    $response_data = json_decode($response, true);
-    if (isset($response_data['error'])) {
-        error_log('API error: ' . $response_data['error']['message']);
-        return [
-            'deployment' => $deployment,
-            'error' => true,
-            'message' => $response_data['error']['message']
-        ];
+    #error_log("DEBUG lib.required.php process_api_response() selected model: ".$deployment);
+    if ($deployment != 'gemini-1.5-flash') {
+        $response_data = json_decode($response, true);
+        if (isset($response_data['error'])) {
+            error_log('API error: ' . $response_data['error']['message']);
+            return [
+                'deployment' => $deployment,
+                'error' => true,
+                'message' => $response_data['error']['message']
+            ];
+        } else {
+            $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
+            create_exchange($chat_id, $message, $response_text);
+            return [
+                'deployment' => $deployment,
+                'error' => false,
+                'message' => $response_text
+            ];
+        }
     } else {
-        $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
-        create_exchange($chat_id, $message, $response_text);
+        #error_log("DEBUG lib.required.php process_api_response() gemini result: ".$response);
+        create_exchange($chat_id, $message, $response);
         return [
             'deployment' => $deployment,
             'error' => false,
-            'message' => $response_text
+            'message' => $response
         ];
     }
 }

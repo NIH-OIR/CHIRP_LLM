@@ -1,0 +1,226 @@
+<!doctype html>
+<!--
+ * @license
+ * Copyright 2024 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="utils/main.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <title>Generative AI - Text and Image</title>
+  </head>
+
+  <body>
+    <header>Generative AI - Text and Image</header>
+    <div class="form-container">
+      <form id="form">
+        <input type="file" id="file'" multiple />
+        <input id="prompt" />
+        <button type="submit">Send</button>
+      </form>
+      <div id="thumbnails"></div>
+    </div>
+    <div class="container">
+      <blockquote id="result"></blockquote>
+    </div>
+
+    <script type="module">
+      import {
+        getGenerativeModel,
+        fileToGenerativePart,
+        updateUI,
+      } from "./utils/shared.js";
+
+      async function run(prompt, files) {
+        const imageParts = await Promise.all(
+          [...files].map(fileToGenerativePart),
+        );
+
+        const model = await getGenerativeModel({
+          model: "gemini-1.5-flash",
+        });
+
+        return model.generateContentStream([...imageParts, prompt]);
+      }
+
+      const fileInputEl = document.querySelector("input[type=file]");
+      const thumbnailsEl = document.querySelector("#thumbnails");
+
+      fileInputEl.addEventListener("input", () => {
+        thumbnailsEl.innerHTML = "";
+        for (const file of fileInputEl.files) {
+          const url = URL.createObjectURL(file);
+          thumbnailsEl.innerHTML += `<img class="thumb" src="${url}" onload="window.URL.revokeObjectURL(this.src)" />`;
+        }
+      });
+
+      document
+        .querySelector("#form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const promptEl = document.querySelector("#prompt");
+          const resultEl = document.querySelector("#result");
+
+          updateUI(
+            resultEl,
+            () => run(promptEl.value, fileInputEl.files),
+            true,
+          );
+        });
+    </script>
+  </body>
+</html>
+[root@espresso gemini]# ll
+total 12
+-rw-r--r--. 1 root root 2870 Aug 14 13:52 chat.html
+-rw-r--r--. 1 root root   53 Aug 14 13:55 config.ini
+-rw-r--r--. 1 root root 2746 Aug 14 13:56 index.html
+drwxr-xr-x. 2 root root   39 Aug 14 14:30 utils
+[root@espresso gemini]# cd utils/
+[root@espresso utils]# ll
+total 8
+-rw-r--r--. 1 root root 1912 Aug 14 13:51 main.css
+-rw-r--r--. 1 root root 3001 Aug 14 14:02 shared.js
+[root@espresso utils]# cat main.css 
+/**
+ * @license
+ * Copyright 2024 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+header {
+  border-bottom: 2px solid rgb(127, 127, 127, 0.5);
+  font-size: 24px;
+  padding: 16px;
+  text-align: center;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+}
+
+.loading::after {
+  content: "Loading...";
+  display: block;
+  font-size: 80%;
+  font-style: italic;
+  margin: 16px 0;
+}
+
+.loading {
+  opacity: 0.5;
+}
+
+.error {
+  color: red;
+}
+
+.container,
+header,
+.form-container {
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+.form-container {
+  border-bottom: 2px solid rgb(127, 127, 127, 0.5);
+}
+
+img.thumb {
+  border: 1px solid grey;
+  border-radius: 8px;
+  height: 100px;
+  margin: 0px 16px 16px 0;
+  padding: 2px;
+  width: 100px;
+}
+
+#form { 
+  flex-direction: column;
+}
+
+#form > * {
+  margin: 10px 0;
+}
+
+.history-item {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+#file {
+  flex-grow: 0;
+}
+
+#prompt {
+  margin: 4px;
+  padding: 2px;
+  width: 100%;
+}
+
+button {
+  padding: 2px 16px;
+}
+
+.name {
+  flex-shrink: 0;
+  font-size: 80%;
+  margin: 16px 16px 16px 0;
+  opacity: 0.5;
+  text-align: right;
+  width: 50px;
+}
+
+blockquote {
+  margin: 0;
+}
+
+.history-item {
+  padding: 0 8px 0 0;
+}
+
+.history-item.model-role {
+  background: rgba(127, 127, 127, 0.1);
+}
+
+.history-item > blockquote {
+  flex-grow: 1;
+  margin: 0;
+}
