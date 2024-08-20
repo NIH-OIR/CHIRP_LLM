@@ -33,3 +33,19 @@ CREATE TABLE `exchange` (
   CONSTRAINT `fk_exchange_chat` FOREIGN KEY (`chat_id`) REFERENCES `chat` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Create table users
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `preferred_username` varchar(255) NOT NULL,
+  `userid` varchar(100) NOT NULL,
+  `role` varchar(100) NOT NULL,
+  `ic` varchar(100) DEFAULT NULL,
+  `pilot_api_keys` varchar(255) DEFAULT NULL,
+  `llms_permitted` varchar(255) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY `id` (`id`),
+  UNIQUE KEY `userid` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
