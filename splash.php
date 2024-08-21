@@ -103,7 +103,9 @@ echo $config['app']['disclaimer_text'];
             title: '',
             open: function( event, ui ) {
                 $(".ui-dialog-titlebar-close").hide();
-                event.preventDefault();
+                $("input[type='radio']").each(function(){
+                    $(this).blur();
+                });
             },
             buttons: [
                 {

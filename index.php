@@ -111,8 +111,10 @@ foreach(array_keys($models) as $m) {
                 <textarea class="form-control" id="userMessage" aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
             </form>
             <div class="maincol-bottom"><!-- Chat body bottom -->
-
-                <form onsubmit="saveMessage()" id="model_select" action="" method="post" style="display: inline-block; margin-left: 20px; margin-right: 10px; margin-top: 15px; border-top: 1px solid white; ">
+                <table style = "width:100%">
+                <tr>
+                <td style="width: 30%;">
+                <form onsubmit="saveMessage()" id="model_select" action="" method="post" style="margin: 5px 0 10px 20px;">
                     <label for="model" title="">Select Model</label>: <select title="Choose between available chat models" id="model" name="model" onchange="document.getElementById('model_select').submit();">
                         <?php
                         foreach ($models as $m => $modelconfig) {
@@ -125,7 +127,9 @@ foreach(array_keys($models) as $m) {
                         ?>
                     </select>
                 </form>
-                <form onsubmit="saveMessage()" id="temperature_select" action="" method="post" style="display: inline-block; margin-left: 20px; margin-right: 10px; margin-top: 15px; border-top: 1px solid white; ">
+                </td>
+                <td style="width: 25%;">
+                <form onsubmit="saveMessage()" id="temperature_select" action="" method="post" style="margin: 5px 0 10px 0;">
                     <label for="temperature">Temperature</label>: <select title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially." name="temperature" onchange="document.getElementById('temperature_select').submit();">
                         <?php
                         foreach ($temperatures as $t) {
@@ -135,7 +139,9 @@ foreach(array_keys($models) as $m) {
                         ?>
                     </select>
                 </form>
-                <form id="fileUpload" method="post" action="upload.php" id="document-uploader" enctype="multipart/form-data" style="display: inline-block; margin-top: 15px; margin-left: 30px;">
+                </td>
+                <td style="width: 25%;">
+                <form id="fileUpload" method="post" action="upload.php" id="document-uploader" enctype="multipart/form-data" style="margin: 5px 0 10px 0;">
                     <!-- Hidden input for chat_id -->
                     <input type="hidden" name="chat_id" aria-label="Hidden field with Chat ID" value="<?php echo htmlspecialchars($_GET['chat_id']); ?>">
 
@@ -147,6 +153,7 @@ foreach(array_keys($models) as $m) {
                         <input title="Document types accepted include PDF, XML, JSON, Word, PowerPoint, Text, and Markdown. At this time we do not support Excel or CSV files." type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.pptx,.txt,.md,.json,.xml" style="width:15em;" required onchange="javascript:fileUpload();" />
                     <?php endif; ?>
                 </form>
+                </td>
 <?php 
                     if(!empty($_SESSION['error'])) {
                         echo "<script>alert('Error: ".$_SESSION['error']."');</script>";
@@ -156,10 +163,24 @@ foreach(array_keys($models) as $m) {
                     }
 ?>
 
-
+                <td style="width: 20%;">
                     <input type="button" value="Print" title="Print the existing chat session" aria-label="Print button" onClick="printChat()" 
-                            id="printButton" style = "width: 80px;margin-left: 100px;"/>
-
+                            id="printButton" style = "width: 80px; margin: 5px 0 10px 100px;"/>
+                </td>
+                </tr>
+                <tr class="contactAcknowledgeTr"><td></td><td></td>
+                <td colspan="2">
+                    <div class="contactAcknowledgeDiv">
+                        <input type="button" value="Contact" aria-label="Contact button" id="contactBtn" class ="contactBtn" onClick = "javascript:sendToContact();" 
+                            title = "Email to CRISPI-LLM@od.nih.gov"/>
+                        <span data-toggle="tooltip" data-placement="right" data-bs-custom-class="acknowledgement-tooltip"
+                                style="color: blue;" id="acknowledgement" >
+                            Acknowledgement
+                        </span>
+                    </div>
+                </td>
+                </tr>
+                </table>
             </div><!-- End Chat body bottom -->
         </main> <!-- End the main-content column -->
 
@@ -171,7 +192,7 @@ foreach(array_keys($models) as $m) {
     </div>
 
 <!-- Tooltip Content -->
-<div class="tooltip bs-tooltip-top" role="tooltip" id="about-content" style="width:600px">
+<div class="tooltip bs-tooltip-top" role="tooltip" id="about-content">
   <div class="tooltip-content" style="max-width: 100%;text-align: left;">
         <p>The Large Language Model (LLM) pilot, funded by the Office of Data Science and Strategy and led by the Office of Intramural Research (OIR), aims to establish a secure LLM environment for NIH Staff. The focus is primarily on IRP programs, allowing exploration of Generative Artificial Intelligence (GenAI) technology specifically LLMs, and their potential impact on our biomedical research enterprise. Ethical and responsible use of LLMs in support of NIH missions is a key consideration to balance the innovation and protection aspects of the technology. The pilot is governed by the IRP AI Task Force, chaired by Dr. Richard Scheuermann.
         </p>
@@ -187,6 +208,12 @@ foreach(array_keys($models) as $m) {
         <p>Notes: The following NIH and HHS <a href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
   </div>
 </div>
+<div class="acknowledgement-tooltip bs-tooltip-top" role="tooltip" id="acknowledgement-content">
+  <div class="acknowledgement-tooltip-content" style="max-width: 100%;text-align: left;">
+        <p>acknowledgement content
+        </p>
+  </div>
+</div>
 <!-- End Tooltip Content -->
 <!-- Include Bootstrap JS and its dependencies-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -200,40 +227,7 @@ foreach(array_keys($models) as $m) {
         var user = <?php echo json_encode(isset($user) ? $user : null); ?>;
 
     </script>
-    <script type="module">
-        import {
-            getGenerativeModel,
-            fileToGenerativePart,
-            updateUI,
-        } from "./geminiutils/shared.js";
-
-        async function run(prompt, files) {
-            const imageParts = await Promise.all(
-                [...files].map(fileToGenerativePart),
-            );
-
-            const model = await getGenerativeModel({
-                model: "gemini-1.5-flash",
-            });
-
-            return model.generateContentStream([...imageParts, prompt]);
-        }
-
-        window.getResultFromGemini = async function(prompt, files) {
-            // console.log("getResultFromGemini prompt: "+prompt);
-            const result = await run(prompt, files);
-            // console.log("getResultFromGemini result: "+result);
-            return result;
-        };
-
-        window.updateUIFromGemini = async function(resultEl, getResult, streaming) {
-            //console.log("updateUIFromGemini");
-            const result = await updateUI (resultEl, getResult, streaming);
-            //console.log("updateUIFromGemini result: "+result);
-            return result;
-        };
-
-    </script>
+    <script type="module" scr="gemini_handler.js"></script>
     <script src="script.v1.02.js"></script>
     <script>
         //document.addEventListener('DOMContentLoaded', function() {
@@ -241,40 +235,46 @@ foreach(array_keys($models) as $m) {
         //});
 
         $(document).ready(function(){
-            $("#aboutBtn").prop("title", )
-            $('[data-toggle="tooltip"]').tooltip({
+            //$("#aboutBtn").prop("title", );
+            $('#aboutBtn').tooltip({
                 html : true,
                 placement : "right",
                 trigger : "click",
                 title : $('#about-content').html()
             });
+            $('#acknowledgement').tooltip({
+                html : true,
+                placement : "top",
+                title : $('#acknowledgement-content').html()
+            });
         });
+
+        function sendToContact() {
+            window.location.href = "mailto:CRISPI-LLM@od.nih.gov";
+        }
+        function printChat() {
+            window.print();
+        }
+
+        // When the page is loaded, check if there's a saved userMessage and display it
+        /*document.addEventListener('DOMContentLoaded', (event) => {
+        var savedMessage = localStorage.getItem('userMessage');
+        if (savedMessage) {
+        document.getElementById('userMessage').value = savedMessage;
+        }
+        });
+
+        // Each time the userMessage is updated, save it in the local storage
+        document.getElementById('userMessage').addEventListener('input', (event) => {
+        localStorage.setItem('userMessage', event.target.value);
+        });
+
+        // After the form is submitted, clear the saved message
+        document.getElementById('messageForm').addEventListener('submit', function() {
+        localStorage.removeItem('userMessage');
+        });
+        */
     </script>
-<script>
-function printChat() {
-window.print();
-}
-
-// When the page is loaded, check if there's a saved userMessage and display it
-/*document.addEventListener('DOMContentLoaded', (event) => {
-var savedMessage = localStorage.getItem('userMessage');
-if (savedMessage) {
-document.getElementById('userMessage').value = savedMessage;
-}
-});
-
-// Each time the userMessage is updated, save it in the local storage
-document.getElementById('userMessage').addEventListener('input', (event) => {
-localStorage.setItem('userMessage', event.target.value);
-});
-
-// After the form is submitted, clear the saved message
-document.getElementById('messageForm').addEventListener('submit', function() {
-localStorage.removeItem('userMessage');
-});
- */
-</script>
-
 </body>
 </html>
 
