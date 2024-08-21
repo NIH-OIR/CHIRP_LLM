@@ -340,3 +340,21 @@ body {
     width : 30%;
     --bs-tooltip-bg: #4b4343;
 }
+
+/*datatable styles*/
+.dataTables_info, .dataTables_paginate {
+    font-size: smaller;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+.select2-search .select2-search__field {
+    width: 100% !important;
+}
+.dtNameCol .dtDateCol{
+    width: 15%;
+}
+.dtEmailCol {
+    width: 30%;
+}

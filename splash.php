@@ -147,7 +147,7 @@ echo $config['app']['disclaimer_text'];
             ]
         });
         var userExist = <?php if (user_exists($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
-        console.log("userExist: "+userExist);
+        // console.log("userExist: "+userExist);
         if (!userExist) {
             $('#roleSelectionDlg').dialog("open");
         } 
