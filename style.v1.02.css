@@ -8,7 +8,7 @@ body {
     width: 100%;
 }
 .maincol-top {
-    height: calc(100vh - 250px);
+    height: calc(100vh - 290px);
     overflow-y: scroll;
     margin-bottom: 10px;
     border: solid 0px blue;
@@ -339,4 +339,22 @@ body {
 .acknowledgement-tooltip {
     width : 30%;
     --bs-tooltip-bg: #4b4343;
+}
+
+/*datatable styles*/
+.dataTables_info, .dataTables_paginate {
+    font-size: smaller;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+.select2-search .select2-search__field {
+    width: 100% !important;
+}
+.dtNameCol .dtDateCol{
+    width: 15%;
+}
+.dtEmailCol {
+    width: 30%;
 }

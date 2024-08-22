@@ -430,3 +430,12 @@ function approximateTokenCountByChars($text) {
     return ceil($charCount / 4); // Rough approximation: 4 characters per token
 }
 
+const AdminUserList = array('fann', 'wyrickrv', 'zhouh5', 'jenb2', 'chiangpt', 'kumarn6', 'mukherjeea7', 'nelsons2', 'fanl5');
+function isAdminUser($userId) {
+    if (in_array($userId, AdminUserList)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+

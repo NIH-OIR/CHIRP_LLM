@@ -12,16 +12,33 @@ foreach(array_keys($models) as $m) {
     $deployments_json[$m] = $config[$m];
 }
 
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $config['app']['app_title']; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="style.v1.02.css" rel="stylesheet">
+
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/themes/base/jquery-ui.min.css"/>
+
+    <!-- Select2 plugin -->
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
+
+    <!-- datatable css -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+    <link href="style.v1.02.css" rel="stylesheet">
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script>
+
     <script>
         var application_path = "<?php echo $application_path; ?>";
         var deployments = <?php echo json_encode($deployments_json); ?>;
@@ -29,6 +46,25 @@ foreach(array_keys($models) as $m) {
         var deployment = "<?php echo $deployment; ?>";
         var temperature = "<?php echo $_SESSION['temperature']; ?>";
     </script>
+
+    <!-- datatable css and js -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.1.4/js/dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+
+	<!-- Select2 plugin -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
+<!--     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
+
 </head>
 <body>
 
@@ -168,7 +204,11 @@ foreach(array_keys($models) as $m) {
                             id="printButton" style = "width: 80px; margin: 5px 0 10px 100px;"/>
                 </td>
                 </tr>
-                <tr class="contactAcknowledgeTr"><td></td><td></td>
+                <tr class="contactAcknowledgeTr">
+                <td>
+                    <input type="button" value="Admin Tool" aria-label="Admin Tool button" id="adminToolBtn" class ="adminToolBtn" 
+                        style="display:none;" title = "Tool for admin to review user information"/>
+                </td><td></td>
                 <td colspan="2">
                     <div class="contactAcknowledgeDiv">
                         <input type="button" value="Contact" aria-label="Contact button" id="contactBtn" class ="contactBtn" onClick = "javascript:sendToContact();" 
@@ -216,24 +256,26 @@ foreach(array_keys($models) as $m) {
 </div>
 <!-- End Tooltip Content -->
 <!-- Include Bootstrap JS and its dependencies-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script>
-        document.getElementById('toggleMenu').addEventListener('click', function() {
-            document.querySelector('.menu').classList.toggle('active');
-        });
-        var chatId = <?php echo json_encode(isset($_GET['chat_id']) ? $_GET['chat_id'] : null); ?>;
-        var user = <?php echo json_encode(isset($user) ? $user : null); ?>;
+<script type="module" scr="gemini_handler.js"></script>
+<script src="script.v1.02.js"></script>
+<script>
+    document.getElementById('toggleMenu').addEventListener('click', function() {
+        document.querySelector('.menu').classList.toggle('active');
+    });
+    var chatId = <?php echo json_encode(isset($_GET['chat_id']) ? $_GET['chat_id'] : null); ?>;
+    var user = <?php echo json_encode(isset($user) ? $user : null); ?>;
 
-    </script>
-    <script type="module" scr="gemini_handler.js"></script>
-    <script src="script.v1.02.js"></script>
+</script>
     <script>
         //document.addEventListener('DOMContentLoaded', function() {
             var sessionTimer = setTimeout(logoutUser, sessionTimeout);
         //});
-
+        var isAdminUser = <?php if (isAdminUser($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
+        if (isAdminUser) {
+            $("#adminToolBtn").show();
+        } else {
+            $("#adminToolBtn").hide();
+        }
         $(document).ready(function(){
             //$("#aboutBtn").prop("title", );
             $('#aboutBtn').tooltip({
@@ -247,6 +289,21 @@ foreach(array_keys($models) as $m) {
                 placement : "top",
                 title : $('#acknowledgement-content').html()
             });
+
+            $('#adminToolDlg').dialog({
+                width: 1060,
+                height: 500,
+                autoOpen: false,
+                title: 'View All Users Information',
+                open: function( event, ui ) {
+                    $(this).closest(".ui-dialog").find(".ui-dialog-titlebar-close")
+                            .addClass("ui-button ui-corner-all ui-widget ui-button-icon-only")
+                            .html("<span class='ui-button-icon-primary ui-icon ui-icon-closethick'></span><span class='ui-button-icone-space'></span");
+                }
+            });
+            $("#adminToolBtn").click(function() {
+                $('#adminToolDlg').dialog("open");
+            })            
         });
 
         function sendToContact() {
@@ -275,6 +332,131 @@ foreach(array_keys($models) as $m) {
         });
         */
     </script>
+<script>
+$(document).ready(function(){
+    $.ajax({
+        url: "db.php",
+        dataType: "json",
+        method: "POST",
+        data: {"callGetUsersData": "1"},
+        success: function(response){
+
+            var return_data = new Array();
+            $.each(response, function() {
+                $.each(this, function(key, value){
+                    return_data.push({
+                        'id': value.id,
+                        'userid': value.userid,
+                        'first_name': value.first_name,
+                        'last_name': value.last_name,
+                        'email':value.preferred_username,
+                        'ic':value.ic,
+                        'api_keys':value.pilot_api_keys,
+                        'llms_permitted':value.llms_permitted,
+                        'accepted_date':value.updated_at
+                    });
+                });
+            });
+            // console.log("return_data: "+JSON.stringify(return_data));
+
+            var oTable = $('#usersTable').DataTable({
+                data: return_data,
+                // rowId: "id",
+                columns: [
+                    {  "title": "Name",
+                        "data": function (data, type, full, meta) { //full name = lastname, firstname
+                            return data.last_name + ", "+ data.first_name;
+                        }
+                    },
+                    {   "title": "Email",
+                        "data": "email",
+                    },
+                    {   "title": "IC",
+                        "data": "ic" 
+                    },
+                    {   "title": "API Keys",
+                        "data": "api_keys" 
+                    },
+                    {   "title": "LLMs Permitted",
+                        "data": "llms_permitted" 
+                    },
+                    {   "title": "Accepted Date",
+                        "data": "accepted_date" 
+                    }
+                ],
+                dom: 'Bfrtip',
+                pageLength: 15,
+                initComplete : function(settings, json) {
+                    $("#usersTable_paginate > span > a").removeClass("paginate_button");
+                    var api = this.api();
+                    count = 0;
+                    $('.filterhead', api.table().header()).each( function (i) {
+                        var column = api.column(i);
+                        var title = column.header();
+                        //replace spaces with dashes
+                        title = $(title).html().replace(/[\W]/g, '-');
+                        
+                        var select = $('<select id="' + title + '" class="select2" multiple="true" ></select>')
+                            .appendTo( $(this).empty() )
+                            .on( 'change', function () {
+                            var data = $.map( $(this).select2('data'), function( value, key ) {
+                                return value.text ? '^' + $.fn.dataTable.util.escapeRegex(value.text) + '$' : null;
+                            });
+                            
+                            //if no data selected use ""
+                            if (data.length === 0) {
+                                data = [""];
+                            }
+                            
+                            //join array into string with regex or (|)
+                            var val = data.join('|');
+                            
+                            //search for the option(s) selected
+                            column.search( val ? val : '', true, false ).draw();
+                        });
+
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' );
+                        } );
+                    
+                        //use column title as selector and placeholder
+                        $('#' + title).select2({
+                            placeholder: "Select a " + title
+                        });
+
+                        $('.select2').val(null).trigger('change');
+                    } );
+                }
+            }); //end DataTable
+        } // end success function
+    }); //end ajax
+});
+</script>
+    <div id="adminToolDlg" style="font-size: 13px;">
+        <div id="usersTable_container" style="width:100%;">
+            <table id="usersTable" style="width:100%;">
+            <thead>
+          <tr>
+            <th class="filterhead dtNameCol"></th>
+            <th class="filterhead dtEmailCol"></th>
+            <th class="filterhead"></th>
+            <th class="filterhead"></th>
+            <th class="filterhead"></th>
+            <th class="filterhead dtDateCol"></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+
+        </thead>
+            </table>
+        </div>
+    </div>
 </body>
 </html>
 

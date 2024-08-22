@@ -232,5 +232,24 @@ if (isset($_POST['callInsertUserData'])) {
     echo $returnData;
 }
 
+function get_all_users() {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT * FROM users");
+    $stmt->execute([]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $output = [];
+    foreach($rows as $r) {
+        $output[] = $r;
+    }
+    #error_log("db.php->get_all_users() row: " . print_r($output,1));
+    return $output;
+}
+
+if (isset($_POST['callGetUsersData'])) {
+    error_log("Calling function get_all_users().");
+    $returnData = get_all_users();
+    echo json_encode(array($returnData));
+}
+
 
 
