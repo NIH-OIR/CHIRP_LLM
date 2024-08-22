@@ -8,7 +8,7 @@ body {
     width: 100%;
 }
 .maincol-top {
-    height: calc(100vh - 250px);
+    height: calc(100vh - 290px);
     overflow-y: scroll;
     margin-bottom: 10px;
     border: solid 0px blue;
