@@ -10,6 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_message = base64_decode($_POST['message']); // Decode from Base64
     //$user_message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
 
+    $command = "python ".$_SERVER['DOCUMENT_ROOT']."/scrubber.py ".json_encode($user_message);
+    error_log("python command: ".$command);
+    $user_message = exec($command);
+
+    #error_log("scrubbed user msg: ".$user_message);
     #print_r($_POST);
 
     $chat_id = filter_input(INPUT_POST, 'chat_id', FILTER_UNSAFE_RAW);
