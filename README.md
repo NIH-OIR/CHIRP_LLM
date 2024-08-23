@@ -30,6 +30,7 @@ The application relies on the following code dependencies:
 - MariaDB or MySQL: You need a database to store chat-related data (we use Server version: 10.5.22-MariaDB MariaDB Server).
 
 - Python: The application uses Python for text extraction from various file formats (we use Python 3.9.18).
+  - PI Scrubadub https://scrubadub.readthedocs.io/en/stable/index.html
 
 - Libraries for Python:
   - `docx` (for parsing .docx files)
