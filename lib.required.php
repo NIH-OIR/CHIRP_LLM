@@ -9,6 +9,8 @@ require_once 'db.php';
 require_once 'get_config.php';
 #echo '<pre>'.print_r($config,1).'</pre>';
 
+require_once 'geminiImpl.php'; 
+
 
 // Start the session, if not already started
 if (session_status() == PHP_SESSION_NONE) {
