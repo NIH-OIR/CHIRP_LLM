@@ -256,7 +256,6 @@ foreach(array_keys($models) as $m) {
 </div>
 <!-- End Tooltip Content -->
 <!-- Include Bootstrap JS and its dependencies-->
-<script type="module" scr="gemini_handler.js"></script>
 <script src="script.v1.02.js"></script>
 <script>
     document.getElementById('toggleMenu').addEventListener('click', function() {

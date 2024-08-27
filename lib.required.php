@@ -212,7 +212,7 @@ function load_configuration($deployment) {
     ];
 }
 
-function get_gpt_response($message, $chat_id, $user, $geminiResult) {
+function get_gpt_response($message, $chat_id, $user) {
     $selectedModel = $GLOBALS['deployment'];
     #error_log("DEBUG lib.required.php get_gpt_response() selected model: ".$selectedModel);
 
