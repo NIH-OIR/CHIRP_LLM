@@ -158,7 +158,11 @@ foreach(array_keys($models) as $m) {
                             $label = $modelconfig['label'];
                             $tooltip = (!empty($modelconfig['tooltip'])) ? $modelconfig['tooltip'] : "";
                             $sel = ($m == $_SESSION['deployment']) ? 'selected="selected"' : '';
-                            echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
+                            if (isAdminUser($_SESSION['user_data']['userid'])) {
+                                echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
+                            } else if (!isAdminUser($_SESSION['user_data']['userid']) && $m != 'gemini-1.5-pro') {
+                                echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
+                            }
                         }
                         ?>
                     </select>
@@ -349,6 +353,7 @@ $(document).ready(function(){
                         'first_name': value.first_name,
                         'last_name': value.last_name,
                         'email':value.preferred_username,
+                        'role': value.role,
                         'ic':value.ic,
                         'api_keys':value.pilot_api_keys,
                         'llms_permitted':value.llms_permitted,
@@ -369,6 +374,9 @@ $(document).ready(function(){
                     },
                     {   "title": "Email",
                         "data": "email",
+                    },
+                    {   "title": "Role",
+                        "data": "role" 
                     },
                     {   "title": "IC",
                         "data": "ic" 
@@ -441,9 +449,11 @@ $(document).ready(function(){
             <th class="filterhead"></th>
             <th class="filterhead"></th>
             <th class="filterhead"></th>
+            <th class="filterhead"></th>
             <th class="filterhead dtDateCol"></th>
           </tr>
           <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
