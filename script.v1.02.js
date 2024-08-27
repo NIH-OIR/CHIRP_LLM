@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('userMessage').value = "";
         console.log("No saved message found for chat ID " + chatId);
     }
-    updateFileUploadByModel();
 });
 
 // Modify the event listener for the userMessage input
@@ -176,52 +175,9 @@ function submitEdit(chatId) {
     });
 }
 
-/*handle file upload for Gemini */
-function updateFileUploadByModel() {
-    var selectedModel = $("#model option:selected").val();
-    if (selectedModel == 'gemini-1.5-flash') {
-        $("input[type='file']").prop("accept", ".png,.jpeg,.jpg,.bmp,.gif");
-        $("input[type='file']").prop("title", "Gemini only accepted image file with following format: PNG, JPEG, JPG, BMP and GIF.");
-        $("input[type='file']").prop("multiple", true);
-    } else {
-        $("input[type='file']").prop("accept", ".pdf,.docx,.pptx,.txt,.md,.json,.xml");
-        $("input[type='file']").prop("title", "Document types accepted include PDF, XML, JSON, Word, PowerPoint, Text, and Markdown. At this time we do not support Excel or CSV files.");
-        $("input[type='file']").prop("multiple", false);
-    }
-}
-
 function fileUpload() {
     var selectedModel = $("#model option:selected").val();
-    if (selectedModel == 'gemini-1.5-flash') { // handle file upload for Gemini
-        $("#userMessage").val("");
-        const fileInputEl = document.querySelector("input[type=file]");
-        const messageListEl = document.querySelector("#messageList");
-
-        console.log("file number:"+fileInputEl.files.length);
-        var i = 0;
-        for (const file of fileInputEl.files) {            
-            if (/\.(jpe?g|png|bmp|gif)$/i.test(file.name)) {
-                const reader = new FileReader();
-                reader.addEventListener("load",() => {
-                        const image = new Image();
-                        image.height = 100;
-                        image.title = file.name;
-                        image.src = reader.result;
-                        messageListEl.appendChild(image);
-                        scrollToBottom();
-                        i++;
-                        if (i == fileInputEl.files.length) {
-                            saveUploadedImgGemini();
-                        }                              
-                    },
-                    false,
-                );
-                reader.readAsDataURL(file);
-            }
-        }
-    } else {
-        $("#fileUpload").submit();
-    }
+    $("#fileUpload").submit();
 }
 function saveUploadedImgGemini() { //save file to DB for Gemini
     var uploadedImgArr = Array();
