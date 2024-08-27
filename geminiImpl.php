@@ -17,50 +17,58 @@ function callGeminiApi($message) {
     $location = 'us-central1';
     $geminiModel = "gemini-1.5-pro-001";
     $response = '';
-    error_log("gemini msg: ".json_encode($message));
+    #error_log("gemini msg: ".json_encode($message));
 
-    $client = new PredictionServiceClient([
-        'credentials' => json_decode(file_get_contents('/var/lib/chat/gemini_vertex-ai.key.json'), true),
-        'apiEndpoint' => $location . '-aiplatform.googleapis.com'
-    ]);
-
-    // Define the model path
-    $model = "projects/$project_id/locations/$location/publishers/google/models/$geminiModel";
-
-    // Prepare the request message.
-    // Create the content part
-    $contents = [];
-    foreach($message as $msg) {
-        $part = new Part();
-        $part->setText($msg);
-        $content = new Content();
-        $content->setRole('user');  // Explicit role setting
-        $content->setParts([$part]);
+    try {
+        $client = new PredictionServiceClient([
+            'credentials' => json_decode(file_get_contents('/var/lib/chat/gemini_vertex-ai.key.json'), true),
+            'apiEndpoint' => $location . '-aiplatform.googleapis.com'
+        ]);
+    
+        // Define the model path
+        $model = "projects/$project_id/locations/$location/publishers/google/models/$geminiModel";
+    
+        // Create the content part
+        $contents = [];
+            foreach($message as $msg) {
+            $part = new Part();
+            $part->setText($msg);
+            $content = new Content();
+            $content->setRole('user');  // Explicit role setting
+            $content->setParts([$part]);
         $contents[] = $content;
-    }
-
-    $generationConfig = (new GenerationConfig()) 
-                        ->setTemperature(0.7)
-                        ->setMaxOutputTokens(8192)
-                        ->setTopK(0.8)
-                        ->setTopP(40);
-    $safetySettings = [(new SafetySetting())->setCategory(HarmCategory::HARM_CATEGORY_HARASSMENT)->setThreshold(HarmBlockThreshold::BLOCK_ONLY_HIGH),
-                        (new SafetySetting())->setCategory(HarmCategory::HARM_CATEGORY_HATE_SPEECH)->setThreshold(HarmBlockThreshold::BLOCK_ONLY_HIGH),
-                        (new SafetySetting())->setCategory(HarmCategory::HARM_CATEGORY_SEXUALLY_EXPLICIT)->setThreshold(HarmBlockThreshold::BLOCK_ONLY_HIGH),
-                        (new SafetySetting())->setCategory(HarmCategory::HARM_CATEGORY_DANGEROUS_CONTENT)->setThreshold(HarmBlockThreshold::BLOCK_ONLY_HIGH),
-                        ];
-
-    $request = (new GenerateContentRequest())
-                ->setModel($model)
-                ->setContents($contents)
-                ->setGenerationConfig($generationConfig)
-                ->setSafetySettings($safetySettings);
-
-    try {       
+            }
+        // Define the generation configuration
+        $generationConfig = (new GenerationConfig())
+                            ->setTemperature(0.7)
+                            ->setMaxOutputTokens(8192)
+                            ->setTopK(20)
+                            ->setTopP(0.95);
+    
+        // Define safety settings
+        $safetySettings = [
+            (new SafetySetting())->setCategory(HarmCategory::HARM_CATEGORY_HARASSMENT)->setThreshold(HarmBlockThreshold::BLOCK_ONLY_HIGH),
+            (new SafetySetting())->setCategory(HarmCategory::HARM_CATEGORY_HATE_SPEECH)->setThreshold(HarmBlockThreshold::BLOCK_ONLY_HIGH),
+            (new SafetySetting())->setCategory(HarmCategory::HARM_CATEGORY_SEXUALLY_EXPLICIT)->setThreshold(HarmBlockThreshold::BLOCK_ONLY_HIGH),
+            (new SafetySetting())->setCategory(HarmCategory::HARM_CATEGORY_DANGEROUS_CONTENT)->setThreshold(HarmBlockThreshold::BLOCK_ONLY_HIGH),
+        ];
+    
+        // Create the GenerateContentRequest object
+        $request = new GenerateContentRequest();
+        $request->setModel($model);
+        $request->setContents($contents);
+        $request->setGenerationConfig($generationConfig);
+        $request->setSafetySettings($safetySettings);
+    
+        // Use streamGenerateContent to process the input data with the proper request object
         $generateContentresponse = $client->generateContent($request);  // Pass the request object here
         $response = $generateContentresponse->serializeToJsonString();
-    } catch (ApiException $ex) { 
+        error_log("Gemini response: ".$response);
+    
+    } catch (ApiException $ex) {
         printf('Call failed with message: %s' . PHP_EOL, $ex->getMessage());
+    } finally {
+        $client->close();
     }
     return $response;
 }

@@ -222,7 +222,9 @@ function get_gpt_response($message, $chat_id, $user) {
         if ($selectedModel == 'gemini-1.5-pro') {
             $msgArr = [];
             foreach($msg as $msgItem) {
-                $msgArr[] = $msgItem['content'];
+                if ($msgItem['role'] == "user") {
+                    $msgArr[] = $msgItem['content'];
+                }
             }
             $response = callGeminiApi($msgArr);
         } else {
@@ -313,7 +315,7 @@ function process_api_response($response, $deployment, $chat_id, $message) {
             'error' => true,
             'message' => $response_data['error']['message']
         ];
-    } else if ($deployment != 'gemini-1.5-flash' && !isset($response_data)) {
+    } else if ($deployment != 'gemini-1.5-pro' && !isset($response_data)) {
         error_log('Gemini API error: ');
         return [
             'deployment' => $deployment,
@@ -321,7 +323,7 @@ function process_api_response($response, $deployment, $chat_id, $message) {
             'message' => "Error occurs in calling Gemini API"
         ];
     }else {
-        if ($deployment != 'gemini-1.5-flash') {
+        if ($deployment != 'gemini-1.5-pro') {
             $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
         } else {
             $response_text = $response_data['candidates'][0]['content']['parts'][0]['text'];
