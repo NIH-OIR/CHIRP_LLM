@@ -99,8 +99,11 @@ foreach(array_keys($models) as $m) {
 
              <!-- Start Menu top content -->
             <div class="left-nav-top">
-                <button type="button" class="btn btn-secondary" data-tip="about-content" data-toggle="tooltip" data-placement="right" style="width:100%;" id="aboutBtn" title="">
+                <button type="button" class="btn btn-secondary" data-tip="about-content" data-toggle="tooltip" data-placement="right" style="width:100%; padding: 0;" id="aboutBtn" title="">
                     About Chirp
+                </button>
+                <button type="button" class="btn btn-secondary" data-tip="announcement-content" data-toggle="tooltip" data-placement="right" style="width:100%; padding: 0; margin-top: 7px;" id="announcementBtn" title="">
+                    Announcement
                 </button>
                 <span class="newchat"><a title="Create new chat" href="javascript:void(0);" onclick="startNewChat()">+&nbsp;&nbsp;New Chat</a></span>
             </div> <!-- End Menu top content -->
@@ -190,7 +193,7 @@ foreach(array_keys($models) as $m) {
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
                         </p>
                     <?php else: ?>
-                        <input title="Document types accepted include PDF, XML, JSON, Word, PowerPoint, Text, and Markdown. At this time we do not support Excel or CSV files." type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.pptx,.txt,.md,.json,.xml" style="width:15em;" required onchange="javascript:fileUpload();" />
+                        <input title="Document types accepted include PDF, XML, JSON, Word, Text, and Markdown. At this time we do not support Excel or CSV files." type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml" style="width:15em;" required onchange="javascript:fileUpload();" />
                     <?php endif; ?>
                 </form>
                 </td>
@@ -258,6 +261,17 @@ foreach(array_keys($models) as $m) {
         </p>
   </div>
 </div>
+<div class="tooltip bs-tooltip-top" role="tooltip" id="announcement-content">
+  <div class="tooltip-content" style="max-width: 100%;text-align: left;">
+        <p>Current Limitations of Document Upload Function:</p>
+        <ul>
+        <li>Files that work: .pdf, .json, .docx, .txt, .md, .xml</li>
+        <li>Files that do not work: .pptx</li>
+        <li>Can not upload: .xlsx, images, .csv</li>
+        </ul>
+        <p>This will be patched in future iterations. Please contact us if any additional issues arise.</p>
+  </div>
+</div>
 <!-- End Tooltip Content -->
 <!-- Include Bootstrap JS and its dependencies-->
 <script src="script.v1.02.js"></script>
@@ -291,6 +305,12 @@ foreach(array_keys($models) as $m) {
                 html : true,
                 placement : "top",
                 title : $('#acknowledgement-content').html()
+            });
+            $('#announcementBtn').tooltip({
+                html : true,
+                placement : "right",
+                trigger : "click",
+                title : $('#announcement-content').html()
             });
 
             $('#adminToolDlg').dialog({
