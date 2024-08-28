@@ -9,6 +9,8 @@ require_once 'db.php';
 require_once 'get_config.php';
 #echo '<pre>'.print_r($config,1).'</pre>';
 
+require_once 'geminiImpl.php'; 
+
 
 // Start the session, if not already started
 if (session_status() == PHP_SESSION_NONE) {
@@ -210,19 +212,26 @@ function load_configuration($deployment) {
     ];
 }
 
-function get_gpt_response($message, $chat_id, $user, $geminiResult) {
+function get_gpt_response($message, $chat_id, $user) {
     $selectedModel = $GLOBALS['deployment'];
     #error_log("DEBUG lib.required.php get_gpt_response() selected model: ".$selectedModel);
-    if ($selectedModel == 'gemini-1.5-flash') {
-        return process_api_response($geminiResult, $selectedModel, $chat_id, $message);
-    } else {
+
         $config = load_configuration($selectedModel);
         $msg = get_chat_thread($message, $chat_id, $user);
 
-        $response = call_azure_api($config, $msg);
-
+        if ($selectedModel == 'gemini-1.5-pro') {
+            $msgArr = [];
+            foreach($msg as $msgItem) {
+                if ($msgItem['role'] == "user") {
+                    $msgArr[] = $msgItem['content'];
+                }
+            }
+            $response = callGeminiApi($msgArr);
+        } else {
+            $response = call_azure_api($config, $msg);
+        }
+        
         return process_api_response($response, $selectedModel, $chat_id, $message);
-    }
 }
 
 // Call Azure OpenAI API
@@ -296,33 +305,37 @@ function execute_api_call($url, $payload, $headers) {
 // Process API Response
 function process_api_response($response, $deployment, $chat_id, $message) {
     #error_log("DEBUG lib.required.php process_api_response() selected model: ".$deployment);
-    if ($deployment != 'gemini-1.5-flash') {
-        $response_data = json_decode($response, true);
-        if (isset($response_data['error'])) {
-            error_log('API error: ' . $response_data['error']['message']);
-            return [
-                'deployment' => $deployment,
-                'error' => true,
-                'message' => $response_data['error']['message']
-            ];
-        } else {
+
+    #error_log("DEBUG lib.required.php process_api_response() gemini result: ".$response);
+    $response_data = json_decode($response, true);
+    if (isset($response_data['error'])) {
+        error_log('API error: ' . $response_data['error']['message']);
+        return [
+            'deployment' => $deployment,
+            'error' => true,
+            'message' => $response_data['error']['message']
+        ];
+    } else if ($deployment != 'gemini-1.5-pro' && !isset($response_data)) {
+        error_log('Gemini API error: ');
+        return [
+            'deployment' => $deployment,
+            'error' => true,
+            'message' => "Error occurs in calling Gemini API"
+        ];
+    }else {
+        if ($deployment != 'gemini-1.5-pro') {
             $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
-            create_exchange($chat_id, $message, $response_text);
-            return [
-                'deployment' => $deployment,
-                'error' => false,
-                'message' => $response_text
-            ];
+        } else {
+            $response_text = $response_data['candidates'][0]['content']['parts'][0]['text'];
         }
-    } else {
-        #error_log("DEBUG lib.required.php process_api_response() gemini result: ".$response);
-        create_exchange($chat_id, $message, $response);
+        create_exchange($chat_id, $message, $response_text);
         return [
             'deployment' => $deployment,
             'error' => false,
-            'message' => $response
+            'message' => $response_text
         ];
     }
+
 }
 
 // Call Mocha API
