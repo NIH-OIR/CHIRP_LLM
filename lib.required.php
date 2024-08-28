@@ -62,7 +62,8 @@ $sessionTimeout = $config['session']['timeout'];  // Load session timeout from c
 
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $sessionTimeout)) {
     // last request was more than 30 minutes ago
-    logout();
+    header("Location: logout.php");
+    exit();
 }
 $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
@@ -158,30 +159,6 @@ if (isAuthenticated()) {
 // This function will check if the user is authenticated
 function isAuthenticated() {
     return isset($_SESSION['tokens']) && isset($_SESSION['tokens']['access_token']);
-}
-
-// Log the user out
-function logout() {
-
-    // start the session if not already started
-    #session_start();
-
-    // Unset all session variables
-    $_SESSION = array();
-
-    // If it's desired to kill the session, also delete the session cookie.
-    // Note: This will destroy the session, and not just the session data!
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
-        );
-    }
-    if (!empty($_SESSION['splash'])) $_SESSION['splash'] = '';
-    // Finally, destroy the session.
-    session_destroy();
-
 }
 
 function get_path() {

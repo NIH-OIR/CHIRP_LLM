@@ -26,7 +26,7 @@ function checkSessionStatus() {
 
 function logoutUser() {
     alert("Your session has expired. Please log in again.");
-    window.location.href = "index.php";
+    window.location.href = "logout.php";
 }
 
 // Modify the event listener for DOMContentLoaded
