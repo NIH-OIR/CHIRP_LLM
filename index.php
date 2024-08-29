@@ -290,12 +290,12 @@ foreach(array_keys($models) as $m) {
 <div class="tooltip bs-tooltip-top" role="tooltip" id="trainingSupport-content">
   <div class="tooltip-content" style="max-width: 100%;text-align: left;">
         <ul>
-        <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/Prompt-Engineering.aspx" style="color: white;">
+        <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/Prompt-Engineering.aspx" target="_blank">
                 Prompt Engineering Guide
             </a>
         </li>
         <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8fGJmNTVmZTFkZGEyNTRiZTFhYjk3MDhkY2MyZWYyYjI0fDE0Yjc3NTc4OTc3MzQyZDU4NTA3MjUxY2EyZGMyYjA2fDB8MHw2Mzg1OTk1Nzk2NTY1NjM2MDd8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazkwYUdWeUlpd2lWMVFpT2pFeGZRPT18MXxMMk5vWVhSekx6RTVPamszTXprek9XUXdMV1F3TW1JdE5HWXpOQzA0TlRJM0xURTFZbVZtWVRFMFpXVm1NVjltWXpFMU16ZzJZUzB3TlRKakxUUmxNMk10WWpreE15MDNOV1JoTURoak5qYzFObUZBZFc1eExtZGliQzV6Y0dGalpYTXZiV1Z6YzJGblpYTXZNVGN5TkRNMk1URTJORFUwT1E9PXxhZGY4ZTkzOGEzODM0NTNmNDk0NzA4ZGNjMmVmMmIyMnw0YTc4MDk2N2Y0NjM0YWZhODJhMmNjYmJmNDExNWRmYw%3D%3D&sdata=Qkk0R09aYzFsOWgyWUlsQzdEc083U0w0Y0tjaGxoaFIxNWRVRU1zZ1E3Yz0%3D&ovuser=14b77578-9773-42d5-8507-251ca2dc2b06%2Cjenb2%40nih.gov&OR=Teams-HL&CT=1724945444026&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiIxNDE1LzI0MDcxMTI4ODI1IiwiSGFzRmVkZXJhdGVkVXNlciI6ZmFsc2V9"
-                style="color: white;">
+                target="_blank">
                 AI Guidance
             </a>
         </li>
