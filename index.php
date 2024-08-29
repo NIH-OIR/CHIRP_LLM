@@ -148,14 +148,21 @@ foreach(array_keys($models) as $m) {
            </div><!-- End Flex item chat body top -->
            <div id="thumbnails"></div>
            <form id="messageForm" class="messageBox">
-                <textarea class="form-control" id="userMessage" aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
+                <img id="chatBubbleIcon" src="images/chat-bubble.png" width="5%">
+                <textarea class="form-control" id="userMessage" style="width: 92%;float: right; margin-right: 20px;"
+                    aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
+                <span>
+                    <img id="attachmentIcon" src="images/attachment.png" alt="Upload File" class="message-icon" 
+                        title="Document types accepted include PDF, XML, JSON, Word, Text, and Markdown. At this time we do not support Excel or CSV files.">
+                </span>
             </form>
             <div class="maincol-bottom"><!-- Chat body bottom -->
                 <table style = "width:100%">
                 <tr>
                 <td style="width: 30%;">
                 <form onsubmit="saveMessage()" id="model_select" action="" method="post" style="margin: 5px 0 10px 20px;">
-                    <label for="model" title="">Select Model</label>: <select title="Choose between available chat models" id="model" name="model" onchange="document.getElementById('model_select').submit();">
+                    <label for="model" title="Choose between available chat models">Select Model:</label>
+                    <select  id="model" name="model" onchange="document.getElementById('model_select').submit();">
                         <?php
                         foreach ($models as $m => $modelconfig) {
                             #echo '<pre>'.print_r($modelconfig,1).'</pre>';
@@ -174,7 +181,10 @@ foreach(array_keys($models) as $m) {
                 </td>
                 <td style="width: 25%;">
                 <form onsubmit="saveMessage()" id="temperature_select" action="" method="post" style="margin: 5px 0 10px 0;">
-                    <label for="temperature">Temperature</label>: <select title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially." name="temperature" onchange="document.getElementById('temperature_select').submit();">
+                    <label for="temperature" title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially.">
+                        Select Temperature:
+                    </label> 
+                    <select  name="temperature" style="width:70px;" onchange="document.getElementById('temperature_select').submit();">
                         <?php
                         foreach ($temperatures as $t) {
                             $sel = ($t == $_SESSION['temperature']) ? 'selected="selected"' : '';
@@ -194,7 +204,7 @@ foreach(array_keys($models) as $m) {
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
                         </p>
                     <?php else: ?>
-                        <input title="Document types accepted include PDF, XML, JSON, Word, Text, and Markdown. At this time we do not support Excel or CSV files." type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml" style="width:15em;" required onchange="javascript:fileUpload();" />
+                        <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml" style="width:15em;" required onchange="javascript:fileUpload();" />
                     <?php endif; ?>
                 </form>
                 </td>
@@ -214,17 +224,20 @@ foreach(array_keys($models) as $m) {
                 </tr>
                 <tr class="contactAcknowledgeTr">
                 <td>
-                    <input type="button" value="Admin Tool" aria-label="Admin Tool button" id="adminToolBtn" class ="adminToolBtn" 
-                        style="display:none;" title = "Tool for admin to review user information"/>
-                </td><td></td>
-                <td colspan="2">
                     <div class="contactAcknowledgeDiv">
-                        <input type="button" value="Contact" aria-label="Contact button" id="contactBtn" class ="contactBtn" onClick = "javascript:sendToContact();" 
-                            title = "Email to CRISPI-LLM@od.nih.gov"/>
                         <span data-toggle="tooltip" data-placement="right" data-bs-custom-class="acknowledgement-tooltip"
                                 style="color: blue;" id="acknowledgement" >
                             Acknowledgement
                         </span>
+                    </div>
+
+                </td><td></td>
+                <td colspan="2">
+                    <div class="contactAdminToolDiv">
+                        <input type="button" value="Contact" aria-label="Contact button" id="contactBtn" class ="contactBtn" onClick = "javascript:sendToContact();" 
+                            title = "Email to CRISPI-LLM@od.nih.gov"/> |
+                            <input type="button" value="Admin Tool" aria-label="Admin Tool button" id="adminToolBtn" class ="adminToolBtn" 
+                            style="display:none;" title = "Tool for admin to review user information"/>
                     </div>
                 </td>
                 </tr>
@@ -313,6 +326,9 @@ foreach(array_keys($models) as $m) {
             $("#adminToolBtn").hide();
         }
         $(document).ready(function(){
+            $('#attachmentIcon').click(function() {
+                $("input[type='file']").click();
+            });
             $('#aboutBtn').tooltip({
                 html : true,
                 placement : "right",

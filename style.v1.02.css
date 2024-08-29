@@ -327,18 +327,35 @@ nav,div::-webkit-scrollbar-track {
 .trainingSupport-tooltip {
     width : 30%;
 }
+.acknowledgement-tooltip {
+    width : 30%;
+    --bs-tooltip-bg: #4b4343;
+    inset: auto 0px 0px 112px !important;
+}
+.acknowledgement-tooltip > .tooltip-arrow {
+    left:-100px !important;
+}
 #messageList {
-    min-height: 60%;
+    min-height: 55%;
     width: 100%;
     margin-top: 10px;
 }
 
 .messageBox {
-    width: 82%;
-    position: absolute;
+    width: 99%;
+    position: relative;
     bottom: 0;
-    margin-bottom: 93px;
+    display: inline-block;
 }
+
+.message-icon {
+    position: absolute;   
+    width: 30px;
+    height: 30px;
+    right: 3%;
+    bottom: 10px;
+    cursor: pointer;
+  }
 
 .contactAcknowledgeTr{
     height: 40px; 
@@ -347,6 +364,11 @@ nav,div::-webkit-scrollbar-track {
 }
 
 .contactAcknowledgeDiv{
+    float: left;
+    margin: 5px 0 0px 10px;
+}
+
+.contactAdminToolDiv{
     float: right;
     margin: 5px 30px 0 0;
 }
@@ -356,10 +378,7 @@ nav,div::-webkit-scrollbar-track {
     margin-right: 20px; 
     background-color: white;
 }
-.acknowledgement-tooltip {
-    width : 30%;
-    --bs-tooltip-bg: #4b4343;
-}
+
 
 /*datatable styles*/
 .dataTables_info, .dataTables_paginate {
@@ -377,4 +396,16 @@ nav,div::-webkit-scrollbar-track {
 }
 .dtEmailCol {
     width: 30%;
+}
+input[type=button] {
+    border-radius: 50px;
+    flex-grow: 2;
+    border: none;
+    background-color: #6c757d;
+    color:white;
+}
+
+.adminToolBtn {
+    width: 100px;
+    margin-left: 20px;
 }
