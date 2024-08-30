@@ -148,18 +148,18 @@ body {
     overflow-y: auto;   
     overflow-x: hidden;
 }
-nav,div::-webkit-scrollbar-track {
+nav div::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(72, 85, 209, 0.3);
     border-radius: 10px;
     background-color: #F5F5F5;
   }
   
-  nav,div::-webkit-scrollbar {
+  nav div::-webkit-scrollbar {
     width: 12px;
     background-color: #F5F5F5;
   }
   
-  nav,div::-webkit-scrollbar-thumb {
+  nav div::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
     background-color: #c1c1c1;
@@ -385,10 +385,12 @@ nav,div::-webkit-scrollbar-track {
 
 
 /*datatable styles*/
-.dataTables_info, .dataTables_paginate {
-    font-size: smaller;
+.dt-search, .dt-paging{
+    float: right;
 }
-
+.dt-info, .dt-paging{
+    font-size:smaller;
+}
 .select2-container {
     width: 100% !important;
 }
@@ -399,8 +401,16 @@ nav,div::-webkit-scrollbar-track {
     width: 15%;
 }
 .dtEmailCol {
-    width: 30%;
+    width: 20%;
 }
+.dt-search, .dt-paging{
+    float: right;
+}
+.filterhead {
+    padding-left: 0px !important;
+    padding-right: 10px !important;
+}
+
 input[type=button] {
     border-radius: 50px;
     flex-grow: 2;
