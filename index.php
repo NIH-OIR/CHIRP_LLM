@@ -95,7 +95,7 @@ foreach(array_keys($models) as $m) {
 
     <div class="row flex-grow-1"> <!-- Begin the Content Row -->
         <!-- Start the menu column -->
-        <nav class="col-12 col-md-2 d-flex align-items-start flex-column menu">
+        <nav class="col-12 col-md-2 align-items-start flex-column menu">
 
              <!-- Start Menu top content -->
             <div class="left-nav-top">

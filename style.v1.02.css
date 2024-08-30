@@ -215,6 +215,7 @@ nav,div::-webkit-scrollbar-track {
 
 .left-nav-bottom {
     width: 100%;
+    padding-top: 7px;
 }
 
 .logout-link {
