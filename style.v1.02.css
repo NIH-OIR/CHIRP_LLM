@@ -375,8 +375,7 @@ nav,div::-webkit-scrollbar-track {
 
 .contactBtn {
     width: 80px; 
-    margin-right: 20px; 
-    background-color: white;
+    margin-left: 20px; 
 }
 
 
@@ -407,5 +406,5 @@ input[type=button] {
 
 .adminToolBtn {
     width: 100px;
-    margin-left: 20px;
+    margin-right: 20px;
 }

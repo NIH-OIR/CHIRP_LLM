@@ -234,10 +234,13 @@ foreach(array_keys($models) as $m) {
                 </td><td></td>
                 <td colspan="2">
                     <div class="contactAdminToolDiv">
+                        <div id="adminToolDiv" class="adminToolDiv" style="display:inline-block;">
+                        <input type="button" value="Admin Tool" aria-label="Admin Tool button" id="adminToolBtn" class ="adminToolBtn" 
+                            title = "Tool for admin to review user information"/>
+                            |
+                        </div>
                         <input type="button" value="Contact" aria-label="Contact button" id="contactBtn" class ="contactBtn" onClick = "javascript:sendToContact();" 
-                            title = "Email to CRISPI-LLM@od.nih.gov"/> |
-                            <input type="button" value="Admin Tool" aria-label="Admin Tool button" id="adminToolBtn" class ="adminToolBtn" 
-                            style="display:none;" title = "Tool for admin to review user information"/>
+                            title = "Email to CRISPI-LLM@od.nih.gov"/> 
                     </div>
                 </td>
                 </tr>
@@ -261,12 +264,12 @@ foreach(array_keys($models) as $m) {
         </p>
         <p>For more information on GenAI technology and resources at NIH, please reference to:</p>
         <ul>
-            <li><a href="https://teams.microsoft.com/l/team/19%3awtMbBDK8XbVfyehH9C9tTJI6Sm7QPb5m_SLm9aeMiM41%40thread.tacv2/conversations?groupId=00b270d4-5cb5-4523-b7e6-352797cbcb85&tenantId=14b77578-9773-42d5-8507-251ca2dc2b06">NIH GenAI Community</a></li>
-            <li><a href="https://cloud.nih.gov/">NIH STRIDES Initiative</a></li>
-            <li>NIH OD <a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8YWxpY2lhLmxpbGxpY2hAbmloLmdvdnw0YzU5YjczN2ExZTc0YjAwMTc2ODA4ZGM4NGQ0OGU3N3wxNGI3NzU3ODk3NzM0MmQ1ODUwNzI1MWNhMmRjMmIwNnwwfDB8NjM4NTMxMjk1NjU5NjY1MTE3fFVua25vd258VFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wPXwwfHx8&sdata=eU1FclhNRERXbU9wVWVSekRDSDBUcHU3RHlSTUlRVEZvR1pBRUgwYnFDZz0%3d&clickparams=eyAiWC1BcHBOYW1lIiA6ICJNaWNyb3NvZnQgT3V0bG9vayIsICJYLUFwcFZlcnNpb24iIDogIjE2LjAuMTY3MzEuMjA2NzQiLCAiT1MiIDogIldpbmRvd3MiIH0%3d&SafelinksUrl=https%3a%2f%2fnih.sharepoint.com%2fsites%2fOD-CDATechnologyAvailabilityGuideCTAG%2fSitePages%2fAIGuidance_FoundationalInformationGenerativeAIRisks.aspx">AI Guidance - Foundational Information, Generative AI and Risks</a></li>
+            <li><a target="_blank" href="https://teams.microsoft.com/l/team/19%3awtMbBDK8XbVfyehH9C9tTJI6Sm7QPb5m_SLm9aeMiM41%40thread.tacv2/conversations?groupId=00b270d4-5cb5-4523-b7e6-352797cbcb85&tenantId=14b77578-9773-42d5-8507-251ca2dc2b06">NIH GenAI Community</a></li>
+            <li><a target="_blank" href="https://cloud.nih.gov/">NIH STRIDES Initiative</a></li>
+            <li>NIH OD <a target="_blank" href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8YWxpY2lhLmxpbGxpY2hAbmloLmdvdnw0YzU5YjczN2ExZTc0YjAwMTc2ODA4ZGM4NGQ0OGU3N3wxNGI3NzU3ODk3NzM0MmQ1ODUwNzI1MWNhMmRjMmIwNnwwfDB8NjM4NTMxMjk1NjU5NjY1MTE3fFVua25vd258VFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wPXwwfHx8&sdata=eU1FclhNRERXbU9wVWVSekRDSDBUcHU3RHlSTUlRVEZvR1pBRUgwYnFDZz0%3d&clickparams=eyAiWC1BcHBOYW1lIiA6ICJNaWNyb3NvZnQgT3V0bG9vayIsICJYLUFwcFZlcnNpb24iIDogIjE2LjAuMTY3MzEuMjA2NzQiLCAiT1MiIDogIldpbmRvd3MiIH0%3d&SafelinksUrl=https%3a%2f%2fnih.sharepoint.com%2fsites%2fOD-CDATechnologyAvailabilityGuideCTAG%2fSitePages%2fAIGuidance_FoundationalInformationGenerativeAIRisks.aspx">AI Guidance - Foundational Information, Generative AI and Risks</a></li>
         </ul>
         <p>Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
-        <p>Notes: The following NIH and HHS <a href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
+        <p>Notes: The following NIH and HHS <a target="_blank" href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
         <p class="feedback"><b><?php echo $config['app']['feedback_text']; ?></b></p>
     </div>
 </div>
@@ -321,9 +324,9 @@ foreach(array_keys($models) as $m) {
         //});
         var isAdminUser = <?php if (isAdminUser($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
         if (isAdminUser) {
-            $("#adminToolBtn").show();
+            $("#adminToolDiv").show();
         } else {
-            $("#adminToolBtn").hide();
+            $("#adminToolDiv").hide();
         }
         $(document).ready(function(){
             $('#attachmentIcon').click(function() {
@@ -354,6 +357,11 @@ foreach(array_keys($models) as $m) {
                     return $('#trainingSupport-content').html()
                 },
                 customClass: "trainingSupport-tooltip"
+            });
+            $('body > div:not(.tooltip)').on("click", function(){
+                $('#aboutBtn').tooltip("hide");
+                $('#announcementBtn').tooltip("hide");
+                $('#trainingSupportBtn').tooltip("hide");
             });
             $('#aboutBtn').on("click", function(){
                 $('#announcementBtn').tooltip("hide");
