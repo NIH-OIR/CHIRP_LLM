@@ -418,6 +418,10 @@ $(document).ready(function(){
             var oTable = $('#usersTable').DataTable({
                 data: return_data,
                 // rowId: "id",
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
                 columns: [
                     { "data": function (data, type, full, meta) { //checkbox
                         return '';
@@ -462,6 +466,13 @@ $(document).ready(function(){
                 dom: 'Bfrtip',
                 pageLength: 10,
                 order: [[1, 'asc']],
+                columnDefs: [
+                    {
+                        orderable: false,
+                        render: DataTable.render.select(),
+                        targets: 0
+                    }
+                ],
                 /* buttons: [
                     {
                         text: "Edit",
