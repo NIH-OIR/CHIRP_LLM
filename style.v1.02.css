@@ -86,6 +86,8 @@ body {
     background-color: #1e558a;
     color: white;
     padding: 15px;
+    height: calc(100vh - 61px);
+    position: relative;
     /*
     width: 275px !important;
     flex: none !important; /* This prevents the column from growing or shrinking */
@@ -214,8 +216,10 @@ nav,div::-webkit-scrollbar-track {
 }
 
 .left-nav-bottom {
-    width: 100%;
-    padding-top: 7px;
+    width: 86%;
+    padding-bottom: 17px;
+    position: absolute;
+    bottom: 0;
 }
 
 .logout-link {
