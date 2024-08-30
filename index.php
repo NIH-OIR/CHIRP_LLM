@@ -95,7 +95,7 @@ foreach(array_keys($models) as $m) {
 
     <div class="row flex-grow-1"> <!-- Begin the Content Row -->
         <!-- Start the menu column -->
-        <nav class="col-12 col-md-2 d-flex align-items-start flex-column menu">
+        <nav class="col-12 col-md-2 align-items-start flex-column menu">
 
              <!-- Start Menu top content -->
             <div class="left-nav-top">
@@ -148,14 +148,21 @@ foreach(array_keys($models) as $m) {
            </div><!-- End Flex item chat body top -->
            <div id="thumbnails"></div>
            <form id="messageForm" class="messageBox">
-                <textarea class="form-control" id="userMessage" aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
+                <img id="chatBubbleIcon" src="images/chat-bubble.png" width="5%">
+                <textarea class="form-control" id="userMessage" style="width: 92%;float: right; margin-right: 20px;"
+                    aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
+                <span>
+                    <img id="attachmentIcon" src="images/attachment.png" alt="Upload File" class="message-icon" 
+                        title="Document types accepted include PDF, XML, JSON, Word, Text, and Markdown. At this time we do not support Excel or CSV files.">
+                </span>
             </form>
             <div class="maincol-bottom"><!-- Chat body bottom -->
                 <table style = "width:100%">
                 <tr>
                 <td style="width: 30%;">
                 <form onsubmit="saveMessage()" id="model_select" action="" method="post" style="margin: 5px 0 10px 20px;">
-                    <label for="model" title="">Select Model</label>: <select title="Choose between available chat models" id="model" name="model" onchange="document.getElementById('model_select').submit();">
+                    <label for="model" title="Choose between available chat models">Select Model:</label>
+                    <select  id="model" name="model" onchange="document.getElementById('model_select').submit();">
                         <?php
                         foreach ($models as $m => $modelconfig) {
                             #echo '<pre>'.print_r($modelconfig,1).'</pre>';
@@ -174,7 +181,10 @@ foreach(array_keys($models) as $m) {
                 </td>
                 <td style="width: 25%;">
                 <form onsubmit="saveMessage()" id="temperature_select" action="" method="post" style="margin: 5px 0 10px 0;">
-                    <label for="temperature">Temperature</label>: <select title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially." name="temperature" onchange="document.getElementById('temperature_select').submit();">
+                    <label for="temperature" title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially.">
+                        Select Temperature:
+                    </label> 
+                    <select  name="temperature" style="width:70px;" onchange="document.getElementById('temperature_select').submit();">
                         <?php
                         foreach ($temperatures as $t) {
                             $sel = ($t == $_SESSION['temperature']) ? 'selected="selected"' : '';
@@ -194,7 +204,7 @@ foreach(array_keys($models) as $m) {
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
                         </p>
                     <?php else: ?>
-                        <input title="Document types accepted include PDF, XML, JSON, Word, Text, and Markdown. At this time we do not support Excel or CSV files." type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml" style="width:15em;" required onchange="javascript:fileUpload();" />
+                        <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml" style="width:15em;" required onchange="javascript:fileUpload();" />
                     <?php endif; ?>
                 </form>
                 </td>
@@ -214,17 +224,23 @@ foreach(array_keys($models) as $m) {
                 </tr>
                 <tr class="contactAcknowledgeTr">
                 <td>
-                    <input type="button" value="Admin Tool" aria-label="Admin Tool button" id="adminToolBtn" class ="adminToolBtn" 
-                        style="display:none;" title = "Tool for admin to review user information"/>
-                </td><td></td>
-                <td colspan="2">
                     <div class="contactAcknowledgeDiv">
-                        <input type="button" value="Contact" aria-label="Contact button" id="contactBtn" class ="contactBtn" onClick = "javascript:sendToContact();" 
-                            title = "Email to CRISPI-LLM@od.nih.gov"/>
                         <span data-toggle="tooltip" data-placement="right" data-bs-custom-class="acknowledgement-tooltip"
                                 style="color: blue;" id="acknowledgement" >
                             Acknowledgement
                         </span>
+                    </div>
+
+                </td><td></td>
+                <td colspan="2">
+                    <div class="contactAdminToolDiv">
+                        <div id="adminToolDiv" class="adminToolDiv" style="display:inline-block;">
+                        <input type="button" value="Admin Tool" aria-label="Admin Tool button" id="adminToolBtn" class ="adminToolBtn" 
+                            title = "Tool for admin to review user information"/>
+                            |
+                        </div>
+                        <input type="button" value="Contact" aria-label="Contact button" id="contactBtn" class ="contactBtn" onClick = "javascript:sendToContact();" 
+                            title = "Email to CRISPI-LLM@od.nih.gov"/> 
                     </div>
                 </td>
                 </tr>
@@ -248,12 +264,12 @@ foreach(array_keys($models) as $m) {
         </p>
         <p>For more information on GenAI technology and resources at NIH, please reference to:</p>
         <ul>
-            <li><a href="https://teams.microsoft.com/l/team/19%3awtMbBDK8XbVfyehH9C9tTJI6Sm7QPb5m_SLm9aeMiM41%40thread.tacv2/conversations?groupId=00b270d4-5cb5-4523-b7e6-352797cbcb85&tenantId=14b77578-9773-42d5-8507-251ca2dc2b06">NIH GenAI Community</a></li>
-            <li><a href="https://cloud.nih.gov/">NIH STRIDES Initiative</a></li>
-            <li>NIH OD <a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8YWxpY2lhLmxpbGxpY2hAbmloLmdvdnw0YzU5YjczN2ExZTc0YjAwMTc2ODA4ZGM4NGQ0OGU3N3wxNGI3NzU3ODk3NzM0MmQ1ODUwNzI1MWNhMmRjMmIwNnwwfDB8NjM4NTMxMjk1NjU5NjY1MTE3fFVua25vd258VFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wPXwwfHx8&sdata=eU1FclhNRERXbU9wVWVSekRDSDBUcHU3RHlSTUlRVEZvR1pBRUgwYnFDZz0%3d&clickparams=eyAiWC1BcHBOYW1lIiA6ICJNaWNyb3NvZnQgT3V0bG9vayIsICJYLUFwcFZlcnNpb24iIDogIjE2LjAuMTY3MzEuMjA2NzQiLCAiT1MiIDogIldpbmRvd3MiIH0%3d&SafelinksUrl=https%3a%2f%2fnih.sharepoint.com%2fsites%2fOD-CDATechnologyAvailabilityGuideCTAG%2fSitePages%2fAIGuidance_FoundationalInformationGenerativeAIRisks.aspx">AI Guidance - Foundational Information, Generative AI and Risks</a></li>
+            <li><a target="_blank" href="https://teams.microsoft.com/l/team/19%3awtMbBDK8XbVfyehH9C9tTJI6Sm7QPb5m_SLm9aeMiM41%40thread.tacv2/conversations?groupId=00b270d4-5cb5-4523-b7e6-352797cbcb85&tenantId=14b77578-9773-42d5-8507-251ca2dc2b06">NIH GenAI Community</a></li>
+            <li><a target="_blank" href="https://cloud.nih.gov/">NIH STRIDES Initiative</a></li>
+            <li>NIH OD <a target="_blank" href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8YWxpY2lhLmxpbGxpY2hAbmloLmdvdnw0YzU5YjczN2ExZTc0YjAwMTc2ODA4ZGM4NGQ0OGU3N3wxNGI3NzU3ODk3NzM0MmQ1ODUwNzI1MWNhMmRjMmIwNnwwfDB8NjM4NTMxMjk1NjU5NjY1MTE3fFVua25vd258VFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wPXwwfHx8&sdata=eU1FclhNRERXbU9wVWVSekRDSDBUcHU3RHlSTUlRVEZvR1pBRUgwYnFDZz0%3d&clickparams=eyAiWC1BcHBOYW1lIiA6ICJNaWNyb3NvZnQgT3V0bG9vayIsICJYLUFwcFZlcnNpb24iIDogIjE2LjAuMTY3MzEuMjA2NzQiLCAiT1MiIDogIldpbmRvd3MiIH0%3d&SafelinksUrl=https%3a%2f%2fnih.sharepoint.com%2fsites%2fOD-CDATechnologyAvailabilityGuideCTAG%2fSitePages%2fAIGuidance_FoundationalInformationGenerativeAIRisks.aspx">AI Guidance - Foundational Information, Generative AI and Risks</a></li>
         </ul>
         <p>Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
-        <p>Notes: The following NIH and HHS <a href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
+        <p>Notes: The following NIH and HHS <a target="_blank" href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
         <p class="feedback"><b><?php echo $config['app']['feedback_text']; ?></b></p>
     </div>
 </div>
@@ -277,12 +293,12 @@ foreach(array_keys($models) as $m) {
 <div class="tooltip bs-tooltip-top" role="tooltip" id="trainingSupport-content">
   <div class="tooltip-content" style="max-width: 100%;text-align: left;">
         <ul>
-        <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/Prompt-Engineering.aspx" style="color: white;">
+        <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/Prompt-Engineering.aspx" target="_blank">
                 Prompt Engineering Guide
             </a>
         </li>
         <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8fGJmNTVmZTFkZGEyNTRiZTFhYjk3MDhkY2MyZWYyYjI0fDE0Yjc3NTc4OTc3MzQyZDU4NTA3MjUxY2EyZGMyYjA2fDB8MHw2Mzg1OTk1Nzk2NTY1NjM2MDd8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazkwYUdWeUlpd2lWMVFpT2pFeGZRPT18MXxMMk5vWVhSekx6RTVPamszTXprek9XUXdMV1F3TW1JdE5HWXpOQzA0TlRJM0xURTFZbVZtWVRFMFpXVm1NVjltWXpFMU16ZzJZUzB3TlRKakxUUmxNMk10WWpreE15MDNOV1JoTURoak5qYzFObUZBZFc1eExtZGliQzV6Y0dGalpYTXZiV1Z6YzJGblpYTXZNVGN5TkRNMk1URTJORFUwT1E9PXxhZGY4ZTkzOGEzODM0NTNmNDk0NzA4ZGNjMmVmMmIyMnw0YTc4MDk2N2Y0NjM0YWZhODJhMmNjYmJmNDExNWRmYw%3D%3D&sdata=Qkk0R09aYzFsOWgyWUlsQzdEc083U0w0Y0tjaGxoaFIxNWRVRU1zZ1E3Yz0%3D&ovuser=14b77578-9773-42d5-8507-251ca2dc2b06%2Cjenb2%40nih.gov&OR=Teams-HL&CT=1724945444026&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiIxNDE1LzI0MDcxMTI4ODI1IiwiSGFzRmVkZXJhdGVkVXNlciI6ZmFsc2V9"
-                style="color: white;">
+                target="_blank">
                 AI Guidance
             </a>
         </li>
@@ -308,11 +324,14 @@ foreach(array_keys($models) as $m) {
         //});
         var isAdminUser = <?php if (isAdminUser($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
         if (isAdminUser) {
-            $("#adminToolBtn").show();
+            $("#adminToolDiv").show();
         } else {
-            $("#adminToolBtn").hide();
+            $("#adminToolDiv").hide();
         }
         $(document).ready(function(){
+            $('#attachmentIcon').click(function() {
+                $("input[type='file']").click();
+            });
             $('#aboutBtn').tooltip({
                 html : true,
                 placement : "right",
@@ -338,6 +357,11 @@ foreach(array_keys($models) as $m) {
                     return $('#trainingSupport-content').html()
                 },
                 customClass: "trainingSupport-tooltip"
+            });
+            $('body > div:not(.tooltip)').on("click", function(){
+                $('#aboutBtn').tooltip("hide");
+                $('#announcementBtn').tooltip("hide");
+                $('#trainingSupportBtn').tooltip("hide");
             });
             $('#aboutBtn').on("click", function(){
                 $('#announcementBtn').tooltip("hide");
