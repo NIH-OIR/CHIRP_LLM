@@ -406,6 +406,10 @@ nav div::-webkit-scrollbar-track {
 .dt-search, .dt-paging{
     float: right;
 }
+table.dataTable>tbody>tr.selected>* {
+    box-shadow: inset 0 0 0 9999px rgb(191 211 239 / 90%);
+    color: black;
+}
 .filterhead {
     padding-left: 0px !important;
     padding-right: 10px !important;
@@ -422,4 +426,8 @@ input[type=button] {
 .adminToolBtn {
     width: 100px;
     margin-right: 20px;
+}
+
+#userInfoForm > .row {
+    margin: 10px;
 }

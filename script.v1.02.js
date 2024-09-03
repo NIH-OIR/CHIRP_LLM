@@ -418,15 +418,10 @@ $(document).ready(function(){
             var oTable = $('#usersTable').DataTable({
                 data: return_data,
                 // rowId: "id",
-                select: {
-                    style: 'os',
-                    selector: 'td:first-child'
-                },
                 columns: [
-                    { "data": function (data, type, full, meta) { //checkbox
-                        return '';
-                            return '<input type="checkbox" name="id" value="' + $('<div/>').text(data.userid).html() + '">';
-                        }
+                    { "data": function (data, type, full, meta) { 
+                        return "";
+                    }
                     },
                     {  "title": "Name",
                         "name": "userFullName",
@@ -466,11 +461,17 @@ $(document).ready(function(){
                 dom: 'Bfrtip',
                 pageLength: 10,
                 order: [[1, 'asc']],
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child',
+                    headerCheckbox: false
+                },
                 columnDefs: [
                     {
+                        targets: 0,
                         orderable: false,
-                        render: DataTable.render.select(),
-                        targets: 0
+                        className: 'select-checkbox'
+                        
                     }
                 ],
                 /* buttons: [
@@ -535,9 +536,29 @@ $(document).ready(function(){
                     } );
 
                     var oTable = $('#usersTable').DataTable();
+
                     oTable.on('select', function(e, dt, type, indexes) {
-                        var selectedRowData = oTable.rows('.selected').data();
-                        var userFullName = selectedRowData.userFullName
+                        var selectedRowData = oTable.rows('.selected').data()[0];
+                        var selectedUserId = selectedRowData.userid;
+                        var selectedUserFullName = selectedRowData.first_name + " " + selectedRowData.last_name;
+                        var selectedIsAdmin = selectedRowData.isAdmin;
+                        //console.log("selectedRowData: "+JSON.stringify(selectedRowData));
+                        //console.log("selectedUserFullName: "+selectedUserFullName+" selectedIsAdmin: "+selectedIsAdmin);
+
+                        $("#userFullNameInput").text(selectedUserFullName);
+                        $("#selectedUserId").val(selectedUserId);
+                        if (selectedIsAdmin == "Yes") {
+                            $("input[name=isAdminUser][value='1']").prop('checked', true);
+                        } else {
+                            $("input[name=isAdminUser][value='0']").prop('checked', true);
+                        }
+                        $("#userInfoForm").show();
+                    });
+                    oTable.on('deselect', function(e, dt, type, indexes) {
+                        $("#selectedUserId").val("");
+                        $("#userFullNameInput").text("");
+                        $("input[name=isAdminUser]").prop('checked', false);
+                        $("#userInfoForm").hide();
                     });
                 }
             }); //end DataTable

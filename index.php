@@ -29,7 +29,7 @@ foreach(array_keys($models) as $m) {
 
     <!-- datatable css -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/2.0.5/css/select.dataTables.css">
 
     <link href="style.v1.02.css" rel="stylesheet">
 
@@ -50,7 +50,7 @@ foreach(array_keys($models) as $m) {
     <!-- datatable css and js -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.1.4/js/dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/2.0.5/js/dataTables.select.min.js"></script>
-    <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script> -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/2.0.5/js/select.dataTables.js"></script>
 
 
 	<!-- Select2 plugin -->
@@ -400,6 +400,8 @@ foreach(array_keys($models) as $m) {
             window.print();
         }
 
+        
+
         // When the page is loaded, check if there's a saved userMessage and display it
         /*document.addEventListener('DOMContentLoaded', (event) => {
         var savedMessage = localStorage.getItem('userMessage');
@@ -420,16 +422,62 @@ foreach(array_keys($models) as $m) {
         */
     </script>
 <script>
-
+function saveAdminUser() {
+    var userid = $("#selectedUserId").val();
+    var checkedIsAmin = $("input[name=isAdminUser]:checked").val();
+    $.ajax({
+        url: "db.php",
+        type: 'POST',
+        data: {"callUpdateAdminUser": "1", 
+                "userid": userid,
+                "isAdmin": checkedIsAmin
+                },
+        success: function(response) {
+            console.log("save admin user successfully");
+            var oTable = $('#usersTable').DataTable();
+            var selectedRowIndx = oTable.rows('.selected').indexes()[0];
+            var updatedSelectedRowData = oTable.rows('.selected').data()[0];
+            if (checkedIsAmin == 1) {
+                updatedSelectedRowData.isAdmin = "Yes";
+            } else {
+                updatedSelectedRowData.isAdmin = "No";
+            }
+            oTable.row(selectedRowIndx).data(updatedSelectedRowData).draw();
+            /*
+            if (checkedIsAmin == 1) {
+                oTable.cell({row:selectedRowIndx, column:5}).data("Yes").draw(false);   
+            } else {
+                oTable.cell({row:selectedRowIndx, column:5}).data("No").draw(false);
+            }                    
+            if (response) {
+                
+            } */
+        }
+    }); 
+}
+function cancelAdminUser() {
+    var oTable = $('#usersTable').DataTable();
+    var selectedRowData = oTable.rows('.selected').data()[0];
+    var selectedIsAdmin = selectedRowData.isAdmin;
+    if (selectedIsAdmin == "Yes") {
+        $("input[name=isAdminUser][value='1']").prop('checked', true);
+    } else {
+        $("input[name=isAdminUser][value='0']").prop('checked', true);
+    } 
+    oTable.rows('.selected').nodes().to$().removeClass( 'selected' );
+    $("#userInfoForm").hide();
+}
 </script>
     <div id="adminToolDlg" style="font-size: 13px;">
-        <div id="userInfoForm">
+        <div id="userInfoForm" style="display:none">
+            <h6>Edit Admin User</h6>
             <div class="row">
                 <div class="col-md-2 columns">
                     <label for="userFullName">User's Name:</label>
                 </div>
-                <div class="col-md-6 columns">
-                    <input type="text" readonly/>
+                <div class="col-md-4 columns">
+                    <input id="selectedUserId" type="hidden"/>
+                    <div id="userFullNameInput" /></div>
                 </div>
             </div>
             <div class="row">
@@ -438,12 +486,21 @@ foreach(array_keys($models) as $m) {
                 </div>
                 <div class="col-md-1 columns">
                     <label for="isAdminUserYes">Yes</label>
-                    <input type="radio" id="isAdminUserYes" name="isAdminUser" value="Yes">
+                    <input type="radio" id="isAdminUserYes" name="isAdminUser" value="1">
                 </div>
                 <div class="col-md-1 columns">
                     <label for="isAdminUserNo">No</label>
-                    <input type="radio" id="isAdminUserNo" name="isAdminUser" value="No">
+                    <input type="radio" id="isAdminUserNo" name="isAdminUser" value="0">
                 </div>
+            </div>
+            <div class="row">
+            <div class="col-md-4 columns"></div>
+            <div class="col-md-1 columns">
+                <input type="button" value="Save" id="saveAdminUserBtn" class ="saveAdminUserBtn" style="width: 65px;" onclick="saveAdminUser()"/>
+            </div>
+            <div class="col-md-1 columns">
+                <input type="button" value="Cancel" id="cancelAdminUserBtn" class ="cancelAdminUserBtn" style="width: 65px;" onclick="cancelAdminUser()"/>
+            </div>
             </div>
         </div>
         <div id="usersTable_container" style="width:100%;">
@@ -461,7 +518,7 @@ foreach(array_keys($models) as $m) {
             <th class="filterhead dtDateCol"></th><!--Accepted Date -->
           </tr>
           <tr>
-            <th></th><!--checkbox -->
+            <th class="select-checkbox"></th><!--checkbox -->
             <th></th><!--Name -->
             <th></th><!--Email -->
             <th></th><!--Role -->

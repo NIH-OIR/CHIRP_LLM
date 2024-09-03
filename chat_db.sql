@@ -26,6 +26,7 @@ CREATE TABLE `exchange` (
   `prompt` text DEFAULT NULL,
   `reply` text DEFAULT NULL,
   `deployment` varchar(64) DEFAULT NULL,
+  `temperature`	decimal(2,1) NULL,
   `deleted` tinyint(4) DEFAULT 0,
   `timestamp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -40,7 +41,8 @@ CREATE TABLE `users` (
   `last_name` varchar(255) NOT NULL,
   `preferred_username` varchar(255) NOT NULL,
   `userid` varchar(100) NOT NULL,
-  `role` varchar(100) NOT NULL,
+  `role` varchar(100) NOT NULL, 
+  `is_admin` bool NULL,
   `ic` varchar(100) DEFAULT NULL,
   `pilot_api_keys` varchar(255) DEFAULT NULL,
   `llms_permitted` varchar(255) DEFAULT NULL,
@@ -48,4 +50,8 @@ CREATE TABLE `users` (
   PRIMARY KEY `id` (`id`),
   UNIQUE KEY `userid` (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Add is_admin_user
+ALTER TABLE `users` ADD COLUMN `is_admin` bool;
+
 
