@@ -245,11 +245,38 @@ function get_all_users() {
     return $output;
 }
 
+function isAdminUser($userid) {
+    global $pdo;
+    try {
+        $stmt = $pdo->prepare("SELECT count(*) FROM users WHERE userid = :userid and is_admin = true");
+        $stmt->execute(['userid' => $userid]);
+        $count = $stmt->fetchColumn();
+        return $count > 0;
+    } catch (PDOException $e) {
+        error_log('Failed to check if user is an admin user: ' . $e->getMessage());
+        return false;
+    }
+
+}
 if (isset($_POST['callGetUsersData'])) {
     error_log("Calling function get_all_users().");
     $returnData = get_all_users();
     echo json_encode(array($returnData));
 }
 
+function update_admin_user($userid, $isAdmin) {
+    global $pdo;
+    
+    // prepare a sql statement to update the deployment of a chat where the id matches the $chat_id
+    $stmt = $pdo->prepare("update users set is_admin = :is_admin where userid = :userid");
+    $stmt->execute(['is_admin' => $isAdmin, 'userid' => $userid]);
+}
+
+if (isset($_POST['callUpdateAdminUser'])) {
+    error_log("Calling function update_admin_user().");
+    $userid = $_POST['userid'];
+    $isAdmin = $_POST['isAdmin']; 
+    update_admin_user($userid, $isAdmin);
+}
 
 

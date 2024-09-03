@@ -386,3 +386,183 @@ $(document).ready(function(){
     });
 });
 
+//admin user datatable
+$(document).ready(function(){
+    $.ajax({
+        url: "db.php",
+        dataType: "json",
+        method: "POST",
+        data: {"callGetUsersData": "1"},
+        success: function(response){
+
+            var return_data = new Array();
+            $.each(response, function() {
+                $.each(this, function(key, value){
+                    return_data.push({
+                        'id': value.id,
+                        'userid': value.userid,
+                        'first_name': value.first_name,
+                        'last_name': value.last_name,
+                        'email':value.preferred_username,
+                        'role': value.role,
+                        'ic':value.ic,
+                        'isAdmin':value.is_admin ? 'Yes' : 'No',
+                        'api_keys':value.pilot_api_keys,
+                        'llms_permitted':value.llms_permitted,
+                        'accepted_date':value.updated_at
+                    });
+                });
+            });
+            //console.log("return_data: "+JSON.stringify(return_data));
+
+            var oTable = $('#usersTable').DataTable({
+                data: return_data,
+                // rowId: "id",
+                columns: [
+                    { "data": function (data, type, full, meta) { 
+                        return "";
+                    }
+                    },
+                    {  "title": "Name",
+                        "name": "userFullName",
+                        "data": function (data, type, full, meta) { //full name = lastname, firstname
+                            return data.last_name + ", "+ data.first_name;
+                        }
+                    },
+                    {   "title": "Email",
+                        "name": "email",
+                        "data": "email",
+                    },
+                    {   "title": "Role",
+                        "name": "role",
+                        "data": "role" 
+                    },
+                    {   "title": "IC",
+                        "name": "ic",
+                        "data": "ic" 
+                    },
+                    {   "title": "Is Admin",
+                        "name": "isAdmin",
+                        "data": "isAdmin" 
+                    },
+                    {   "title": "API Keys",
+                        "name": "api_keys",
+                        "data": "api_keys" 
+                    },
+                    {   "title": "LLMs Permitted",
+                        "name": "llms_permitted",
+                        "data": "llms_permitted" 
+                    },
+                    {   "title": "Accepted Date",
+                        "name": "accepted_date",
+                        "data": "accepted_date" 
+                    }
+                ],
+                dom: 'Bfrtip',
+                pageLength: 10,
+                order: [[1, 'asc']],
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child',
+                    headerCheckbox: false
+                },
+                columnDefs: [
+                    {
+                        targets: 0,
+                        orderable: false,
+                        className: 'select-checkbox'
+                        
+                    }
+                ],
+                /* buttons: [
+                    {
+                        text: "Edit",
+                        className: "editBtn",
+                        enableControl: {
+                            count: 1,
+                            invert:true
+                        },
+                        action: function(e, dt, node, config) {
+                            var oTable = $('#usersTable').DataTable();
+                            var selectedRowData = oTable.rows('.selected').data();
+                            var selectedRowIdArr = [];
+                            var selectedRowIdsStr = "";
+                        }
+
+                    }
+	            ], */
+                initComplete : function(settings, json) {
+                    $("#usersTable_paginate > span > a").removeClass("paginate_button");
+                    var api = this.api();
+                    count = 0;
+                    $('.filterhead', api.table().header()).each( function (i) {
+                        var column = api.column(i);
+                        var title = column.title();
+
+                        //replace spaces with dashes
+                        title = title.replace(/[\W]/g, '-');
+                        if(title.length > 0) { 
+                        var select = $('<select id="' + title + '" class="select2" multiple="true" ></select>')
+                            .appendTo( $(this).empty() )
+                            .on( 'change', function () {
+                            var data = $.map( $(this).select2('data'), function( value, key ) {
+                                return value.text ? '^' + $.fn.dataTable.util.escapeRegex(value.text) + '$' : null;
+                            });
+                            
+                            //if no data selected use ""
+                            if (data.length === 0) {
+                                data = [""];
+                            }
+                            
+                            //join array into string with regex or (|)
+                            var val = data.join('|');
+                            
+                            //search for the option(s) selected
+                            column.search( val ? val : '', true, false ).draw();
+                        });
+
+
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' );
+                        } );
+                    
+                        //use column title as selector and placeholder
+                        $('#' + title).select2({
+                            placeholder: "Select a " + title
+                        });
+
+                        $('.select2').val(null).trigger('change');
+                        }
+                    } );
+
+                    var oTable = $('#usersTable').DataTable();
+
+                    oTable.on('select', function(e, dt, type, indexes) {
+                        var selectedRowData = oTable.rows('.selected').data()[0];
+                        var selectedUserId = selectedRowData.userid;
+                        var selectedUserFullName = selectedRowData.first_name + " " + selectedRowData.last_name;
+                        var selectedIsAdmin = selectedRowData.isAdmin;
+                        //console.log("selectedRowData: "+JSON.stringify(selectedRowData));
+                        //console.log("selectedUserFullName: "+selectedUserFullName+" selectedIsAdmin: "+selectedIsAdmin);
+
+                        $("#userFullNameInput").text(selectedUserFullName);
+                        $("#selectedUserId").val(selectedUserId);
+                        if (selectedIsAdmin == "Yes") {
+                            $("input[name=isAdminUser][value='1']").prop('checked', true);
+                        } else {
+                            $("input[name=isAdminUser][value='0']").prop('checked', true);
+                        }
+                        $("#userInfoForm").show();
+                    });
+                    oTable.on('deselect', function(e, dt, type, indexes) {
+                        $("#selectedUserId").val("");
+                        $("#userFullNameInput").text("");
+                        $("input[name=isAdminUser]").prop('checked', false);
+                        $("#userInfoForm").hide();
+                    });
+                }
+            }); //end DataTable
+        } // end success function
+    }); //end ajax
+});
+

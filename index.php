@@ -29,7 +29,7 @@ foreach(array_keys($models) as $m) {
 
     <!-- datatable css -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/2.0.5/css/select.dataTables.css">
 
     <link href="style.v1.02.css" rel="stylesheet">
 
@@ -49,7 +49,8 @@ foreach(array_keys($models) as $m) {
 
     <!-- datatable css and js -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.1.4/js/dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/2.0.5/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/2.0.5/js/select.dataTables.js"></script>
 
 
 	<!-- Select2 plugin -->
@@ -385,7 +386,7 @@ foreach(array_keys($models) as $m) {
                     $(this).closest(".ui-dialog").find(".ui-dialog-titlebar-close")
                             .addClass("ui-button ui-corner-all ui-widget ui-button-icon-only")
                             .html("<span class='ui-button-icon-primary ui-icon ui-icon-closethick'></span><span class='ui-button-icone-space'></span");
-                }
+                },
             });
             $("#adminToolBtn").click(function() {
                 $('#adminToolDlg').dialog("open");
@@ -398,6 +399,8 @@ foreach(array_keys($models) as $m) {
         function printChat() {
             window.print();
         }
+
+        
 
         // When the page is loaded, check if there's a saved userMessage and display it
         /*document.addEventListener('DOMContentLoaded', (event) => {
@@ -419,130 +422,111 @@ foreach(array_keys($models) as $m) {
         */
     </script>
 <script>
-$(document).ready(function(){
+function saveAdminUser() {
+    var userid = $("#selectedUserId").val();
+    var checkedIsAmin = $("input[name=isAdminUser]:checked").val();
     $.ajax({
         url: "db.php",
-        dataType: "json",
-        method: "POST",
-        data: {"callGetUsersData": "1"},
-        success: function(response){
-
-            var return_data = new Array();
-            $.each(response, function() {
-                $.each(this, function(key, value){
-                    return_data.push({
-                        'id': value.id,
-                        'userid': value.userid,
-                        'first_name': value.first_name,
-                        'last_name': value.last_name,
-                        'email':value.preferred_username,
-                        'role': value.role,
-                        'ic':value.ic,
-                        'api_keys':value.pilot_api_keys,
-                        'llms_permitted':value.llms_permitted,
-                        'accepted_date':value.updated_at
-                    });
-                });
-            });
-            // console.log("return_data: "+JSON.stringify(return_data));
-
-            var oTable = $('#usersTable').DataTable({
-                data: return_data,
-                // rowId: "id",
-                columns: [
-                    {  "title": "Name",
-                        "data": function (data, type, full, meta) { //full name = lastname, firstname
-                            return data.last_name + ", "+ data.first_name;
-                        }
-                    },
-                    {   "title": "Email",
-                        "data": "email",
-                    },
-                    {   "title": "Role",
-                        "data": "role" 
-                    },
-                    {   "title": "IC",
-                        "data": "ic" 
-                    },
-                    {   "title": "API Keys",
-                        "data": "api_keys" 
-                    },
-                    {   "title": "LLMs Permitted",
-                        "data": "llms_permitted" 
-                    },
-                    {   "title": "Accepted Date",
-                        "data": "accepted_date" 
-                    }
-                ],
-                dom: 'Bfrtip',
-                pageLength: 15,
-                initComplete : function(settings, json) {
-                    $("#usersTable_paginate > span > a").removeClass("paginate_button");
-                    var api = this.api();
-                    count = 0;
-                    $('.filterhead', api.table().header()).each( function (i) {
-                        var column = api.column(i);
-                        var title = column.header();
-                        //replace spaces with dashes
-                        title = $(title).html().replace(/[\W]/g, '-');
-                        
-                        var select = $('<select id="' + title + '" class="select2" multiple="true" ></select>')
-                            .appendTo( $(this).empty() )
-                            .on( 'change', function () {
-                            var data = $.map( $(this).select2('data'), function( value, key ) {
-                                return value.text ? '^' + $.fn.dataTable.util.escapeRegex(value.text) + '$' : null;
-                            });
-                            
-                            //if no data selected use ""
-                            if (data.length === 0) {
-                                data = [""];
-                            }
-                            
-                            //join array into string with regex or (|)
-                            var val = data.join('|');
-                            
-                            //search for the option(s) selected
-                            column.search( val ? val : '', true, false ).draw();
-                        });
-
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' );
-                        } );
-                    
-                        //use column title as selector and placeholder
-                        $('#' + title).select2({
-                            placeholder: "Select a " + title
-                        });
-
-                        $('.select2').val(null).trigger('change');
-                    } );
-                }
-            }); //end DataTable
-        } // end success function
-    }); //end ajax
-});
+        type: 'POST',
+        data: {"callUpdateAdminUser": "1", 
+                "userid": userid,
+                "isAdmin": checkedIsAmin
+                },
+        success: function(response) {
+            console.log("save admin user successfully");
+            var oTable = $('#usersTable').DataTable();
+            var selectedRowIndx = oTable.rows('.selected').indexes()[0];
+            var updatedSelectedRowData = oTable.rows('.selected').data()[0];
+            if (checkedIsAmin == 1) {
+                updatedSelectedRowData.isAdmin = "Yes";
+            } else {
+                updatedSelectedRowData.isAdmin = "No";
+            }
+            oTable.row(selectedRowIndx).data(updatedSelectedRowData).draw();
+            /*
+            if (checkedIsAmin == 1) {
+                oTable.cell({row:selectedRowIndx, column:5}).data("Yes").draw(false);   
+            } else {
+                oTable.cell({row:selectedRowIndx, column:5}).data("No").draw(false);
+            }                    
+            if (response) {
+                
+            } */
+        }
+    }); 
+}
+function cancelAdminUser() {
+    var oTable = $('#usersTable').DataTable();
+    var selectedRowData = oTable.rows('.selected').data()[0];
+    var selectedIsAdmin = selectedRowData.isAdmin;
+    if (selectedIsAdmin == "Yes") {
+        $("input[name=isAdminUser][value='1']").prop('checked', true);
+    } else {
+        $("input[name=isAdminUser][value='0']").prop('checked', true);
+    } 
+    oTable.rows('.selected').nodes().to$().removeClass( 'selected' );
+    $("#userInfoForm").hide();
+}
 </script>
     <div id="adminToolDlg" style="font-size: 13px;">
+        <div id="userInfoForm" style="display:none">
+            <h6>Edit Admin User</h6>
+            <div class="row">
+                <div class="col-md-2 columns">
+                    <label for="userFullName">User's Name:</label>
+                </div>
+                <div class="col-md-4 columns">
+                    <input id="selectedUserId" type="hidden"/>
+                    <div id="userFullNameInput" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 columns">
+                <label for="isAdminUser">Is Admin User?:</label>
+                </div>
+                <div class="col-md-1 columns">
+                    <label for="isAdminUserYes">Yes</label>
+                    <input type="radio" id="isAdminUserYes" name="isAdminUser" value="1">
+                </div>
+                <div class="col-md-1 columns">
+                    <label for="isAdminUserNo">No</label>
+                    <input type="radio" id="isAdminUserNo" name="isAdminUser" value="0">
+                </div>
+            </div>
+            <div class="row">
+            <div class="col-md-4 columns"></div>
+            <div class="col-md-1 columns">
+                <input type="button" value="Save" id="saveAdminUserBtn" class ="saveAdminUserBtn" style="width: 65px;" onclick="saveAdminUser()"/>
+            </div>
+            <div class="col-md-1 columns">
+                <input type="button" value="Cancel" id="cancelAdminUserBtn" class ="cancelAdminUserBtn" style="width: 65px;" onclick="cancelAdminUser()"/>
+            </div>
+            </div>
+        </div>
         <div id="usersTable_container" style="width:100%;">
             <table id="usersTable" style="width:100%;">
             <thead>
           <tr>
-            <th class="filterhead dtNameCol"></th>
-            <th class="filterhead dtEmailCol"></th>
             <th class="filterhead"></th>
-            <th class="filterhead"></th>
-            <th class="filterhead"></th>
-            <th class="filterhead"></th>
-            <th class="filterhead dtDateCol"></th>
+            <th class="filterhead dtNameCol"></th> <!--Name -->
+            <th class="filterhead dtEmailCol"></th> <!--Email -->
+            <th class="filterhead"></th><!--Role -->
+            <th class="filterhead"></th><!--IC -->
+            <th class="filterhead"></th><!--Is Admin -->
+            <th class="filterhead"></th><!--API Keys -->
+            <th class="filterhead"></th><!--LLMs Permitted -->
+            <th class="filterhead dtDateCol"></th><!--Accepted Date -->
           </tr>
           <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th class="select-checkbox"></th><!--checkbox -->
+            <th></th><!--Name -->
+            <th></th><!--Email -->
+            <th></th><!--Role -->
+            <th></th><!--IC -->
+            <th></th><!--Is Admin -->
+            <th></th><!--API Keys -->
+            <th></th><!--LLMs Permitted -->
+            <th></th><!--Accepted Date -->
           </tr>
 
         </thead>
