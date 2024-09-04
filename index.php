@@ -195,13 +195,15 @@ foreach(array_keys($models) as $m) {
                     </select>
                 </form>
                 </td>
-                <td style="width: 25%;">
+                <td>
                 <form id="fileUpload" method="post" action="upload.php" id="document-uploader" enctype="multipart/form-data" style="margin: 5px 0 10px 0;">
                     <!-- Hidden input for chat_id -->
                     <input type="hidden" name="chat_id" aria-label="Hidden field with Chat ID" value="<?php echo htmlspecialchars($_GET['chat_id']); ?>">
 
                     <?php if (!empty($_SESSION['document_name'])): ?>
-                        <p>Uploaded file: <span style="color: salmon;"><?php echo htmlspecialchars($_SESSION['document_name']); ?></span>
+                        <p>Uploaded file: <span class="uploadFileSpan" title="<?php echo htmlspecialchars($_SESSION['document_name']); ?>">
+                                                <?php echo htmlspecialchars($_SESSION['document_name']); ?>
+                                         </span>
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
                         </p>
                     <?php else: ?>
@@ -218,9 +220,9 @@ foreach(array_keys($models) as $m) {
                     }
 ?>
 
-                <td style="width: 20%;">
+                <td style="width: 10%;">
                     <input type="button" value="Print" title="Print the existing chat session" aria-label="Print button" onClick="printChat()" 
-                            id="printButton" style = "width: 80px; margin: 5px 0 10px 100px;"/>
+                            id="printButton" style = "width: 80px; margin: 5px 0 10px 10px;"/>
                 </td>
                 </tr>
                 <tr class="contactAcknowledgeTr">

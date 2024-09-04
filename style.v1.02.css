@@ -382,6 +382,14 @@ nav div::-webkit-scrollbar-track {
     width: 80px; 
     margin-left: 20px; 
 }
+.uploadFileSpan {
+    color: salmon;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    display: inline-block;
+}
 
 
 /*datatable styles*/
