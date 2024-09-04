@@ -236,7 +236,11 @@ $(document).ready(function(){
 
     // Event delegation
     $(document).on('mouseover', '.chat-item', function () {
-        showIcons(this);
+        if ($(this).find('.edit-field').length) {
+            hideIcons(this);
+        } else {
+            showIcons(this);
+        }
     });
 
     $(document).on('mouseout', '.chat-item', function () {
