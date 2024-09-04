@@ -199,7 +199,7 @@ function get_gpt_response($message, $chat_id, $user) {
         if ($selectedModel == 'gemini-1.5-pro') {
             $msgArr = [];
             foreach($msg as $msgItem) {
-                if ($msgItem['role'] == "user") {
+                if ($msgItem['role'] == "user" || $msgItem['role'] == "system") {
                     $msgArr[] = $msgItem['content'];
                 }
             }
