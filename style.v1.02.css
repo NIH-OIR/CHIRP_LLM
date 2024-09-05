@@ -390,7 +390,7 @@ nav div::-webkit-scrollbar-track {
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 200px;
-    display: inline-block;
+    display: inline;
 }
 
 
