@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($chat_id)) {
         // Create new chat session
-        $chat_id = $new_chat_id = create_chat($user, 'New auto-generated Chat', '', $_SESSION['deployment'], $document_name, $document_text);
+        $chat_id = $new_chat_id = create_chat($user, 'New Chat', '', $_SESSION['deployment'], $document_name, $document_text);
     }
 
     #echo "THIS IS THE deployment: " . $deployment . "\n";
