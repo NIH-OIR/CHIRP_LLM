@@ -16,7 +16,7 @@ $document_text = $_SESSION['document_text'] = '';
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Create a new chat in the database using the authenticated user's username as the chat's creator
-    $newChatId = create_chat($user, 'GPT Chat', '', $deployment, $document_name, $document_text);
+    $newChatId = create_chat($user, 'New Chat', '', $deployment, $document_name, $document_text);
     
     // Return the ID of the new chat as a JSON object to the client
     echo json_encode(['chat_id' => $newChatId]);
