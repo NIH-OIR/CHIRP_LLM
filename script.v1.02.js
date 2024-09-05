@@ -390,6 +390,17 @@ $(document).ready(function(){
     });
 });
 
+function isScrolledIntoView(elem)
+{
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
+
 //admin user datatable
 $(document).ready(function(){
     $.ajax({
@@ -463,7 +474,11 @@ $(document).ready(function(){
                     }
                 ],
                 dom: 'Bfrtip',
-                pageLength: 10,
+                //pageLength: 10,
+                paging: false,
+                scrollCollapse: true,
+                scrollY: '50vh',
+                scrollX: false,
                 order: [[1, 'asc']],
                 select: {
                     style: 'os',

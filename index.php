@@ -92,20 +92,30 @@ foreach(array_keys($models) as $m) {
         </div>
     </div> <!-- End Header Row -->
 
+    <div class="row ui-tabs" id="tabs" style="display:none;">
+        <ul class="topNav ui-tabs-nav">
+            <li><a href="#tabs-chat" id ="chatAnchor">Chat</a></li>
+            <li><a href="#tabs-about" id ="aboutAnchor">About Chirp</a></li>
+            <li><a href="#tabs-announcement" id ="announcementAnchor">Announcement</a></li>
+            <li><a href="#tabs-trainingSupport" id ="trainingSupportAnchor">Training & Support</a></li>
+            <li><a href="#tabs-contactAcknowledgement" id ="tabs-contactAcknowledgementAnchor">Contact & Acknowledgement</a></li>
+            <li id ="adminToolTabList"><a href="#tabs-adminTool" >Admin Tool</a></li>
+        </ul>
+    
 
 
-    <div class="row flex-grow-1"> <!-- Begin the Content Row -->
+    <div class="col d-flex" id="tabs-chat"> <!-- Begin the Content Row Chat tab -->
         <!-- Start the menu column -->
         <nav class="col-12 col-md-2 align-items-start flex-column menu">
 
              <!-- Start Menu top content -->
             <div class="left-nav-top">
-                <button type="button" class="btn btn-secondary" data-tip="about-content" data-toggle="tooltip" data-placement="right" style="width:100%; padding: 0;" id="aboutBtn" title="">
+                <!-- <button type="button" class="btn btn-secondary" data-tip="about-content" data-toggle="tooltip" data-placement="right" style="width:100%; padding: 0;" id="aboutBtn" title="">
                     About Chirp
                 </button>
                 <button type="button" class="btn btn-secondary" data-tip="announcement-content" data-toggle="tooltip" data-placement="right" style="width:100%; padding: 0; margin-top: 7px;" id="announcementBtn" title="">
                     Announcement
-                </button>
+                </button> -->
                 <span class="newchat"><a title="Create new chat" href="javascript:void(0);" onclick="startNewChat()">+&nbsp;&nbsp;New Chat</a></span>
             </div> <!-- End Menu top content -->
             <!-- Chat List in Left Nav -->
@@ -129,11 +139,11 @@ foreach(array_keys($models) as $m) {
             </div>
     
             <!-- Start Menu bottom content -->
-            <div class="mt-auto left-nav-bottom">
+            <!-- <div class="mt-auto left-nav-bottom">
                 <button type="button" class="btn btn-secondary" data-tip="trainingSupport-content" data-toggle="tooltip" data-container="body" data-placement="right" style="width:100%; padding: 0; margin-top: 7px;" id="trainingSupportBtn" title="">
                     Training & Support
                 </button>
-            </div><!-- End Menu bottom content -->
+            </div> --><!-- End Menu bottom content -->
 
 
         </nav> <!-- End the menu column -->
@@ -225,42 +235,14 @@ foreach(array_keys($models) as $m) {
                             id="printButton" style = "width: 80px; margin: 5px 0 10px 10px;"/>
                 </td>
                 </tr>
-                <tr class="contactAcknowledgeTr">
-                <td>
-                    <div class="contactAcknowledgeDiv">
-                        <span data-toggle="tooltip" data-placement="right" data-bs-custom-class="acknowledgement-tooltip"
-                                style="color: blue;" id="acknowledgement" >
-                            Acknowledgement
-                        </span>
-                    </div>
-
-                </td><td></td>
-                <td colspan="2">
-                    <div class="contactAdminToolDiv">
-                        <div id="adminToolDiv" class="adminToolDiv" style="display:inline-block;">
-                        <input type="button" value="Admin Tool" aria-label="Admin Tool button" id="adminToolBtn" class ="adminToolBtn" 
-                            title = "Tool for admin to review user information"/>
-                            |
-                        </div>
-                        <input type="button" value="Contact" aria-label="Contact button" id="contactBtn" class ="contactBtn" onClick = "javascript:sendToContact();" 
-                            title = "Email to CRISPI-LLM@od.nih.gov"/> 
-                    </div>
-                </td>
-                </tr>
                 </table>
             </div><!-- End Chat body bottom -->
         </main> <!-- End the main-content column -->
 
-    </div> <!-- end the Content Row -->
-
-</div> <!-- end the Container-fluid -->
-    <div class="waiting-indicator" style="display: none;">
-        <img src="images/Ripple-1s-59px.gif" alt="Loading...">
-    </div>
-
-<!-- Tooltip Content -->
-<div class="tooltip bs-tooltip-top" role="tooltip" id="about-content">
-  <div class="tooltip-content" style="max-width: 100%;text-align: left;">
+    </div> <!-- end the Content Row Chat tab-->
+    <!-- about tab-->
+    <div id="tabs-about" >
+    <div class="tabsContainer tabsText">
         <p>The Large Language Model (LLM) pilot, funded by the Office of Data Science and Strategy and led by the Office of Intramural Research (OIR), aims to establish a secure LLM environment for NIH Staff. The focus is primarily on IRP programs, allowing exploration of Generative Artificial Intelligence (GenAI) technology specifically LLMs, and their potential impact on our biomedical research enterprise. Ethical and responsible use of LLMs in support of NIH missions is a key consideration to balance the innovation and protection aspects of the technology. The pilot is governed by the IRP AI Task Force, chaired by Dr. Richard Scheuermann.
         </p>
         <p>To achieve its objectives, the pilot will collect limited demographic information, including IC (Institute/Center), user roles, and user prompts and responses from each LLM. This data will inform policy decisions and guide future implementations of similar technologies. Importantly, the collected information will be used solely for usage and statistical reporting purposes.   
@@ -276,27 +258,25 @@ foreach(array_keys($models) as $m) {
         <p>Notes: The following NIH and HHS <a target="_blank" href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
         <p class="feedback"><b><?php echo $config['app']['feedback_text']; ?></b></p>
     </div>
-</div>
-<div class="acknowledgement-tooltip bs-tooltip-top" role="tooltip" id="acknowledgement-content">
-  <div class="acknowledgement-tooltip-content" style="max-width: 100%;text-align: left;">
-        <p>acknowledgement content
-        </p>
-  </div>
-</div>
-<div class="tooltip bs-tooltip-top" role="tooltip" id="announcement-content">
-  <div class="tooltip-content" style="max-width: 100%;text-align: left;">
+    </div>
+    <!-- end about tab-->
+    <!-- announcement tab-->
+    <div id="tabs-announcement">
+    <div class="tabsContainer tabsText">
         <p>Current Limitations of Document Upload Function:</p>
-        <ul>
-        <li>Files that work: .pdf, .json, .docx, .txt, .md, .xml</li>
-        <li>Files that do not work: .pptx</li>
-        <li>Can not upload: .xlsx, images, .csv</li>
-        </ul>
+            <ul>
+            <li>Files that work: .pdf, .json, .docx, .txt, .md, .xml</li>
+            <li>Files that do not work: .pptx</li>
+            <li>Can not upload: .xlsx, images, .csv</li>
+            </ul>
         <p>This will be patched in future iterations. Please contact us if any additional issues arise.</p>
-  </div>
-</div>
-<div class="tooltip bs-tooltip-top" role="tooltip" id="trainingSupport-content">
-  <div class="tooltip-content" style="max-width: 100%;text-align: left;">
-        <ul>
+    </div>
+    </div>
+    <!-- end announcement tab-->
+    <!-- training tab-->
+    <div id="tabs-trainingSupport">
+    <div class="tabsContainer tabsText">
+    <ul>
         <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/Prompt-Engineering.aspx" target="_blank">
                 Prompt Engineering Guide
             </a>
@@ -306,12 +286,96 @@ foreach(array_keys($models) as $m) {
                 AI Guidance
             </a>
         </li>
-
-            
         </ul>
-  </div>
-</div>
-<!-- End Tooltip Content -->
+    </div>
+    </div>
+    <!-- end training tab-->
+    <!-- contact acknowledge tab-->
+    <div id="tabs-contactAcknowledgement">
+    <div class="tabsContainer tabsText">
+        <h5>Contact</h5>
+        <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> 
+        <hr>
+        <h5>Acknowledgement</h5>
+        <p>acknowledgement content
+        </p>
+    </div>
+    </div>
+    <!-- end contact acknowledge tab-->
+    <!-- admin tool tab-->
+    <div id="tabs-adminTool">
+        <div class="tabsContainer">
+        <div id="userInfoForm" style="display:none">
+            <h6>Edit Admin User</h6>
+            <div class="row">
+                <div class="col-md-2 columns">
+                    <label for="userFullName">User's Name:</label>
+                </div>
+                <div class="col-md-4 columns">
+                    <input id="selectedUserId" type="hidden"/>
+                    <div id="userFullNameInput" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 columns">
+                <label for="isAdminUser">Is Admin User?:</label>
+                </div>
+                <div class="col-md-1 columns">
+                    <label for="isAdminUserYes">Yes</label>
+                    <input type="radio" id="isAdminUserYes" name="isAdminUser" value="1">
+                </div>
+                <div class="col-md-1 columns">
+                    <label for="isAdminUserNo">No</label>
+                    <input type="radio" id="isAdminUserNo" name="isAdminUser" value="0">
+                </div>
+            </div>
+            <div class="row">
+            <div class="col-md-4 columns"></div>
+            <div class="col-md-1 columns">
+                <input type="button" value="Save" id="saveAdminUserBtn" class ="saveAdminUserBtn" style="width: 65px;" onclick="saveAdminUser()"/>
+            </div>
+            <div class="col-md-1 columns">
+                <input type="button" value="Cancel" id="cancelAdminUserBtn" class ="cancelAdminUserBtn" style="width: 65px;" onclick="cancelAdminUser()"/>
+            </div>
+            </div>
+        </div>
+        <div id="usersTable_container" style="width:100%;">
+            <table id="usersTable" style="width:100%;">
+            <thead>
+            <tr>
+                <th class="filterhead"></th>
+                <th class="filterhead dtNameCol"></th> <!--Name -->
+                <th class="filterhead dtEmailCol"></th> <!--Email -->
+                <th class="filterhead"></th><!--Role -->
+                <th class="filterhead"></th><!--IC -->
+                <th class="filterhead"></th><!--Is Admin -->
+                <th class="filterhead"></th><!--API Keys -->
+                <th class="filterhead"></th><!--LLMs Permitted -->
+                <th class="filterhead dtDateCol"></th><!--Accepted Date -->
+            </tr>
+            <tr>
+                <th class="select-checkbox"></th><!--checkbox -->
+                <th></th><!--Name -->
+                <th></th><!--Email -->
+                <th></th><!--Role -->
+                <th></th><!--IC -->
+                <th></th><!--Is Admin -->
+                <th></th><!--API Keys -->
+                <th></th><!--LLMs Permitted -->
+                <th></th><!--Accepted Date -->
+            </tr>
+            </thead>
+            </table>
+        </div>
+        </div>
+    </div>
+    <!-- admin tool tab-->
+</div> <!--end tab-->
+</div> <!-- end the Container-fluid -->
+    <div class="waiting-indicator" style="display: none;">
+        <img src="images/Ripple-1s-59px.gif" alt="Loading...">
+    </div>
+
 <!-- Include Bootstrap JS and its dependencies-->
 <script src="script.v1.02.js"></script>
 <script>
@@ -328,77 +392,35 @@ foreach(array_keys($models) as $m) {
         //});
         var isAdminUser = <?php if (isAdminUser($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
         if (isAdminUser) {
-            $("#adminToolDiv").show();
+            console.log("is admin");
+            $("li#adminToolTabList").show();
         } else {
-            $("#adminToolDiv").hide();
+            console.log("not admin");
+            $("li#adminToolTabList").hide();
         }
         $(document).ready(function(){
+            $( "#tabs" ).tabs().show();
+            $(".ui-tabs-anchor").click(function(){
+                console.log($(this).prop("href"));
+                if ($(this).text() != "Chat") {
+                    $("#tabs-chat").attr('style', 'display: none !important');
+                } else {
+                    $("#tabs-chat").removeAttr("style");
+                }
+            });
+
             $('#attachmentIcon').click(function() {
                 $("input[type='file']").click();
             });
-            $('#aboutBtn').tooltip({
-                html : true,
-                placement : "right",
-                trigger : "click",
-                title : $('#about-content').html()
-            });
-            $('#acknowledgement').tooltip({
-                html : true,
-                placement : "top",
-                title : $('#acknowledgement-content').html()
-            });
-            $('#announcementBtn').tooltip({
-                html : true,
-                placement : "right",
-                trigger : "click",
-                title : $('#announcement-content').html(),
-            });
-            var trainingSupportTooltip = $('#trainingSupportBtn').tooltip({
-                html : true,
-                placement : "right",
-                trigger : "click",
-                title : function() {
-                    return $('#trainingSupport-content').html()
-                },
-                customClass: "trainingSupport-tooltip"
-            });
-            $('body > div:not(.tooltip)').on("click", function(){
-                $('#aboutBtn').tooltip("hide");
-                $('#announcementBtn').tooltip("hide");
-                $('#trainingSupportBtn').tooltip("hide");
-            });
-            $('#aboutBtn').on("click", function(){
-                $('#announcementBtn').tooltip("hide");
-                $('#trainingSupportBtn').tooltip("hide");
-            });
-            $('#announcementBtn').on("click", function(){
-                $('#aboutBtn').tooltip("hide");
-                $('#trainingSupportBtn').tooltip("hide");
-            });
-            $('#trainingSupportBtn').on("click", function(){
-                $('#announcementBtn').tooltip("hide");
-                $('#aboutBtn').tooltip("hide");
-            });
-
-            $('#adminToolDlg').dialog({
-                width: 1060,
-                height: 500,
-                autoOpen: false,
-                title: 'View All Users Information',
-                open: function( event, ui ) {
-                    $(this).closest(".ui-dialog").find(".ui-dialog-titlebar-close")
-                            .addClass("ui-button ui-corner-all ui-widget ui-button-icon-only")
-                            .html("<span class='ui-button-icon-primary ui-icon ui-icon-closethick'></span><span class='ui-button-icone-space'></span");
-                },
-            });
-            $("#adminToolBtn").click(function() {
-                $('#adminToolDlg').dialog("open");
-            })            
+            if ($(".current-chat").length > 0) {
+                $('.left-nav-chat-list').animate({
+                    scrollTop: !isScrolledIntoView($('.current-chat')) ? $(".current-chat").offset().top : 0
+                }, 2000);
+            }
+   
         });
 
-        function sendToContact() {
-            window.location.href = "mailto:CRISPI-LLM@od.nih.gov";
-        }
+        
         function printChat() {
             window.print();
         }
@@ -471,71 +493,7 @@ function cancelAdminUser() {
     $("#userInfoForm").hide();
 }
 </script>
-    <div id="adminToolDlg" style="font-size: 13px;">
-        <div id="userInfoForm" style="display:none">
-            <h6>Edit Admin User</h6>
-            <div class="row">
-                <div class="col-md-2 columns">
-                    <label for="userFullName">User's Name:</label>
-                </div>
-                <div class="col-md-4 columns">
-                    <input id="selectedUserId" type="hidden"/>
-                    <div id="userFullNameInput" /></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 columns">
-                <label for="isAdminUser">Is Admin User?:</label>
-                </div>
-                <div class="col-md-1 columns">
-                    <label for="isAdminUserYes">Yes</label>
-                    <input type="radio" id="isAdminUserYes" name="isAdminUser" value="1">
-                </div>
-                <div class="col-md-1 columns">
-                    <label for="isAdminUserNo">No</label>
-                    <input type="radio" id="isAdminUserNo" name="isAdminUser" value="0">
-                </div>
-            </div>
-            <div class="row">
-            <div class="col-md-4 columns"></div>
-            <div class="col-md-1 columns">
-                <input type="button" value="Save" id="saveAdminUserBtn" class ="saveAdminUserBtn" style="width: 65px;" onclick="saveAdminUser()"/>
-            </div>
-            <div class="col-md-1 columns">
-                <input type="button" value="Cancel" id="cancelAdminUserBtn" class ="cancelAdminUserBtn" style="width: 65px;" onclick="cancelAdminUser()"/>
-            </div>
-            </div>
-        </div>
-        <div id="usersTable_container" style="width:100%;">
-            <table id="usersTable" style="width:100%;">
-            <thead>
-          <tr>
-            <th class="filterhead"></th>
-            <th class="filterhead dtNameCol"></th> <!--Name -->
-            <th class="filterhead dtEmailCol"></th> <!--Email -->
-            <th class="filterhead"></th><!--Role -->
-            <th class="filterhead"></th><!--IC -->
-            <th class="filterhead"></th><!--Is Admin -->
-            <th class="filterhead"></th><!--API Keys -->
-            <th class="filterhead"></th><!--LLMs Permitted -->
-            <th class="filterhead dtDateCol"></th><!--Accepted Date -->
-          </tr>
-          <tr>
-            <th class="select-checkbox"></th><!--checkbox -->
-            <th></th><!--Name -->
-            <th></th><!--Email -->
-            <th></th><!--Role -->
-            <th></th><!--IC -->
-            <th></th><!--Is Admin -->
-            <th></th><!--API Keys -->
-            <th></th><!--LLMs Permitted -->
-            <th></th><!--Accepted Date -->
-          </tr>
 
-        </thead>
-            </table>
-        </div>
-    </div>
 </body>
 </html>
 

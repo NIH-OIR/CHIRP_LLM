@@ -77,7 +77,8 @@ body {
     display: none; /* Hide by default */
 }
 .main-content {
-    height: calc(100vh - 70px);
+    /* height: calc(100vh - 70px); */
+    height: calc(100vh - 100px);
     display: flex;
 }
 .menu {
@@ -86,7 +87,8 @@ body {
     background-color: #1e558a;
     color: white;
     padding: 15px;
-    height: calc(100vh - 61px);
+    /*height: calc(100vh - 61px);*/
+    height: calc(100vh - 115px);
     position: relative;
     /*
     width: 275px !important;
@@ -144,7 +146,7 @@ body {
 
 .left-nav-chat-list {
     width: 100%;
-    height: 60%;
+    height: 80%;
     overflow-y: auto;   
     overflow-x: hidden;
 }
@@ -422,6 +424,13 @@ table.dataTable>tbody>tr.selected>* {
     padding-left: 0px !important;
     padding-right: 10px !important;
 }
+table.dataTable {
+    width: 99vw !important;
+}
+.dt-scroll-body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
 
 input[type=button] {
     border-radius: 50px;
@@ -431,6 +440,10 @@ input[type=button] {
     color:white;
 }
 
+input[type=button]:hover{
+    background-color: #c1c1c1;
+}
+
 .adminToolBtn {
     width: 100px;
     margin-right: 20px;
@@ -438,4 +451,75 @@ input[type=button] {
 
 #userInfoForm > .row {
     margin: 10px;
+}
+
+/*top horizontal bar*/
+.topNav{
+
+    /* left:-50%; */
+    text-align:left;
+}
+.topNav ul{
+    list-style:none;
+
+    /* left:50%; */
+    margin: 0;
+    padding: 5px !important;
+    background-color: #c1c1c1;
+}
+
+
+.topNav a{
+    text-decoration:none;
+    background: #1e558a;
+    float:left;
+    color:#fff;
+    padding: 2px 10px;
+    text-align:center;
+    white-space:nowrap;
+}
+.topNav a:hover{ 
+    border:2px inset 1e558a;
+    color:fff;
+    background:#173a4f;
+}
+.topNav a:hover{ 
+    color:black;
+    cursor: pointer;
+}
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited, a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
+    color:white;
+    text-decoration: none;
+}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid #003eff;
+    background: #1e558a;
+    font-weight: normal;
+    color: #fff;
+}
+.ui-tabs .ui-tabs-panel {
+    padding: 0 0 0 4px; 
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+    cursor: pointer;
+    background-color: #5b5858;
+
+}
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    padding: .3em 1em;
+}
+
+.tabsContainer {
+    font-size: 13px;
+    /* max-height: 78vh; */
+    margin-top: 10px;
+    height: 78vh;
+    display:block;
+    overflow-y: auto;
+    overflow-x:hidden;
+}
+
+.tabsText {
+    width: 70vw;
+    margin-left: 15vw;
 }
