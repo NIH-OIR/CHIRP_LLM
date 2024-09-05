@@ -398,7 +398,7 @@ function isScrolledIntoView(elem)
     var elemTop = $(elem).offset().top;
     var elemBottom = elemTop + $(elem).height();
 
-    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+    return ((elemBottom <= docViewBottom - $(elem).height()) && (elemTop >= docViewTop));
 }
 
 //admin user datatable
