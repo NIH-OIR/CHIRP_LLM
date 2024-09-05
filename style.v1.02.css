@@ -2,7 +2,9 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0; 
     height: 100%; 
-    overflow: hidden;
+    min-width: 1155px;
+    overflow-x:auto;
+    overflow-y: hidden;
 }
 .p-2 {
     width: 100%;
@@ -242,11 +244,16 @@ nav div::-webkit-scrollbar-track {
     display: none;
 }
 
-/*#printButton {
+@media (max-width: 1208px) {
+    body, .btn{
+        font-size: 1.5vw;
+    }
+    .maincol-bottom {
+        font-size: 1vw;
+    }   
 }
-*/
 /* Show the navbar with the hamburger menu on small screens */
-@media (max-width: 767.98px) { 
+@media (max-width: 767.98px) {    
     .navbar {
         display: flex;
         background-color: #000; /* Or any color you prefer */
@@ -276,6 +283,13 @@ nav div::-webkit-scrollbar-track {
         left: 0;
         z-index: 1000; /* On top of other content */
         overflow: scroll;
+    }
+    .maincol-bottom {
+        height: calc(100vh - 95vh);
+        font-size:smaller;
+    }
+    .contactAcknowledgeTr {
+        display: none;
     }
 }
 
