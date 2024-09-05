@@ -372,9 +372,10 @@ foreach(array_keys($models) as $m) {
     <!-- admin tool tab-->
 </div> <!--end tab-->
 </div> <!-- end the Container-fluid -->
-    <div class="waiting-indicator" style="display: none;">
-        <img src="images/Ripple-1s-59px.gif" alt="Loading...">
-    </div>
+
+<div class="waiting-indicator" style="display: none;">
+    <img src="images/Ripple-1s-59px.gif" alt="Loading...">
+</div>
 
 <!-- Include Bootstrap JS and its dependencies-->
 <script src="script.v1.02.js"></script>
@@ -385,68 +386,42 @@ foreach(array_keys($models) as $m) {
     var chatId = <?php echo json_encode(isset($_GET['chat_id']) ? $_GET['chat_id'] : null); ?>;
     var user = <?php echo json_encode(isset($user) ? $user : null); ?>;
 
-</script>
-    <script>
-        //document.addEventListener('DOMContentLoaded', function() {
-            var sessionTimer = setTimeout(logoutUser, sessionTimeout);
-        //});
-        var isAdminUser = <?php if (isAdminUser($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
-        if (isAdminUser) {
-            console.log("is admin");
-            $("li#adminToolTabList").show();
-        } else {
-            console.log("not admin");
-            $("li#adminToolTabList").hide();
-        }
-        $(document).ready(function(){
-            $( "#tabs" ).tabs().show();
-            $(".ui-tabs-anchor").click(function(){
-                console.log($(this).prop("href"));
-                if ($(this).text() != "Chat") {
-                    $("#tabs-chat").attr('style', 'display: none !important');
-                } else {
-                    $("#tabs-chat").removeAttr("style");
-                }
-            });
+    //document.addEventListener('DOMContentLoaded', function() {
+        var sessionTimer = setTimeout(logoutUser, sessionTimeout);
+    //});
+    var isAdminUser = <?php if (isAdminUser($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
+    if (isAdminUser) {
+        $("li#adminToolTabList").show();
+    } else {
+        $("li#adminToolTabList").hide();
+    }
+    $(document).ready(function(){
+        $( "#tabs" ).tabs().show();
 
-            $('#attachmentIcon').click(function() {
-                $("input[type='file']").click();
-            });
-            if ($(".current-chat").length > 0) {
-                $('.left-nav-chat-list').animate({
-                    scrollTop: !isScrolledIntoView($('.current-chat')) ? $(".current-chat").offset().top : 0
-                }, 2000);
+        $(".ui-tabs-anchor").click(function(){
+            if ($(this).text() != "Chat") {
+                $("#tabs-chat").attr('style', 'display: none !important');
+            } else {
+                $("#tabs-chat").removeAttr("style");
             }
-   
         });
 
-        
-        function printChat() {
-            window.print();
+        $('#attachmentIcon').click(function() {
+            $("input[type='file']").click();
+        });
+        if ($(".current-chat").length > 0) {
+            $('.left-nav-chat-list').animate({
+                scrollTop: !isScrolledIntoView($('.current-chat')) ? $(".current-chat").offset().top : 0
+            }, 2000);
         }
 
-        
+    }); // end $(document).ready()
 
-        // When the page is loaded, check if there's a saved userMessage and display it
-        /*document.addEventListener('DOMContentLoaded', (event) => {
-        var savedMessage = localStorage.getItem('userMessage');
-        if (savedMessage) {
-        document.getElementById('userMessage').value = savedMessage;
-        }
-        });
+    
+function printChat() {
+    window.print();
+}
 
-        // Each time the userMessage is updated, save it in the local storage
-        document.getElementById('userMessage').addEventListener('input', (event) => {
-        localStorage.setItem('userMessage', event.target.value);
-        });
-
-        // After the form is submitted, clear the saved message
-        document.getElementById('messageForm').addEventListener('submit', function() {
-        localStorage.removeItem('userMessage');
-        });
-        */
-    </script>
-<script>
 function saveAdminUser() {
     var userid = $("#selectedUserId").val();
     var checkedIsAmin = $("input[name=isAdminUser]:checked").val();
