@@ -94,7 +94,7 @@ foreach(array_keys($models) as $m) {
 
     <div class="row ui-tabs" id="tabs" style="display:none;">
         <ul class="topNav ui-tabs-nav">
-            <li><a href="#tabs-chat" id ="chatAnchor">Chat</a></li>
+            <li><a href="#tabs-chat" id ="chatAnchor">My Chat</a></li>
             <li><a href="#tabs-about" id ="aboutAnchor">About Chirp</a></li>
             <li><a href="#tabs-announcement" id ="announcementAnchor">Announcement</a></li>
             <li><a href="#tabs-trainingSupport" id ="trainingSupportAnchor">Training & Support</a></li>
@@ -399,7 +399,8 @@ foreach(array_keys($models) as $m) {
         $( "#tabs" ).tabs().show();
 
         $(".ui-tabs-anchor").click(function(){
-            if ($(this).text() != "Chat") {
+            //if ($(this).text() != "My Chat") {
+            if($(this).attr("id") != "chatAnchor"){
                 $("#tabs-chat").attr('style', 'display: none !important');
             } else {
                 $("#tabs-chat").removeAttr("style");

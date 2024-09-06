@@ -249,6 +249,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.edit-icon', function () {
         var chatId = $(this).parent().attr('id').split('-')[1];
+        hideIcons($("#"+$(this).parent().attr('id')));
         editChat(chatId);
     });
 

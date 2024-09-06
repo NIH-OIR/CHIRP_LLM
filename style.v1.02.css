@@ -17,7 +17,7 @@ body {
     width: 100%;
 }
 .maincol-bottom {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     width: 82%;
     position: absolute;
     bottom: 0;
@@ -79,19 +79,19 @@ body {
     display: none; /* Hide by default */
 }
 .main-content {
-    /* height: calc(100vh - 70px); */
     height: calc(100vh - 100px);
     display: flex;
 }
 .menu {
     overflow: hidden;
     /*background-color: #343a40;*/
-    background-color: #1e558a;
+    /* background-color: #1e558a; */
+    background-color:#f4f5f7;
     color: white;
     padding: 15px;
-    /*height: calc(100vh - 61px);*/
-    height: calc(100vh - 115px);
+    height: calc(100vh - 128px);
     position: relative;
+    margin-top:8px;
     /*
     width: 275px !important;
     flex: none !important; /* This prevents the column from growing or shrinking */
@@ -103,7 +103,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 165px;
-    color: white;
+    /* color: white; */
     text-decoration: none;
 }
 .menu a:hover {
@@ -173,7 +173,7 @@ nav, div::-webkit-scrollbar-thumb {
     border-radius: 5px;
     padding: 5px;
     margin: 10px 10px 10px 0px;
-    display: inline-block;
+    display: inline-flex;
     width: 100%;
 }
 .chat-item {
@@ -215,7 +215,8 @@ nav, div::-webkit-scrollbar-thumb {
 
 .current-chat {
     /*background-color: #545a60;*/
-    background-color: #1d6ab8;
+    /* background-color: #1d6ab8; */
+    background-color: #b1cdf3;
     min-width: 100%;
 }
 
@@ -367,6 +368,7 @@ nav, div::-webkit-scrollbar-thumb {
     position: relative;
     bottom: 0;
     display: inline-block;
+    margin-left: 8px;
 }
 
 .message-icon {
@@ -455,7 +457,7 @@ input[type=button] {
 }
 
 input[type=button]:hover{
-    background-color: #c1c1c1;
+    background-color: #a6a3a3;
 }
 
 .adminToolBtn {
@@ -469,20 +471,12 @@ input[type=button]:hover{
 
 /*top horizontal bar*/
 .topNav{
-
-    /* left:-50%; */
     text-align:left;
-}
-.topNav ul{
     list-style:none;
-
-    /* left:50%; */
     margin: 0;
     padding: 5px !important;
-    background-color: #c1c1c1;
+    background-color: #efe6e6;
 }
-
-
 .topNav a{
     text-decoration:none;
     background: #1e558a;
@@ -501,12 +495,14 @@ input[type=button]:hover{
     color:black;
     cursor: pointer;
 }
+.ui-tabs {
+    padding-top: 0;
+}
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited, a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
     color:white;
     text-decoration: none;
 }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
-    border: 1px solid #003eff;
     background: #1e558a;
     font-weight: normal;
     color: #fff;
@@ -525,9 +521,8 @@ input[type=button]:hover{
 
 .tabsContainer {
     font-size: 13px;
-    /* max-height: 78vh; */
     margin-top: 10px;
-    height: 78vh;
+    height: 80vh;
     display:block;
     overflow-y: auto;
     overflow-x:hidden;
@@ -536,4 +531,7 @@ input[type=button]:hover{
 .tabsText {
     width: 70vw;
     margin-left: 15vw;
+    background-color: #f4f5f7;
+    padding: 10px;
+    border-radius: 10px;
 }

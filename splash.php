@@ -81,7 +81,7 @@ echo $config['app']['disclaimer_text'];
 ?>                    
 
                     <p class=""><a title="Open the training video in a new window" href="<?php echo $config['app']['video_link']; ?>" target="_blank">Training Video</a></p>
-                    <p class="newchat" style="text-align: center;">
+                    <p class="newchat" style="text-align: center;display: inline-block;">
                     <a title="Click here to go to authentication" href="index.php" id="proceedLink">Proceed</a></p>
                     <!-- Chat messages will be added here -->
                 </div>
