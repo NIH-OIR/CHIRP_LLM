@@ -332,16 +332,20 @@ nav, div::-webkit-scrollbar-thumb {
 
 /*style for tooltip*/
 .tooltip {
-    width : 60%;
-    --bs-tooltip-bg: #4b4343;
-    --bs-tooltip-arrow-height: 0.9rem;
+    max-width: 40%;
+    width:fit-content;
+    --bs-tooltip-bg: #f0f0f0;
+    --bs-tooltip-arrow-height: 0.6rem;
 }
 .tooltip-inner {
     max-width: 100% !important;
+    background-color: #f0f0f0;
+    color: #1b1b1b;
+    text-align: left;
 }
 .tooltip-content {
     text-align: left;
-    padding: 10px 15px;
+    padding: 10px 15px;   
 }
 .tooltip a{
     color: rgb(134 176 237);

@@ -172,7 +172,7 @@ foreach(array_keys($models) as $m) {
                 <tr>
                 <td style="width: 30%;">
                 <form onsubmit="saveMessage()" id="model_select" action="" method="post" style="margin: 5px 0 10px 20px;">
-                    <label for="model" title="Choose between available chat models">Select Model:</label>
+                    <label for="model">Select Model:</label>
                     <select  id="model" name="model" onchange="document.getElementById('model_select').submit();">
                         <?php
                         foreach ($models as $m => $modelconfig) {
@@ -188,11 +188,14 @@ foreach(array_keys($models) as $m) {
                         }
                         ?>
                     </select>
+                    <div style="display:inline;">
+                        <img id="modelQIcon" src="images/question_icon.png" width="15px" title="Choose between available chat models"/>
+                    </div>
                 </form>
                 </td>
                 <td style="width: 25%;">
                 <form onsubmit="saveMessage()" id="temperature_select" action="" method="post" style="margin: 5px 0 10px 0;">
-                    <label for="temperature" title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially.">
+                    <label for="temperature" >
                         Select Temperature:
                     </label> 
                     <select  name="temperature" style="width:70px;" onchange="document.getElementById('temperature_select').submit();">
@@ -203,6 +206,11 @@ foreach(array_keys($models) as $m) {
                         }
                         ?>
                     </select>
+                    <div style="display:inline;">
+                        <img id="temperatureQIcon" src="images/question_icon.png" width="15px"
+                            title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially."
+                        />
+                    </div>
                 </form>
                 </td>
                 <td>
@@ -415,6 +423,11 @@ foreach(array_keys($models) as $m) {
                 scrollTop: !isScrolledIntoView($('.current-chat')) ? $(".current-chat").offset().top : 0
             }, 2000);
         }
+
+        $('#modelQIcon, #temperatureQIcon, #attachmentIcon').tooltip({
+            html : true,
+            placement : "top",
+        });
 
     }); // end $(document).ready()
 
