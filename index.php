@@ -189,7 +189,7 @@ foreach(array_keys($models) as $m) {
                         ?>
                     </select>
                     <div style="display:inline;">
-                        <img id="modelQIcon" src="images/question_icon.png" width="15px" title="Choose between available chat models"/>
+                        <img id="modelQIcon" src="images/question_icon.svg" width="15px" title="Choose between available chat models"/>
                     </div>
                 </form>
                 </td>
@@ -207,7 +207,7 @@ foreach(array_keys($models) as $m) {
                         ?>
                     </select>
                     <div style="display:inline;">
-                        <img id="temperatureQIcon" src="images/question_icon.png" width="15px"
+                        <img id="temperatureQIcon" src="images/question_icon.svg" width="15px"
                             title="Choose a temperature setting between 0 and 2. A temperature of 0 means the responses will be very deterministic (meaning you almost always get the same response to a given prompt). A temperature of 2 means the responses can vary substantially."
                         />
                     </div>
