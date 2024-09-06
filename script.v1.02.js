@@ -249,6 +249,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.edit-icon', function () {
         var chatId = $(this).parent().attr('id').split('-')[1];
+        hideIcons($("#"+$(this).parent().attr('id')));
         editChat(chatId);
     });
 
@@ -390,6 +391,17 @@ $(document).ready(function(){
     });
 });
 
+function isScrolledIntoView(elem)
+{
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom - $(elem).height()) && (elemTop >= docViewTop));
+}
+
 //admin user datatable
 $(document).ready(function(){
     $.ajax({
@@ -463,7 +475,11 @@ $(document).ready(function(){
                     }
                 ],
                 dom: 'Bfrtip',
-                pageLength: 10,
+                //pageLength: 10,
+                paging: false,
+                scrollCollapse: true,
+                scrollY: '50vh',
+                scrollX: false,
                 order: [[1, 'asc']],
                 select: {
                     style: 'os',
