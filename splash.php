@@ -30,13 +30,16 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
 <body>
     <div class="container">
         <div class="header row align-items-center">
-            <div class="col-sm-4">
+            <!-- <div class="col-sm-4">
             <img src="images/<?php echo $config['app']['app_logo']; ?>" class="logo" alt="<?php echo $config['app']['app_logo_alt']; ?>">
             </div>
             <div class="col-sm-4 text-center">
                 <h1><?php echo $config['app']['app_title']; ?></h1>
+            </div> -->
+            <div class="col-sm-10" style="padding-left: 3px;">
+                <img width="100%" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
             </div>
-            <div class="col-sm-4 text-end">
+            <div class="col-sm-2 text-end">
 <?php
 
 if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SESSION['user_data']['name'].'</p>'."\n";

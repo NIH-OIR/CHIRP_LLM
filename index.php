@@ -81,13 +81,19 @@ foreach(array_keys($models) as $m) {
     
 
     <div class="row header d-flex align-items-center"> <!-- Header Row -->
-        <div class="col d-flex justify-content-start">
+<!--         <div class="col d-flex justify-content-start">
             <img src="images/<?php echo $config['app']['app_logo']; ?>" class="logo" alt="<?php echo $config['app']['app_logo_alt']; ?>">
         </div>
         <div class="col d-flex justify-content-center">
             <h1><?php echo $config['app']['app_title']; ?></h1>
         </div>
         <div class="col d-flex justify-content-end">
+            <p id="username"><span class="greeting">Hello </span><span class="user-name"><?php echo $username; ?></span> <a title="Log out of the chat interface" href="logout.php" class="logout-link" style="display:inline-block;">Logout</a></p>
+        </div> -->
+        <div class="col d-flex justify-content-center" style="padding-left: 3px;width: 100%;">
+            <img width="100%" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
+        </div>
+        <div class="col d-flex col-2">
             <p id="username"><span class="greeting">Hello </span><span class="user-name"><?php echo $username; ?></span> <a title="Log out of the chat interface" href="logout.php" class="logout-link" style="display:inline-block;">Logout</a></p>
         </div>
     </div> <!-- End Header Row -->
