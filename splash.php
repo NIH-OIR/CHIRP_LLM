@@ -36,7 +36,7 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
             <div class="col-sm-4 text-center">
                 <h1><?php echo $config['app']['app_title']; ?></h1>
             </div> -->
-            <div class="col-sm-10" style="padding-left: 3px;">
+            <div class="col d-flex justify-content-center" style="padding-left: 3px;">
                 <img width="100%" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
             </div>
             <div class="col-sm-2 text-end">
@@ -77,7 +77,7 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                     <!-- <?php echo $config['app']['help_text1']; ?> -->
                     OD Chat is a secure chatbot enabling OD staff to use generative AI for their day-to-day work.
                 </div>
-                <div style="height: 55vh; overflow-y:auto; overflow-x:hidden;">
+                <div id="scrollContent" style="height: 50vh; overflow-y:auto; overflow-x:hidden;">
                     <p>OD Chat stores all data locally in the NIH data center and uses a secure NIH STRIDES cloud account to host AI models. This enables staff to use NHLBI Chat for sensitive data workloads including:</p>
                     <ul>
                         <li>De-identified and anonymized clinical data</li>
@@ -137,8 +137,8 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                 </div>
                 <div class="footer" style="margin-top: 15px;">
                     <p style="margin-bottom:5px;"><a title="Open the training video in a new window" href="<?php echo $config['app']['video_link']; ?>" target="_blank">Training Video</a></p>
-                    <p class="newchat" style="text-align: center;display: inline-block;">
-                    <a title="Click here to go to authentication" href="index.php" id="proceedLink">Proceed</a></p>
+                    <p id="proceedContainer" class="newchat" style="text-align: center;display: inline-block;background-color: #f8f9fa;">
+                    <a title="Click here to go to proceed" href="index.php" id="proceedLink" >Proceed</a></p>
                     <!-- Chat messages will be added here -->
                     <p><a title="Open the disclosure information in a new window" href="<?php echo $config['app']['disclosure_link']; ?>" target="_Blank" title="Vulnerability Disclosure">Vulnerability Disclosure</a></p>
                 </div>
@@ -204,6 +204,16 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
         // console.log("userExist: "+userExist);
         if (!userExist) {
             $('#roleSelectionDlg').dialog("open");
+
+            $("#proceedLink").removeAttr("href").addClass("proceedDisabled");
+            $('div#scrollContent').on('scroll', function() {
+                var elem = $(this);
+                if (elem.scrollTop() > 0 && 
+                    ((elem[0].scrollHeight - elem.scrollTop()) <= (elem.outerHeight() + 1))) {
+                    console.log("scroll to the bottom");
+                    $("#proceedLink").prop("href", "index.php").removeClass("proceedDisabled").addClass("proceedEnabled");
+                }
+            });
         } 
 
     });
