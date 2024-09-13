@@ -535,3 +535,10 @@ input[type=button]:hover{
     padding: 10px;
     border-radius: 10px;
 }
+
+.proceedDisabled {
+    color: #a09c9c;
+}
+.proceedEnabled {
+    color:#1b76fd
+}
