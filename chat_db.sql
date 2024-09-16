@@ -54,4 +54,7 @@ CREATE TABLE `users` (
 -- Add is_admin_user
 ALTER TABLE `users` ADD COLUMN `is_admin` bool;
 
+-- Add column email to users table
+ALTER TABLE `users` ADD COLUMN `email` varchar(255);
+
 

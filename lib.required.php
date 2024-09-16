@@ -421,3 +421,13 @@ function approximateTokenCountByChars($text) {
 }
 
 
+function isUserExist($userData) {
+    if (user_exists($userData['userid'])) {
+        if (!isset($userData['department'])) {
+            $userData['department'] = '';
+        }
+        update_user($userData['userid'], $userData['department'], $userData['email']); 
+        echo "true";  
+  } else echo "false";
+}
+

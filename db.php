@@ -175,9 +175,21 @@ function user_exists($userid) {
     }
 }
 
+function update_user($userid, $userIc, $userEmail) {
+    global $pdo;
+
+    // prepare a sql statement to update the deployment of a chat where the id matches the $chat_id
+    $stmt = $pdo->prepare("update users set ic = :ic1, email = :email where userid = :userid and (ic = '' or ic != :ic2)");
+    $stmt->execute(['ic1' => $userIc, 
+                    'userid' => $userid, 
+                    'ic2' => $userIc,
+                    'email' => $userEmail,
+                   ]);
+}
+
 
 // Insert user data into the users table
-function insert_user_data($first_name, $last_name, $preferred_username, $userid, $role) {
+function insert_user_data($first_name, $last_name, $preferred_username, $userid, $role, $ic, $email) {
     global $pdo;
 
     // Check if the user data exists in the session
@@ -186,21 +198,13 @@ function insert_user_data($first_name, $last_name, $preferred_username, $userid,
         return false;
     }
 
-    // Extract user data from the session
-    // $name = $_SESSION['user_data']['name'];
-    // $first_name = $_SESSION['user_data']['first_name'];
-    // $last_name = $_SESSION['user_data']['last_name'];
-    // $preferred_username = $_SESSION['user_data']['preferred_username'];
-    // $userid = $_SESSION['user_data']['userid'];
-    // $role = $_SESSION['user_data']['role'];  // Use the role from the session
-    $ic = ''; // Replace with actual Institutional Component (IC) value
     $pilot_api_keys = ''; // Placeholder, can be modified based on your logic
     $llms_permitted = ''; // Placeholder, can be modified based on your logic
 
     try {
         // Prepare the SQL statement to insert the user data
-        $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, preferred_username, userid, role, ic, pilot_api_keys, llms_permitted, updated_at) 
-                                VALUES (:first_name, :last_name, :preferred_username, :userid, :role, :ic, :pilot_api_keys, :llms_permitted, NOW())");
+        $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, preferred_username, userid, role, ic, pilot_api_keys, llms_permitted, updated_at, email) 
+                                VALUES (:first_name, :last_name, :preferred_username, :userid, :role, :ic, :pilot_api_keys, :llms_permitted, NOW(), :email)");
 
         // Execute the statement with the session data
         $stmt->execute([
@@ -212,6 +216,7 @@ function insert_user_data($first_name, $last_name, $preferred_username, $userid,
             'ic' => $ic,
             'pilot_api_keys' => $pilot_api_keys,
             'llms_permitted' => $llms_permitted,
+            'email' => $email
         ]);
 
         return true; // Indicate success
@@ -228,7 +233,9 @@ if (isset($_POST['callInsertUserData'])) {
     $preferred_username = $_POST['preferred_username'];
     $userid = $_POST['userid'];
     $role = $_POST['selectedRole']; 
-    $returnData = insert_user_data($first_name, $last_name, $preferred_username, $userid, $role);
+    $ic = $_POST['ic'];
+    $email = $_POST['email'];
+    $returnData = insert_user_data($first_name, $last_name, $preferred_username, $userid, $role, $ic, $email);
     echo $returnData;
 }
 
