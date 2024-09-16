@@ -170,6 +170,8 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                         var lastName = "<?php if (!empty($_SESSION['user_data']['last_name'])) echo $_SESSION['user_data']['last_name']; else echo ""; ?>";
                         var preferredUsername = "<?php if (!empty($_SESSION['user_data']['preferred_username'])) echo $_SESSION['user_data']['preferred_username']; else echo ""; ?>";
                         var userid = "<?php if (!empty($_SESSION['user_data']['userid'])) echo $_SESSION['user_data']['userid']; else echo ""; ?>";
+                        var ic = "<?php if (!empty($_SESSION['user_data']['department'])) echo $_SESSION['user_data']['department']; else echo ""; ?>";
+                        var email = "<?php if (!empty($_SESSION['user_data']['email'])) echo $_SESSION['user_data']['email']; else echo ""; ?>";
 
                         $.ajax({
                             url: "db.php",
@@ -179,7 +181,9 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                                     "first_name": firstName,
                                     "last_name": lastName,
                                     "preferred_username": preferredUsername,
-                                    "userid": userid
+                                    "userid": userid,
+                                    "ic": ic,
+                                    "email": email
                                   },
                             success: function(response) {                              
                                 if (response) {
@@ -200,7 +204,7 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                 },
             ]
         });
-        var userExist = <?php if (user_exists($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
+        var userExist = <?php isUserExist($_SESSION['user_data']); ?>;
         // console.log("userExist: "+userExist);
         if (!userExist) {
             $('#roleSelectionDlg').dialog("open");

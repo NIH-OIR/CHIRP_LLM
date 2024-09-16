@@ -6,7 +6,7 @@ session_start();
 $clientId = $config['openid']['clientId'];
 $callback = $config['openid']['callback'];
 
-$scope = 'openid profile';  // Asking for identity and profile information
+$scope = $config['openid']['scope'];  // Asking for identity and profile information
 $state = bin2hex(random_bytes(16));  // Generate a random state
 $_SESSION['oauth2state'] = $state;  // Store state in session for later validation
 
