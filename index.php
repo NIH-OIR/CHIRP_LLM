@@ -371,9 +371,9 @@ foreach(array_keys($models) as $m) {
                 <th class="select-checkbox"></th><!--checkbox -->
                 <th></th><!--Name -->
                 <th></th><!--Email -->
-                <th></th><!--Role -->
-                <th></th><!--IC -->
-                <th></th><!--Is Admin -->
+                <th style="width: 10%;"></th><!--Role -->
+                <th style="width: 10%;"></th><!--IC -->
+                <th style="width: 10%;"></th><!--Is Admin -->
                 <th></th><!--API Keys -->
                 <th></th><!--LLMs Permitted -->
                 <th></th><!--Accepted Date -->
