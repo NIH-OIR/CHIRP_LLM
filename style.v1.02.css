@@ -448,6 +448,9 @@ table.dataTable {
     overflow-y: auto !important;
     overflow-x: hidden !important;
 }
+.dt-type-date {
+    text-align: left !important;
+}
 
 input[type=button] {
     border-radius: 50px;

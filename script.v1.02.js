@@ -419,7 +419,7 @@ $(document).ready(function(){
                         'userid': value.userid,
                         'first_name': value.first_name,
                         'last_name': value.last_name,
-                        'email':value.preferred_username,
+                        'email':value.email,
                         'role': value.role,
                         'ic':value.ic,
                         'isAdmin':value.is_admin ? 'Yes' : 'No',
@@ -447,11 +447,11 @@ $(document).ready(function(){
                     },
                     {   "title": "Email",
                         "name": "email",
-                        "data": "email",
+                        "data": "email"
                     },
                     {   "title": "Role",
                         "name": "role",
-                        "data": "role" 
+                        "data": "role"
                     },
                     {   "title": "IC",
                         "name": "ic",
@@ -471,7 +471,10 @@ $(document).ready(function(){
                     },
                     {   "title": "Accepted Date",
                         "name": "accepted_date",
-                        "data": "accepted_date" 
+                        "data": function (data, type, full, meta) { //get the date only
+                            var dateTimeArr = data.accepted_date.split(" ");
+                            return dateTimeArr[0];
+                        }
                     }
                 ],
                 dom: 'Bfrtip',
