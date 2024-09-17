@@ -10,11 +10,13 @@ body {
     width: 100%;
 }
 .maincol-top {
-    /* height: calc(100vh - 325px); */
     overflow-y: scroll;
-    margin-bottom: 10px;
+    margin: 10px 0;
     border: solid 0px blue;
     width: 100%;
+    min-height: 55%;
+    max-height: 80%;
+    height: calc(100vh - 330px);
 }
 .maincol-bottom {
     margin-bottom: 10px;
@@ -260,6 +262,7 @@ nav, div::-webkit-scrollbar-thumb {
     .navbar {
         display: flex;
         background-color: #000; /* Or any color you prefer */
+        width: 0px;
     }
     .menu {
         display: none !important;
@@ -352,13 +355,6 @@ nav, div::-webkit-scrollbar-thumb {
 }
 .trainingSupport-tooltip {
     width : 30%;
-}
-
-#messageList {
-    min-height: 55%;
-    width: 100%;
-    margin-top: 10px;
-    height: 50%;
 }
 
 .messageBox {
@@ -527,7 +523,7 @@ input[type=button]:hover{
 .tabsContainer {
     font-size: 13px;
     margin-top: 10px;
-    height: 80vh;
+    height: 70vh;
     display:block;
     overflow-y: auto;
     overflow-x:hidden;
