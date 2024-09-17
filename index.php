@@ -70,8 +70,8 @@ foreach(array_keys($models) as $m) {
 <body>
 
 <!-- Navbar for Hamburger Menu -->
-<nav class="navbar navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" id="toggleMenu" aria-label="Toggle navigation">
+<nav class="navbar bg-dark">
+    <button class="navbar-toggler" type="button" id="toggleMenu" aria-label="Toggle navigation" style=" background-color: #efe6e6;">
         <span class="navbar-toggler-icon"></span>
     </button>
 </nav>
@@ -80,16 +80,7 @@ foreach(array_keys($models) as $m) {
     <!-- <a href="#main-content" class="skip-link">Skip to main content</a> -->
     
 
-    <div class="row header d-flex align-items-center"> <!-- Header Row -->
-<!--         <div class="col d-flex justify-content-start">
-            <img src="images/<?php echo $config['app']['app_logo']; ?>" class="logo" alt="<?php echo $config['app']['app_logo_alt']; ?>">
-        </div>
-        <div class="col d-flex justify-content-center">
-            <h1><?php echo $config['app']['app_title']; ?></h1>
-        </div>
-        <div class="col d-flex justify-content-end">
-            <p id="username"><span class="greeting">Hello </span><span class="user-name"><?php echo $username; ?></span> <a title="Log out of the chat interface" href="logout.php" class="logout-link" style="display:inline-block;">Logout</a></p>
-        </div> -->
+    <div class="row header d-flex align-items-center" style="height: calc(100vh * 0.18);"> <!-- Header Row -->
         <div class="col d-flex justify-content-center" style="padding-left: 3px;width: 100%;">
             <img width="100%" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
         </div>
@@ -162,18 +153,18 @@ foreach(array_keys($models) as $m) {
             <!-- Main content here -->
             <div id="messageList" class="p-2 maincolumn maincol-top chat-container"><!-- Flex item chat body top -->
                     <!-- Chat messages will be added here -->
-           </div><!-- End Flex item chat body top -->
-           <div id="thumbnails"></div>
-           <form id="messageForm" class="messageBox">
-                <img id="chatBubbleIcon" src="images/chat-bubble.png" width="5%">
-                <textarea class="form-control" id="userMessage" style="width: 92%;float: right; margin-right: 20px;"
-                    aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
-                <span>
-                    <img id="attachmentIcon" src="images/attachment.png" alt="Upload File" class="message-icon" 
-                        title="Document types accepted include PDF, XML, JSON, Word, Text, and Markdown. At this time we do not support Excel or CSV files.">
-                </span>
-            </form>
+            </div><!-- End Flex item chat body top -->
             <div class="maincol-bottom"><!-- Chat body bottom -->
+                <div id="thumbnails"></div>
+                <form id="messageForm" class="messageBox">
+                    <img id="chatBubbleIcon" src="images/chat-bubble.png" width="5%">
+                    <textarea class="form-control" id="userMessage" style="width: 92%;float: right; margin-right: 20px;"
+                        aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
+                    <span>
+                        <img id="attachmentIcon" src="images/attachment.png" alt="Upload File" class="message-icon" 
+                            title="Document types accepted include PDF, XML, JSON, Word, Text, and Markdown. At this time we do not support Excel or CSV files.">
+                    </span>
+                </form>
                 <table style = "width:100%">
                 <tr>
                 <td style="width: 30%;">
