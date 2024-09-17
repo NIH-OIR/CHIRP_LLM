@@ -177,7 +177,31 @@ function submitEdit(chatId) {
 
 function fileUpload() {
     var selectedModel = $("#model option:selected").val();
-    $("#fileUpload").submit();
+    var fileUpload = $('input[type=file]')[0];
+    var filename = fileUpload.files.length ? fileUpload.files[0].name : "";
+    var fileSize = fileUpload.files[0].size;
+    const fileSizeLimit = 5;
+
+    var isValidFileName = false;
+    var isValidFileSize = false;
+    if (filename.length > 0 && /\.(pdf|docx|txt|md|json|xml)$/i.test(filename)) {
+        isValidFileName = true;
+    } 
+    if (fileSize / 1024 / 1024 < fileSizeLimit) {//file size less than 5MB
+        isValidFileSize = true;
+    }
+    if (!isValidFileName) {
+        if (!isValidFileSize) {
+            alert("The accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
+        } else {
+            alert("The uploaded file type is not accepted. The accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
+        }
+    } else if (!isValidFileSize) {
+        alert("The uploaded file size is too large. The limit size of uploaded file is " + fileSizeLimit + "MB.");
+    } else {
+        $("#fileUpload").submit();
+    }
+
 }
 
 $(document).ready(function(){
