@@ -3,7 +3,7 @@ body {
     margin: 0; 
     height: 100%; 
     min-width: 1155px;
-    overflow-x:auto;
+    overflow-x:hidden;
     overflow-y: hidden;
 }
 .p-2 {
