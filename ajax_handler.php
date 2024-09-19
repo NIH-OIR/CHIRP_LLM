@@ -2,6 +2,7 @@
 // Include required files and database connection
 require_once 'lib.required.php';
 require_once 'db.php';
+require_once 'piiDetection.php';
 
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -10,9 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_message = base64_decode($_POST['message']); // Decode from Base64
     //$user_message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
 
-    $command = "python3 ".$_SERVER['DOCUMENT_ROOT']."/scrubber.py ".json_encode($user_message);
+    #$command = "python3 ".$_SERVER['DOCUMENT_ROOT']."/scrubber.py ".json_encode($user_message);
+    #$command = "python ".$_SERVER['DOCUMENT_ROOT']."/scrubber.py ".json_encode($user_message);
     #error_log("python command: ".$command);
-    $user_message = exec($command);
+    #$user_message = exec($command);
+
+    $user_message = piiDetection($user_message);
 
     #error_log("scrubbed user msg: ".$user_message);
     #print_r($_POST);
@@ -41,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = [
         'deployment' => $gpt_response['deployment'], 
         'error' => $gpt_response['error'],
+        'userMessage' => $user_message,
         'gpt_response' => $gpt_response['message'], 
         'chat_id' => $chat_id,
         'new_chat_id' => $new_chat_id
