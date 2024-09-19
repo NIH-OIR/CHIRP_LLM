@@ -211,12 +211,12 @@ foreach(array_keys($models) as $m) {
                 </form>
                 </td>
                 <td>
-                <form id="fileUpload" method="post" action="upload.php" id="document-uploader" enctype="multipart/form-data" style="margin: 5px 0 10px 0;">
+                <form id="fileUpload" method="post" action="upload.php" id="document-uploader" enctype="multipart/form-data">
                     <!-- Hidden input for chat_id -->
                     <input type="hidden" name="chat_id" aria-label="Hidden field with Chat ID" value="<?php echo htmlspecialchars($_GET['chat_id']); ?>">
 
                     <?php if (!empty($_SESSION['document_name'])): ?>
-                        <p>Uploaded file: <span class="uploadFileSpan" title="<?php echo htmlspecialchars($_SESSION['document_name']); ?>">
+                        <p style="font-size: small; margin-bottom:0;">Uploaded file: <span class="uploadFileSpan" title="<?php echo htmlspecialchars($_SESSION['document_name']); ?>">
                                                 <?php echo htmlspecialchars($_SESSION['document_name']); ?>
                                          </span>
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
