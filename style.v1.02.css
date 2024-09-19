@@ -15,7 +15,7 @@ body {
     border: solid 0px blue;
     width: 100%;
     min-height: 55%;
-    max-height: 80%;
+    max-height: 70%;
     height: calc(100vh - 330px);
 }
 .maincol-bottom {
