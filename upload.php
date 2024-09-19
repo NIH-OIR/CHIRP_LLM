@@ -6,6 +6,8 @@ error_reporting(E_ALL);
 // Include necessary libraries
 require_once 'lib.required.php';
 
+require_once 'piiDetection.php';
+
 // Get the chat_id if present
 $chat_id = isset($_REQUEST['chat_id']) ? $_REQUEST['chat_id'] : '';
 
@@ -36,12 +38,14 @@ if (isset($_FILES['uploadDocument'])) {
 
     if (strpos($output, 'ValueError') === false) {
         //scrubber content
-        $scrubberedCommand = "python3 ".$_SERVER['DOCUMENT_ROOT']."/scrubber.py ".json_encode($output);
+        #$scrubberedCommand = "python3 ".$_SERVER['DOCUMENT_ROOT']."/scrubber.py ".json_encode($output);
         #$scrubberedCommand = "python ".$_SERVER['DOCUMENT_ROOT']."/scrubber.py ".json_encode($output);
-        $scrubberedOutput = exec($scrubberedCommand);
+        #$scrubberedOutput = exec($scrubberedCommand);
+        
+        $redactedOutput = piiDetection($output);
 
         // Store the text and the original filename in session variables
-        $_SESSION['document_text'] = $scrubberedOutput;
+        $_SESSION['document_text'] = $redactedOutput;
         $_SESSION['document_name'] = basename($file['name']);
 
         #echo "3 - <pre>".print_r($_SESSION,1)."</pre>"; die("got here");

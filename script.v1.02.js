@@ -348,6 +348,7 @@ $(document).ready(function(){
                     var gpt_response = jsonResponse['gpt_response'];
                     var deployment = jsonResponse['deployment'];
                     var error = jsonResponse['error'];
+                    var userMessage = jsonResponse['userMessage'];
                     //console.log(error)
                     //console.log(deployment)
                     //console.log(gpt_response)
@@ -376,8 +377,8 @@ $(document).ready(function(){
                         //console.log(jsonResponse)
                         window.location.href = "/" + jsonResponse.new_chat_id;
                     }
-
-                    var userMessageDecoded = atob(messageContent);
+                    
+                    var userMessageDecoded = userMessage;
                     //console.log("this is the user message ")
                     //console.log(userMessageDecoded)
                     var sanitizedPrompt = sanitizeString(userMessageDecoded).replace(/\n/g, '<br>');
