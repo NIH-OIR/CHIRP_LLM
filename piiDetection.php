@@ -15,8 +15,9 @@ function piiDetection($message) {
     $piiDetectionHeaders[] = 'Content-Type: application/json';
     $piiDetectionHeaders[] = 'Ocp-Apim-Subscription-Key: '.$piiDetectionApiKey;
     #error_log("piiDetection line 17 header : ".print_r($piiDetectionHeaders, true));
+    #error_log("piiDetection line 18 message : ".$message);
 
-    $messageArr = str_split($message, 50000); //there is 50000 char limit for PII detection
+    $messageArr = str_split($message, 5120); //there is 50000 char limit for PII detection
     $inputTextArr = [];
     foreach($messageArr as $key=>$value) {
         $inputTextItem = ["id" => $key,
@@ -58,14 +59,15 @@ function piiDetection($message) {
     $response_data = json_decode($response, true);
     #error_log("piiDetection line 56 response data : ".print_r($response_data, true));
 
+
     $response_text = "";
-    if (isset($response_data['error'])) {
-        error_log('API error: ' . $response_data['error']['message']);
-        return 'PII Dection API call failed';
+    if (isset($response_data['results']['errors'][0])) {
+        error_log('API error: ' . $response_data['results']['errors'][0]['error']['message'] . " "
+                                . $response_data['results']['errors'][0]['error']['innererror']['message']);
         return [
             'kind' => "PiiEntityRecognition",
             'error' => true,
-            'message' => $response_data['error']['message']
+            'message' => $response_data['results']['errors'][0]['error']
         ];
     } else {
         $redactedTextArr = [];
