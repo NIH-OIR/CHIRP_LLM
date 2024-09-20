@@ -28,12 +28,17 @@ function piiDetection($message) {
     };
 
     $piiDetectionBody = ['kind' => 'PiiEntityRecognition',
-                         'parameter' => ['modelVersion' => 'latest',
-                                         'PiiDomain' => 'phi'
+                         'parameters' => ['modelVersion' => 'latest',
+                                         'domain' => 'phi',
+                                         'piiCategories' => ["PhoneNumber", "Address", "Email","URL", "IP Address", "Age", "CreditCardNumber",
+                                                             "InternationalBankingAccountNumber", "SWIFTCode", "ABARoutingNumber",
+                                                             "USSocialSecurityNumber", "USBankAccountNumber", "USDriversLicenseNumber", "USIndividualTaxpayerIdentification",
+                                                             "USUKPassportNumber"
+                                                            ]
                                         ],
                          'analysisInput' => ['documents' => $inputTextArr]
                         ];
-
+    #error_log("piiDetection line 41 body : ".json_encode($piiDetectionBody));
     // Execute API Call
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $piiDetectionUrl);
