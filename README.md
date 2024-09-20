@@ -29,9 +29,6 @@ The application relies on the following code dependencies:
 
 - MariaDB or MySQL: You need a database to store chat-related data (we use Server version: 10.5.22-MariaDB MariaDB Server).
 
-- Python: The application uses Python for text extraction from various file formats (we use Python 3.9.18).
-  - PI Scrubadub https://scrubadub.readthedocs.io/en/stable/index.html
-
 - Libraries for Python:
   - `docx` (for parsing .docx files)
   - `pdfminer` (for parsing .pdf files)
@@ -40,6 +37,9 @@ The application relies on the following code dependencies:
 - JavaScript Libraries: The application uses JavaScript libraries that are loaded from external sources:
   - Bootstrap
   - Highlight.js
+  - jQuery
+  - jQueryUI
+  - Datatable
 
 ## Azure API Configuration
 
@@ -50,12 +50,11 @@ For the Azure OpenAI API, you will need:
 - The appropriate URL endpoint for API calls.
 - Token and context limits as per your Azure plan.
 
-## LDAP / Authentication Information
+## OpenID / Authentication Information
 
 The application uses OpenID for authentication. You will need to configure:
 
-- `authorization_url_base`, `clientId`, `client_secret`, and `callback` for OpenID.
-- LDAP configurations for user authentication against your directory service.
+- `authorization_url_base`, `clientId`, `client_secret`, `callback` and scope for OpenID.
 
 ## Database Information
 
