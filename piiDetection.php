@@ -31,7 +31,7 @@ function piiDetection($message) {
     $piiDetectionBody = ['kind' => 'PiiEntityRecognition',
                          'parameters' => ['modelVersion' => 'latest',
                                          'domain' => 'phi',
-                                         'piiCategories' => ["PhoneNumber", "Address", "Email","URL", "IP Address", "Age", "CreditCardNumber",
+                                         'piiCategories' => ["PhoneNumber", "Address", "Email","URL", "IP Address", "Age", "Date", "CreditCardNumber",
                                                              "InternationalBankingAccountNumber", "SWIFTCode", "ABARoutingNumber",
                                                              "USSocialSecurityNumber", "USBankAccountNumber", "USDriversLicenseNumber", "USIndividualTaxpayerIdentification",
                                                              "USUKPassportNumber"
