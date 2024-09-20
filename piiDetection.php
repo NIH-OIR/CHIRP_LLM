@@ -1,7 +1,8 @@
 <?php
 
 require_once 'get_config.php';
-
+/* PII detection servcie refer to https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/overview
+*/
 function piiDetection($message) {
 
     global $config;
@@ -17,7 +18,7 @@ function piiDetection($message) {
     #error_log("piiDetection line 17 header : ".print_r($piiDetectionHeaders, true));
     #error_log("piiDetection line 18 message : ".$message);
 
-    $messageArr = str_split($message, 5120); //there is 50000 char limit for PII detection
+    $messageArr = str_split($message, 5120); //there is 5120 char limit for PII detection per document
     $inputTextArr = [];
     foreach($messageArr as $key=>$value) {
         $inputTextItem = ["id" => $key,
@@ -28,12 +29,17 @@ function piiDetection($message) {
     };
 
     $piiDetectionBody = ['kind' => 'PiiEntityRecognition',
-                         'parameter' => ['modelVersion' => 'latest',
-                                         'PiiDomain' => 'phi'
+                         'parameters' => ['modelVersion' => 'latest',
+                                         'domain' => 'phi',
+                                         'piiCategories' => ["PhoneNumber", "Address", "Email","URL", "IP Address", "Age", "Date", "CreditCardNumber",
+                                                             "InternationalBankingAccountNumber", "SWIFTCode", "ABARoutingNumber",
+                                                             "USSocialSecurityNumber", "USBankAccountNumber", "USDriversLicenseNumber", "USIndividualTaxpayerIdentification",
+                                                             "USUKPassportNumber"
+                                                            ]
                                         ],
                          'analysisInput' => ['documents' => $inputTextArr]
                         ];
-
+    #error_log("piiDetection line 41 body : ".json_encode($piiDetectionBody));
     // Execute API Call
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $piiDetectionUrl);
