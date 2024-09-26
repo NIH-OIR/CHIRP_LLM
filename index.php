@@ -186,7 +186,7 @@ foreach(array_keys($models) as $m) {
                         ?>
                     </select>
                     <div style="display:inline;">
-                        <img id="modelQIcon" src="images/question_icon.svg" width="15px" title="Choose between available chat models"/>
+                        <img id="modelQIcon" src="images/question_icon.svg" width="15px" title="Only GPT-4o is available."/>
                     </div>
                 </form>
                 </td>
