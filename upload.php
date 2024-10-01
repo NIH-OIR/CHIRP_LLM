@@ -30,8 +30,8 @@ if (isset($_FILES['uploadDocument'])) {
     #echo "1 - <pre>".print_r($_FILES,1)."</pre>"; die("got here");
 
     // Ensure that your script is executable and has the correct shebang line
-    $command = escapeshellcmd(__DIR__."/venv/bin/python ".__DIR__."/parser_multi.py \"".$file['tmp_name']."\" \"".$file['name']."\"") . " 2>&1";
-    #$command = "python ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
+    #$command = escapeshellcmd(__DIR__."/venv/bin/python ".__DIR__."/parser_multi.py \"".$file['tmp_name']."\" \"".$file['name']."\"") . " 2>&1";
+    $command = "python3 ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
 
     $output = shell_exec($command);
     #echo "2 - <pre>".print_r($output,1)."</pre>"; die("got here");
