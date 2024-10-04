@@ -252,16 +252,6 @@ foreach(array_keys($models) as $m) {
         </p>
         <p>To achieve its objectives, the pilot will collect limited demographic information, including IC (Institute/Center), user roles, and user prompts and responses from each LLM. This data will inform policy decisions and guide future implementations of similar technologies. Importantly, the collected information will be used solely for usage and statistical reporting purposes.   
         </p>
-        <p>For more information on GenAI technology and resources at NIH, please reference to:</p>
-        <ul>
-            <li><a target="_blank" href="https://teams.microsoft.com/l/team/19%3awtMbBDK8XbVfyehH9C9tTJI6Sm7QPb5m_SLm9aeMiM41%40thread.tacv2/conversations?groupId=00b270d4-5cb5-4523-b7e6-352797cbcb85&tenantId=14b77578-9773-42d5-8507-251ca2dc2b06">NIH GenAI Community</a></li>
-            <li><a target="_blank" href="https://cloud.nih.gov/">NIH STRIDES Initiative</a></li>
-            <li>NIH OD <a target="_blank" href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8YWxpY2lhLmxpbGxpY2hAbmloLmdvdnw0YzU5YjczN2ExZTc0YjAwMTc2ODA4ZGM4NGQ0OGU3N3wxNGI3NzU3ODk3NzM0MmQ1ODUwNzI1MWNhMmRjMmIwNnwwfDB8NjM4NTMxMjk1NjU5NjY1MTE3fFVua25vd258VFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wPXwwfHx8&sdata=eU1FclhNRERXbU9wVWVSekRDSDBUcHU3RHlSTUlRVEZvR1pBRUgwYnFDZz0%3d&clickparams=eyAiWC1BcHBOYW1lIiA6ICJNaWNyb3NvZnQgT3V0bG9vayIsICJYLUFwcFZlcnNpb24iIDogIjE2LjAuMTY3MzEuMjA2NzQiLCAiT1MiIDogIldpbmRvd3MiIH0%3d&SafelinksUrl=https%3a%2f%2fnih.sharepoint.com%2fsites%2fOD-CDATechnologyAvailabilityGuideCTAG%2fSitePages%2fAIGuidance_FoundationalInformationGenerativeAIRisks.aspx">AI Guidance - Foundational Information, Generative AI and Risks</a></li>
-            <li><a target="_blank" href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/Prompt-Engineering.aspx">Prompt Engineering Guide</a></li>
-        </ul>
-        <p>Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
-        <p>Notes: The following NIH and HHS <a target="_blank" href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
-        <p class="feedback"><b><?php echo $config['app']['feedback_text']; ?></b></p>
     </div>
     </div>
     <!-- end about tab-->
@@ -281,17 +271,16 @@ foreach(array_keys($models) as $m) {
     <!-- training tab-->
     <div id="tabs-trainingSupport">
     <div class="tabsContainer tabsText">
-    <ul>
-        <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/Prompt-Engineering.aspx" target="_blank">
-                Prompt Engineering Guide
-            </a>
-        </li>
-        <li><a href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8fGJmNTVmZTFkZGEyNTRiZTFhYjk3MDhkY2MyZWYyYjI0fDE0Yjc3NTc4OTc3MzQyZDU4NTA3MjUxY2EyZGMyYjA2fDB8MHw2Mzg1OTk1Nzk2NTY1NjM2MDd8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazkwYUdWeUlpd2lWMVFpT2pFeGZRPT18MXxMMk5vWVhSekx6RTVPamszTXprek9XUXdMV1F3TW1JdE5HWXpOQzA0TlRJM0xURTFZbVZtWVRFMFpXVm1NVjltWXpFMU16ZzJZUzB3TlRKakxUUmxNMk10WWpreE15MDNOV1JoTURoak5qYzFObUZBZFc1eExtZGliQzV6Y0dGalpYTXZiV1Z6YzJGblpYTXZNVGN5TkRNMk1URTJORFUwT1E9PXxhZGY4ZTkzOGEzODM0NTNmNDk0NzA4ZGNjMmVmMmIyMnw0YTc4MDk2N2Y0NjM0YWZhODJhMmNjYmJmNDExNWRmYw%3D%3D&sdata=Qkk0R09aYzFsOWgyWUlsQzdEc083U0w0Y0tjaGxoaFIxNWRVRU1zZ1E3Yz0%3D&ovuser=14b77578-9773-42d5-8507-251ca2dc2b06%2Cjenb2%40nih.gov&OR=Teams-HL&CT=1724945444026&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiIxNDE1LzI0MDcxMTI4ODI1IiwiSGFzRmVkZXJhdGVkVXNlciI6ZmFsc2V9"
-                target="_blank">
-                AI Guidance
-            </a>
-        </li>
+    <p>For more information on GenAI technology and resources at NIH, please reference to:</p>
+        <ul>
+            <li><a target="_blank" href="https://teams.microsoft.com/l/team/19%3awtMbBDK8XbVfyehH9C9tTJI6Sm7QPb5m_SLm9aeMiM41%40thread.tacv2/conversations?groupId=00b270d4-5cb5-4523-b7e6-352797cbcb85&tenantId=14b77578-9773-42d5-8507-251ca2dc2b06">NIH GenAI Community</a></li>
+            <li><a target="_blank" href="https://cloud.nih.gov/">NIH STRIDES Initiative</a></li>
+            <li>NIH OD <a target="_blank" href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/AIGuidance_FoundationalInformationGenerativeAIRisks.aspx?xsdata=MDV8MDJ8YWxpY2lhLmxpbGxpY2hAbmloLmdvdnw0YzU5YjczN2ExZTc0YjAwMTc2ODA4ZGM4NGQ0OGU3N3wxNGI3NzU3ODk3NzM0MmQ1ODUwNzI1MWNhMmRjMmIwNnwwfDB8NjM4NTMxMjk1NjU5NjY1MTE3fFVua25vd258VFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wPXwwfHx8&sdata=eU1FclhNRERXbU9wVWVSekRDSDBUcHU3RHlSTUlRVEZvR1pBRUgwYnFDZz0%3d&clickparams=eyAiWC1BcHBOYW1lIiA6ICJNaWNyb3NvZnQgT3V0bG9vayIsICJYLUFwcFZlcnNpb24iIDogIjE2LjAuMTY3MzEuMjA2NzQiLCAiT1MiIDogIldpbmRvd3MiIH0%3d&SafelinksUrl=https%3a%2f%2fnih.sharepoint.com%2fsites%2fOD-CDATechnologyAvailabilityGuideCTAG%2fSitePages%2fAIGuidance_FoundationalInformationGenerativeAIRisks.aspx">AI Guidance - Foundational Information, Generative AI and Risks</a></li>
+            <li><a target="_blank" href="https://nih.sharepoint.com/sites/OD-CDATechnologyAvailabilityGuideCTAG/SitePages/Prompt-Engineering.aspx">Prompt Engineering Guide</a></li>
         </ul>
+        <p>Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
+        <p>Notes: The following NIH and HHS <a target="_blank" href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
+        <p class="feedback"><b><?php echo $config['app']['feedback_text']; ?></b></p>
     </div>
     </div>
     <!-- end training tab-->
