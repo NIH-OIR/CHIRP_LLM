@@ -179,7 +179,7 @@ nav, div::-webkit-scrollbar-thumb {
     width: 100%;
 }
 #scrollContent {
-    height: calc(100vh - 350px);
+    height: 50vh;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -311,9 +311,9 @@ nav, div::-webkit-scrollbar-thumb {
     }
 }
 
-@media (max-height: 562px) { 
+@media (min-height: 562px) { 
     #scrollContent {
-        height: 50vh; /* Fill the height minus header */
+        height: calc(100vh - 350px); /* Fill the height minus header */
     }
 }
 
