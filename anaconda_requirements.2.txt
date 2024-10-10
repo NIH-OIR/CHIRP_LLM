@@ -225,7 +225,7 @@ psutil
 ptyprocess
 pure-eval
 py-cpuinfo
-pyarrow==11.0.0
+pyarrow==14.0.1
 pyasn1
 pyasn1-modules==0.2.8
 pycodestyle
