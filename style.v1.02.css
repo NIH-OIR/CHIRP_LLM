@@ -174,9 +174,14 @@ nav, div::-webkit-scrollbar-thumb {
     border: solid gray 1px;
     border-radius: 5px;
     padding: 5px;
-    margin: 10px 10px 10px 0px;
+    margin: 5px 0px;
     display: inline-flex;
     width: 100%;
+}
+#scrollContent {
+    height: calc(100vh - 350px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .chat-item {
     position: relative;
@@ -303,6 +308,12 @@ nav, div::-webkit-scrollbar-thumb {
 @media (max-width: 538px) { 
     .maincol-top {
         height: calc(100vh - 360px); /* Fill the height minus header */
+    }
+}
+
+@media (max-height: 562px) { 
+    #scrollContent {
+        height: 50vh; /* Fill the height minus header */
     }
 }
 
