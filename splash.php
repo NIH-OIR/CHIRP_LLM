@@ -72,7 +72,7 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
             <div class="col-md-12 columns">
                 <div>
                     <p class="newchat" style="text-align: center;">
-                    Chirp is a secure chatbot enabling OD staff to use generative AI for their day-to-day work.
+                    Chirp is a secure chatbot enabling NIH staff to use generative AI for their day-to-day work.
                     </p>
                 </div>
                 <div id="scrollContent">
