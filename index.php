@@ -177,6 +177,7 @@ foreach(array_keys($models) as $m) {
                             $label = $modelconfig['label'];
                             $tooltip = (!empty($modelconfig['tooltip'])) ? $modelconfig['tooltip'] : "";
                             $sel = ($m == $_SESSION['deployment']) ? 'selected="selected"' : '';
+                            #error_log("DEBUG indx.php  selected model: ".$sel);
                             if (isAdminUser($_SESSION['user_data']['userid'])) {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             } else if (!isAdminUser($_SESSION['user_data']['userid']) && $m != 'gemini-1.5-pro') {

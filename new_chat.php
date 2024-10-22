@@ -9,7 +9,8 @@ if (empty($user)) {
     die("User not authenticated");
 }
 
-$deployment = (empty($_SESSION['deployment'])) ? 'azure-gpt4' : $_SESSION['deployment'];
+$deployment = (empty($_SESSION['deployment']) || $_SESSION['deployment'] == 'azure-llama3' || $_SESSION['deployment'] == 'mistral-nemo' || $_SESSION['deployment'] == 'gemini-1.5-pro') 
+                ? 'azure-gpt4' : $_SESSION['deployment'];
 $document_name = $_SESSION['document_name'] = '';
 $document_text = $_SESSION['document_text'] = '';
 
