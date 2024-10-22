@@ -122,9 +122,9 @@ if (!empty($chat_id) && !empty($all_chats[$chat_id])) {
         $_SESSION['document_text'] = $all_chats[$chat_id]['document_text'];
 }
 
-if (empty($_SESSION['deployment'])) {
+$retiredModels = array("azure-llama3", "mistral-nemo", "gemini-1.5-pro");
+if (empty($_SESSION['deployment']) || in_array($_SESSION['deployment'], $retiredModels)) {
     $deployment = $_SESSION['deployment'] = $config['azure']['default'];
-
 } else {
     $deployment = $_SESSION['deployment'];
 }
