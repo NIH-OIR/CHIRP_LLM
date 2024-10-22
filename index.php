@@ -172,11 +172,17 @@ foreach(array_keys($models) as $m) {
                     <label for="model">Select Model:</label>
                     <select  id="model" name="model" onchange="document.getElementById('model_select').submit();">
                         <?php
+                        $retiredModels = array("azure-llama3", "mistral-nemo", "gemini-1.5-pro");
                         foreach ($models as $m => $modelconfig) {
                             #echo '<pre>'.print_r($modelconfig,1).'</pre>';
                             $label = $modelconfig['label'];
                             $tooltip = (!empty($modelconfig['tooltip'])) ? $modelconfig['tooltip'] : "";
+                            if (in_array($m, $retiredModels)) {
+                                $m == 'azure-gpt4';
+                            }
                             $sel = ($m == $_SESSION['deployment']) ? 'selected="selected"' : '';
+                            #error_log("DEBUG indx.php  session deployment: ".$_SESSION['deployment']);
+                            #error_log("DEBUG indx.php  selected model: ".$m ." is selected: ".$sel);
                             if (isAdminUser($_SESSION['user_data']['userid'])) {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             } else if (!isAdminUser($_SESSION['user_data']['userid']) && $m != 'gemini-1.5-pro') {
