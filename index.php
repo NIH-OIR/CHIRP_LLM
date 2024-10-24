@@ -72,7 +72,10 @@ foreach(array_keys($models) as $m) {
     <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
-
+    
+<!--custom js files -->
+    <script src="session_handler.js"></script>
+    <script src="script.v1.02.js"></script>
 </head>
 <body>
 
@@ -384,8 +387,7 @@ foreach(array_keys($models) as $m) {
     <img src="images/Ripple-1s-59px.gif" alt="Loading...">
 </div>
 
-<!-- Include Bootstrap JS and its dependencies-->
-<script src="script.v1.02.js"></script>
+
 <script>
     document.getElementById('toggleMenu').addEventListener('click', function() {
         document.querySelector('.menu').classList.toggle('active');
@@ -393,9 +395,6 @@ foreach(array_keys($models) as $m) {
     var chatId = <?php echo json_encode(isset($_GET['chat_id']) ? $_GET['chat_id'] : null); ?>;
     var user = <?php echo json_encode(isset($user) ? $user : null); ?>;
 
-    //document.addEventListener('DOMContentLoaded', function() {
-        var sessionTimer = setTimeout(logoutUser, sessionTimeout);
-    //});
     var isAdminUser = <?php if (isAdminUser($_SESSION['user_data']['userid'])) echo "true"; else echo "false"; ?>;
     if (isAdminUser) {
         $("li#adminToolTabList").show();
