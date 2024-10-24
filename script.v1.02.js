@@ -1,34 +1,6 @@
 
 var chatContainer;
 
-function resetSessionTimer(remainingTime = sessionTimeout) {
-    clearTimeout(sessionTimer);
-    sessionTimer = setTimeout(logoutUser, remainingTime);
-}
-
-function checkSessionStatus() {
-    $.ajax({
-        url: 'session_status.php',
-        type: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            if (!response.session_active) {
-                logoutUser();
-            } else {
-                resetSessionTimer(response.remaining_time * 1000); // Adjust timer based on server's response
-            }
-        },
-        error: function() {
-            console.error('Failed to check session status.');
-        }
-    });
-}
-
-function logoutUser() {
-    alert("Your session has expired. Please log in again.");
-    window.location.href = "logout.php";
-}
-
 // Modify the event listener for DOMContentLoaded
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log("DOMContentLoaded - Current chat ID: ", chatId);
@@ -68,9 +40,6 @@ function startNewChat() {
         url: "new_chat.php",
         dataType: 'json',
         success: function(response) {
-            // Reset the session timer on every successful AJAX call
-            resetSessionTimer();
-
             // The response should contain the new chat's ID
             var newChatId = response.chat_id;
             // Navigate to the new chat page
@@ -131,8 +100,6 @@ function deleteChat(chatId) {
                 chat_id: chatId
             },
             success: function() {
-                // Reset the session timer on every successful AJAX call
-                resetSessionTimer();
 
                 // Reload the page to refresh the list of chats
                 //location.reload();
@@ -173,8 +140,6 @@ function submitEdit(chatId) {
             title: newTitle
         },
         success: function() {
-            // Reset the session timer on every successful AJAX call
-            resetSessionTimer();
 
             // Reload the page to refresh the list of chats
             location.reload();
@@ -398,8 +363,6 @@ $(document).ready(function(){
 });
 
 function displayMessages(chatMessages) {
-    resetSessionTimer(); // Reset the session timer on every successful AJAX call
-
     // Display messages from the selected chat
     chatMessages.forEach(function (message) {
         // Sanitize the received data
