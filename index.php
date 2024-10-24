@@ -56,6 +56,13 @@ foreach(array_keys($models) as $m) {
 	<!-- Select2 plugin -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
+    <!-- Highlight.js CSS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <!-- Highlight.js Library -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <!-- Include marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 
 <!--     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
@@ -422,7 +429,9 @@ foreach(array_keys($models) as $m) {
         });
 
     }); // end $(document).ready()
-
+    document.addEventListener('DOMContentLoaded', (event) => {
+        hljs.highlightAll();
+    });
     
 function printChat() {
     window.print();

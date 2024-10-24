@@ -554,3 +554,111 @@ input[type=button]:hover{
 .proceedEnabled {
     color:#1b76fd
 }
+
+/***************************/
+/* Styling for code blocks */
+.code-block {
+    position: relative;
+    background-color: #282c34; /* Dark background */
+    color: #abb2bf; /* Light text */
+    padding: 36px 4px 4px 4px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 20px auto 0px auto;
+    width: 80%; /* Adjust the width to 80% of the chat container */
+}
+
+.code-block .language-label {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e5c07b;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+/* Copy Button Styling */
+.copy-button, .scopy-chat-button {
+    position: absolute;
+    top: 2px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #e5c07b;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+.copy-button:hover, .copy-chat-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.copy-button:focus, .copy-chat-button:focus {
+    outline: none;
+}
+.copy-button svg, .copy-chat-button svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+.copied-chat-popup {
+    position: absolute;
+    background-color: #56b364;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000;
+    pointer-events: none; /* Allows clicks to pass through */
+}
+.copied-chat-popup.show {
+    opacity: 1;
+}
+.copy-chat-button {
+    position: absolute;
+    background: none;
+    border: none;
+    color: #a5803b;
+    cursor: pointer;
+    /* padding: 6px; */
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    bottom: 4px;
+    left: 4px;
+    /*display: none;*/
+    font-size: 16px;
+}
+.copy-chat-button:hover {
+    color: #FFFFDD;
+    background-color: #0056b3;
+}
+/* Copied Popup Styling */
+.copied-popup {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #56b364;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    pointer-events: none;
+    z-index: 10;
+}
+/* Show the popup when active */
+.copied-popup.show {
+    opacity: 1;
+    visibility: visible;
+}
+/* Adjust the pre and code tags */
+.code-block pre {
+    margin: 0;
+}
