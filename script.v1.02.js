@@ -15,11 +15,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 // Modify the event listener for the userMessage input
-document.getElementById('userMessage').addEventListener('input', (event) => {
-    //coonsole.log("Input event for chat ID " + chatId);
-    localStorage.setItem('chatDraft_' + chatId, event.target.value);
-    //console.log("Saved draft message for chat ID " + chatId + ": ", event.target.value);
-});
+if (document.getElementById('userMessage') != null) {
+    document.getElementById('userMessage').addEventListener('input', (event) => {
+        //coonsole.log("Input event for chat ID " + chatId);
+        localStorage.setItem('chatDraft_' + chatId, event.target.value);
+        //console.log("Saved draft message for chat ID " + chatId + ": ", event.target.value);
+    });
+}
 
 // $('#messageForm').submit(function(e) {
 //     console.log("Form submission for chat ID " + chatId);
