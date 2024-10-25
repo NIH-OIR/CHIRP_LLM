@@ -398,7 +398,7 @@ textarea {
     padding-left: 0.4%;
     cursor: pointer;
     outline: none;
-    color: #007bff; /* Button color */
+    color: #959799; /* Button color */
 }
 /* Icon within the submit button */
 .send-icon {
@@ -406,7 +406,9 @@ textarea {
     height: 24px;
     fill: currentColor; /* Inherit color from the button */
 }
-
+.submit-button:hover {
+    color:#007bff;
+}
 /* Hide the button outline on focus */
 .submit-button:focus {
     outline: none;
