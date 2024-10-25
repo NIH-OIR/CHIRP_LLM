@@ -195,7 +195,7 @@ function get_gpt_response($message, $chat_id, $user) {
     #error_log("DEBUG lib.required.php get_gpt_response() selected model: ".$selectedModel);
 
         $config = load_configuration($selectedModel);
-        $msg = get_chat_thread($message, $chat_id, $user);
+        $msg = get_chat_thread($message, $chat_id, $user, $config);
 
         if ($selectedModel == 'gemini-1.5-pro') {
             $msgArr = [];
@@ -346,11 +346,11 @@ function substringWords($text, $numWords) {
     return $subString;
 }
 
-function get_chat_thread($message, $chat_id, $user)
+function get_chat_thread($message, $chat_id, $user, $config)
 {
-    global $config,$deployment;
+    //global $config,$deployment;
 
-    $context_limit = (int)$config[$deployment]['context_limit'];
+    $context_limit = (int)$config['context_limit'];
     $messages = [];
     #echo "context limit: " . $context_limit;
 

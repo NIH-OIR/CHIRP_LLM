@@ -137,7 +137,7 @@ foreach(array_keys($models) as $m) {
                     }
                     echo '<div class="chat-item '.$class.'" id="chat-' . htmlspecialchars($chat['id']) . '">';
 
-                    echo '<a class="chat-link chat-title" title="Load chat into context window" href="' . htmlspecialchars($chat['id']) . '">' . htmlspecialchars($chat['title']) . '</a>';
+                    echo '<a class="chat-link chat-title" title="'.htmlspecialchars($chat['title']).'" href="' . htmlspecialchars($chat['id']) . '">' . htmlspecialchars($chat['title']) . '</a>';
                     echo '<img class="chat-icon edit-icon" src="images/chat_edit.png" alt="Edit this chat" title="Edit this chat">';
                     echo '<img class="chat-icon delete-icon" src="images/chat_delete.png" alt="Delete this chat" title="Delete this chat">';
                     echo '</div>';

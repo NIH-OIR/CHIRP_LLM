@@ -21,7 +21,10 @@ if(isset($_POST['chat_id']) && isset($_POST['title'])) {
     
     // prepare a sql statement to update the title of a chat where the id matches the $chat_id
     // using prepared statements ensures that user inputs are escaped correctly, preventing sql injection
-    $stmt = $pdo->prepare("update chat set title = :title where id = :id");
-    $stmt->execute(['title' => $new_title, 'id' => $chat_id]);
+    // $stmt = $pdo->prepare("update chat set title = :title where id = :id");
+    // $stmt->execute(['title' => $new_title, 'id' => $chat_id]);
+
+    // Use the existing update_chat_title function
+    update_chat_title($user, $chat_id, $new_title);
 }
 
