@@ -60,4 +60,7 @@ ALTER TABLE `users` ADD COLUMN `email` varchar(255);
 -- Add column document_type to chat table
 ALTER TABLE `chat` ADD COLUMN `document_type` varchar(255);
 
+-- Add column new_title to chat table
+ALTER TABLE `chat` ADD COLUMN `new_title` tinyint(4) DEFAULT 1;
+
 
