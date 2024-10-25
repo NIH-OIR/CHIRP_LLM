@@ -57,4 +57,7 @@ ALTER TABLE `users` ADD COLUMN `is_admin` bool;
 -- Add column email to users table
 ALTER TABLE `users` ADD COLUMN `email` varchar(255);
 
+-- Add column document_type to chat table
+ALTER TABLE `chat` ADD COLUMN `document_type` varchar(255);
+
 

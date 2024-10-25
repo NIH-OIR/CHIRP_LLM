@@ -119,6 +119,7 @@ if (!empty($chat_id) && !empty($all_chats[$chat_id])) {
         $_SESSION['deployment'] = $all_chats[$chat_id]['deployment'];
         $_SESSION['temperature'] = $all_chats[$chat_id]['temperature'];
         $_SESSION['document_name'] = $all_chats[$chat_id]['document_name'];
+        $_SESSION['document_type'] = $all_chats[$chat_id]['document_type'];
         $_SESSION['document_text'] = $all_chats[$chat_id]['document_text'];
 }
 
@@ -350,19 +351,35 @@ function get_chat_thread($message, $chat_id, $user)
     global $config,$deployment;
 
     $context_limit = (int)$config[$deployment]['context_limit'];
+    $messages = [];
     #echo "context limit: " . $context_limit;
 
     if (!empty($_SESSION['document_text'])) {
-        $messages = [
-            [
-                'role' => 'system',
-                'content' => $_SESSION['document_text']
-            ],
-            [
-                'role' => 'user',
-                'content' => $message
-            ]
-        ];
+        if (strpos($_SESSION['document_type'], 'image/') === 0) {
+            // Handle image content (use image_url field with base64 encoded image)
+            $messages[] = [
+                "role" => "system",
+                "content" => "You are a helpful assistant to analyze images."
+            ];
+            $messages[] = [
+                "role" => "user",
+                "content" => [
+                    ["type" => "text", "text" => $message],
+                    ["type" => "image_url", "image_url" => ["url" => $_SESSION['document_text']]]
+                ]
+            ];
+        } else {
+            $messages = [
+                [
+                    'role' => 'system',
+                    'content' => $_SESSION['document_text']
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $message
+                ]
+            ];
+        }
         return $messages;
     }
 

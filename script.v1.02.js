@@ -158,7 +158,7 @@ function fileUpload() {
 
     var isValidFileName = false;
     var isValidFileSize = false;
-    if (filename.length > 0 && /\.(pdf|docx|txt|md|json|xml)$/i.test(filename)) {
+    if (filename.length > 0 && /\.(pdf|docx|txt|md|json|xml|png|jpg|jpeg|gif)$/i.test(filename)) {
         isValidFileName = true;
     } 
     if (fileSize / 1024 / 1024 < fileSizeLimit) {//file size less than 5MB
