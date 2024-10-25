@@ -173,6 +173,12 @@ foreach(array_keys($models) as $m) {
                     <span>
                         <img id="attachmentIcon" src="images/attachment.png" alt="Upload File" class="message-icon" 
                             title="Document types accepted include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. At this time we do not support Excel or CSV files.">
+                        <button type="submit" class="submit-button" aria-label="Send message">
+                            <!-- Icon (paper plane) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="send-icon">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                        </button>
                     </span>
                 </form>
                 <table style = "width:100%">
