@@ -8,8 +8,9 @@ if (empty($user)) {
     // If the user is not authenticated, output an error message and exit the script
     die("User not authenticated");
 }
-$retiredModels = array("azure-llama3", "mistral-nemo", "gemini-1.5-pro");
-$deployment = (empty($_SESSION['deployment']) || in_array($_SESSION['deployment'], $retiredModels)) ? 'azure-gpt4' : $_SESSION['deployment'];
+// $retiredModels = array("azure-llama3", "mistral-nemo", "gemini-1.5-pro");
+// $deployment = (empty($_SESSION['deployment']) || in_array($_SESSION['deployment'], $retiredModels)) ? 'azure-gpt4' : $_SESSION['deployment'];
+$deployment = $config['azure']['default'];
 $document_name = $_SESSION['document_name'] = '';
 $document_text = $_SESSION['document_text'] = '';
 

@@ -172,7 +172,7 @@ foreach(array_keys($models) as $m) {
                         aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
                     <span>
                         <img id="attachmentIcon" src="images/attachment.png" alt="Upload File" class="message-icon" 
-                            title="Document types accepted include PDF, XML, JSON, Word, Text, and Markdown. At this time we do not support Excel or CSV files.">
+                            title="Document types accepted include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. At this time we do not support Excel or CSV files.">
                     </span>
                 </form>
                 <table style = "width:100%">
@@ -227,19 +227,27 @@ foreach(array_keys($models) as $m) {
                 </form>
                 </td>
                 <td>
+                <!-- File Upload Form -->
                 <form id="fileUpload" method="post" action="upload.php" id="document-uploader" enctype="multipart/form-data">
                     <!-- Hidden input for chat_id -->
                     <input type="hidden" name="chat_id" aria-label="Hidden field with Chat ID" value="<?php echo htmlspecialchars($_GET['chat_id']); ?>">
 
-                    <?php if (!empty($_SESSION['document_name'])): ?>
-                        <p style="font-size: small; margin-bottom:0;">Uploaded file: <span class="uploadFileSpan" title="<?php echo htmlspecialchars($_SESSION['document_name']); ?>">
-                                                <?php echo htmlspecialchars($_SESSION['document_name']); ?>
-                                         </span>
+                    <?php if (!empty($_SESSION['document_name'])){ ?>
+                          
+                        <p style="font-size: small; margin-bottom:0;">Uploaded file: 
+
+                        <?php if (!empty($_SESSION['document_type']) && strpos($_SESSION['document_type'], 'image/') === 0){ ?>
+                            <img src="<?php echo $_SESSION['document_text']; ?>" alt="Uploaded Image Thumbnail" style="max-width: 60px; max-height: 60px;margin-top: -10px;" />
+                        <?php } else{ ?>  
+                            <span class="uploadFileSpan" title="<?php echo htmlspecialchars($_SESSION['document_name']); ?>">
+                                <?php echo htmlspecialchars($_SESSION['document_name']); ?>
+                            </span>
+                        <?php } ?>
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
-                        </p>
-                    <?php else: ?>
-                        <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml" style="width:15em;" required onchange="javascript:fileUpload();" />
-                    <?php endif; ?>
+                        </p>                    
+                    <?php } else { ?>
+                        <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml,.png,.jpg,.jpeg,.gif" style="width:15em;" required onchange="javascript:fileUpload();" />
+                    <?php } ?>
                 </form>
                 </td>
 <?php 
@@ -276,9 +284,9 @@ foreach(array_keys($models) as $m) {
     <div class="tabsContainer tabsText">
         <p>Current Limitations of Document Upload Function:</p>
             <ul>
-            <li>Files that work: .pdf, .json, .docx, .txt, .md, .xml</li>
+            <li>Files that work: .pdf, .json, .docx, .txt, .md, .xml, .png, .jpg, .jpeg, .gif</li>
             <li>Files that do not work: .pptx</li>
-            <li>Can not upload: .xlsx, images, .csv</li>
+            <li>Can not upload: .xlsx, .csv, and all other image formats</li>
             </ul>
         <p>This will be patched in future iterations. Please contact us if any additional issues arise.</p>
     </div>
