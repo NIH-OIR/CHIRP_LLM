@@ -201,14 +201,15 @@ foreach(array_keys($models) as $m) {
                             #error_log("DEBUG indx.php  selected model: ".$m ." is selected: ".$sel);
                             if (isAdminUser($_SESSION['user_data']['userid'])) {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
-                            } else if (!isAdminUser($_SESSION['user_data']['userid']) && $m != 'gemini-1.5-pro') {
+                            } else if (!isAdminUser($_SESSION['user_data']['userid']) 
+                                        && $m != 'gemini-1.5-pro' && $m != 'azure-dall-e-3') {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             }
                         }
                         ?>
                     </select>
                     <div style="display:inline;">
-                        <img id="modelQIcon" src="images/question_icon.svg" width="15px" title="Only GPT-4o is available."/>
+                        <img id="modelQIcon" src="images/question_icon.svg" width="15px" title="Please select the available model."/>
                     </div>
                 </form>
                 </td>
