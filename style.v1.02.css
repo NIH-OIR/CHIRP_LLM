@@ -688,3 +688,22 @@ input[type=button]:hover{
 .code-block pre {
     margin: 0;
 }
+
+/*image display*/
+.image-display {
+    box-shadow: rgb(208, 208, 208) 0px 2px 4px, rgb(234, 234, 234) 0px 0px 2px;
+    padding: 15px;
+    margin: 10px 10px 10px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgb(255, 255, 255);
+    width: 230px;
+}
+.image-download-button{
+    margin-top: 10px; 
+    width: 24px;
+    border: none;
+    background: none;
+    padding: 0;
+}

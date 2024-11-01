@@ -315,9 +315,9 @@ $(document).ready(function(){
                     if(!gpt_response) {
                         gpt_response = "The message could not be processed."
                     } 
-
-                    gpt_response = formatCodeBlocks(gpt_response);
-
+                    if (deployment !== "azure-dall-e-3") {
+                        gpt_response = formatCodeBlocks(gpt_response);
+                    }
                     if (jsonResponse.new_chat_id) {
                         //console.log(jsonResponse)
                         window.location.href = "/" + jsonResponse.new_chat_id;
@@ -334,12 +334,20 @@ $(document).ready(function(){
                         // Add the assistant's icon
                         assistantMessageElement.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" class="openai-icon">');
                     
-                        assistantMessageElement.append('<span>' + gpt_response + '</span>');
-                        // Append the assistant message to the chat container
-                        chatContainer.append(assistantMessageElement);
-    
-                        // Add the copy button
-                        addCopyButton(assistantMessageElement, raw_gpt_response);                   
+                        if (deployment == "azure-dall-e-3") {
+                            var imgBlob = "data:image/png;base64,"+ raw_gpt_response;
+                            var imageDisplayDiv = $('<div class="image-display"><img src="' + imgBlob + '" width="200"></div>')
+                            assistantMessageElement.append(imageDisplayDiv);
+                            // Append the assistant message to the chat container
+                            chatContainer.append(assistantMessageElement);
+                            addDownloadIcon(imageDisplayDiv, raw_gpt_response);
+
+                        } else {
+                            assistantMessageElement.append('<span>' + gpt_response + '</span>');
+                            // Append the assistant message to the chat container
+                            chatContainer.append(assistantMessageElement);
+                            addCopyButton(assistantMessageElement, raw_gpt_response); 
+                        }             
                     }
 
                     // Scroll to the bottom of the chat container
@@ -350,6 +358,10 @@ $(document).ready(function(){
                 }
             });
         }
+    });
+    $('.image-download-button').tooltip({
+        html : true,
+        placement : "top",
     });
 });
 
@@ -374,16 +386,31 @@ function displayMessages(chatMessages) {
             var imgSrc = 'images/' + deployments[message.deployment].image;
             var imgAlt = deployments[message.deployment].image_alt;
 
-            var assistantMessageElement = $('<div class="message assistant-message"></div>').html(sanitizedReply);
+            var assistantMessageElement = $('<div class="message assistant-message"></div>');
+            var openaiIcon = $('<img src="' + imgSrc + '" alt="' + imgAlt + '" class="openai-icon">');
+            if (deployment !== "azure-dall-e-3") {
+                assistantMessageElement.html(sanitizedReply);
+                // Add the assistant's icon
+                assistantMessageElement.prepend(openaiIcon);
 
-            // Add the assistant's icon
-            assistantMessageElement.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" class="openai-icon">');
+                // Append the assistant message to the chat container
+                chatContainer.append(assistantMessageElement);
+                addCopyButton(assistantMessageElement, message.reply);
+            } else {
+                var imgBlob = "data:image/png;base64,"+ message.reply;
+                var imageDisplayDiv = $('<div class="image-display"><img src="' + imgBlob + '" width="200"></div>');
+                assistantMessageElement.html(imageDisplayDiv);
+                // Add the assistant's icon
+                assistantMessageElement.prepend(openaiIcon);
 
-            // Append the assistant message to the chat container
-            chatContainer.append(assistantMessageElement);
-
-            // Add the copy button
-            addCopyButton(assistantMessageElement, message.reply);
+                // Append the assistant message to the chat container
+                chatContainer.append(assistantMessageElement);
+                addDownloadIcon(imageDisplayDiv, message.reply);
+                $('.image-download-button').tooltip({
+                    html : true,
+                    placement : "right",
+                });
+            }
         }
 
         // Re-run Highlight.js on new content
@@ -490,28 +517,35 @@ function addCopyButton(messageElement, rawMessageContent) {
         setTimeout(function() {
             popup.remove();
         }, 2000);
-        // // Use the rawMessageContent directly
-        // navigator.clipboard.writeText(rawMessageContent).then(function() {
-        //     // Create a subtle popup message
-        //     var popup = $('<span class="copied-chat-popup show">Copied!</span>');
-            
-        //     // Style the popup (adjust positioning as needed)
-        //     popup.css({
-        //         position: 'absolute',
-        //         top: copyButton.position().top + 4, // Adjust this value as needed
-        //         left: copyButton.position().left + 150,
-        //     });
+    });
+}
 
-        //     // Append the popup to the message element
-        //     messageElement.append(popup);
-
-        //     // Remove the popup after 2 seconds
-        //     setTimeout(function() {
-        //         popup.remove();
-        //     }, 2000);
-        // }, function(err) {
-        //     console.error('Could not copy text: ', err);
-        // });
+function addDownloadIcon(imgElement, imgBlob){
+    var downloadIcon = $(`
+        <button class="image-download-button" title="Download" aria-label="Download">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"/>
+            </svg>
+        </button>
+    `);
+    imgElement.append(downloadIcon);
+    downloadIcon.on('click', function() {
+    //     fetch(imgUrl)
+    //     .then(resp => resp.blob())
+    //     .then(blob => {
+    //         const url = window.URL.createObjectURL(blob);
+        imgBlob = "data:image/png;base64,"+ imgBlob;
+        var a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = imgBlob;
+        // the filename you want
+        a.download = 'myDalleImage.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        // })
+        // .catch(() => alert('An error in getting image blob'));
     });
 }
 

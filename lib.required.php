@@ -17,6 +17,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+define('MAX_TOKEN', "10000");
+define('CONTEXT_LIMIT', "65536");
+
 /*handling login bypass*/
 /*
 $_SESSION['splash'] = true;
@@ -177,17 +180,26 @@ function get_recent_messages($chat_id, $user) {
 
 // Load configuration
 function load_configuration($deployment) {
-    // echo "lib.required line 191 deployment: ". $deployment;
+    #error_log("lib.required line 180 deployment: ". $deployment);
     global $config;
-    return [
+
+    $context_limit = isset($config[$deployment]['context_limit']) ? (int)($config[$deployment]['context_limit']) *1.5 : (int)CONTEXT_LIMIT;
+    $conf = [
         'selected_model' => $deployment,
         'api_key' => trim($config[$deployment]['api_key'], '"'),
         'base_url' => $config[$deployment]['url'],
         'deployment_name' => $config[$deployment]['deployment_name'],
         'api_version' => $config[$deployment]['api_version'],
-        'max_tokens' => (int)$config[$deployment]['max_tokens'],
-        'context_limit' => (int)($config[$deployment]['context_limit']*1.5),
+        'max_tokens' => (int) ($config[$deployment]['max_tokens'] ?? MAX_TOKEN),
+        'context_limit' => $context_limit,
     ];
+
+    if ($deployment == "azure-dall-e-3") {
+        unset($conf["max_tokens"]);
+        unset($conf["context_limit"]);
+    }
+    #error_log("lib.required line 197 load_configuration conf: ". print_r($conf, true));
+    return $conf;
 }
 
 function get_gpt_response($message, $chat_id, $user) {
@@ -213,15 +225,18 @@ function get_gpt_response($message, $chat_id, $user) {
 }
 
 // Call Azure OpenAI API
+// dall-e-3: https://nih-od-oir-openai-crispi-east-01.openai.azure.com/openai/deployments/nih-od-oir-openai-dall-e-3/images/generations?api-version=2024-05-01-preview
 function call_azure_api($config, $msg) {
     $url = $config['base_url'] . "/openai/deployments/" . $config['deployment_name'] . "/chat/completions?api-version=".$config['api_version'];
     if ($config['selected_model'] == "azure-llama3" || $config['selected_model'] == "mistral-nemo") {
         $url = $config['base_url'] . "/v1/chat/completions";
+    } else if ($config['selected_model'] == "azure-dall-e-3") {
+        $url = $config['base_url'] . "/openai/deployments/" . $config['deployment_name'] . "/images/generations?api-version=".$config['api_version'];
     }
     #error_log("INFO: lib.required call_azure_api() url : ". $url."\n");
     $payload = [
         'messages' => $msg,
-        "max_tokens" => $config['max_tokens'],
+        "max_tokens" => $config['max_tokens'] ?? MAX_TOKEN,
         "temperature" => (float)$_SESSION['temperature'],
         "frequency_penalty" => 0,
         "presence_penalty" => 0,
@@ -246,9 +261,19 @@ function call_azure_api($config, $msg) {
         $payload["safe_prompt"] = "false";
         $payload["stream"] = false;
     }
-    if ($config['selected_model'] == "azure-gpt4") {
+    if ($config['selected_model'] == "azure-gpt4" || $config['selected_model'] == "azure-dall-e-3") {
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'api-key: ' . $config['api_key'];
+    }
+    if ( $config['selected_model'] == "azure-dall-e-3") {
+        $payload = [];
+        $payload = ['prompt' => $msg[0]['content'],
+                    'n' => 1,
+                    'size' => "1024x1024",
+                    'response_format' => 'b64_json',
+                    'quality' => "standard",
+                    'style' => "vivid"
+        ];
     }
     #error_log("INFO: lib.required line 240 payload json: ". json_encode($payload)."\n");
     #error_log("INFO: lib.required line 241 headers json: ". json_encode($headers)."\n");
@@ -284,8 +309,27 @@ function execute_api_call($url, $payload, $headers) {
 function process_api_response($response, $deployment, $chat_id, $message) {
     #error_log("DEBUG lib.required.php process_api_response() selected model: ".$deployment);
 
-    #error_log("DEBUG lib.required.php process_api_response() gemini result: ".$response);
+    #error_log("DEBUG lib.required.php process_api_response() api result: ".$response);
     $response_data = json_decode($response, true);
+    if ($deployment == 'azure-dall-e-3') {
+        if (isset($response_data['error'])) { //return error msg if error occurs
+            return [
+                'deployment' => $deployment,
+                'error' => true,
+                'message' => $response_data['error']['inner_error']['message']             
+            ];
+        } else {
+            $image_blob = $response_data['data'][0]['b64_json'];
+            $revised_prompt = $response_data['data'][0]['revised_prompt'];
+            create_exchange($chat_id, $message, $image_blob);
+            return [
+                'deployment' => $deployment,
+                'error' => false,
+                'message' => $image_blob,
+                'revised_prompt' => $revised_prompt
+            ];
+        }
+    }
     if (isset($response_data['error'])) {
         error_log('API error: ' . $response_data['error']['message']);
         return [
@@ -321,7 +365,7 @@ function call_mocha_api($base_url, $msg) {
     #$payload = $msg;
     $payload = [
         'messages' => $msg,
-        "max_tokens" => $config['max_tokens'],
+        "max_tokens" => $config['max_tokens'] ?? MAX_TOKEN,
         "temperature" => (float)$_SESSION['temperature'],
         "frequency_penalty" => 0,
         "presence_penalty" => 0,
@@ -350,7 +394,7 @@ function get_chat_thread($message, $chat_id, $user, $config)
 {
     //global $config,$deployment;
 
-    $context_limit = (int)$config['context_limit'];
+    $context_limit = (int)($config['context_limit'] ?? CONTEXT_LIMIT);
     $messages = [];
     #echo "context limit: " . $context_limit;
 

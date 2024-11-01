@@ -55,19 +55,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Generate a concise chat title if a new chat was created and there were no errors in the GPT response
     if (!empty($new_chat_id) && empty($gpt_response['error'])) {
-        $chat_title = generate_chat_title($user_message, $gpt_response['message'], GET_TITLE_DEPLOYMENT);
+        if ($gpt_response['deployment'] != 'azure-dall-e-3') {
+            $chat_title = generate_chat_title($user_message, $gpt_response['message'], GET_TITLE_DEPLOYMENT);
+        } else {
+            $chat_title = generate_chat_title($user_message, $gpt_response['revised_prompt'], GET_TITLE_DEPLOYMENT);
+        }
         
+        #error_log("ajax_handler chat_title: ".$chat_title);
         // Update the chat title in the database if the title was successfully generated
         if ($chat_title !== null) {
             update_chat_title($user, $chat_id, $chat_title);
         }
     }
-
+    #error_log("ajax_handler.php gpt_response message: ".print_r($gpt_response['message'], true));
     $response = [
         'deployment' => $gpt_response['deployment'] ?? null, 
         'error' => $gpt_response['error'] ?? null,
         'gpt_response' => $gpt_response['message'] ?? null, 
-        'gpt_response' => $gpt_response['message'], 
         'chat_id' => $chat_id,
         'new_chat_id' => $new_chat_id
     ];
