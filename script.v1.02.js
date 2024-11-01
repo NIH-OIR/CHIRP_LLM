@@ -335,7 +335,8 @@ $(document).ready(function(){
                         assistantMessageElement.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" class="openai-icon">');
                     
                         if (deployment == "azure-dall-e-3") {
-                            var imageDisplayDiv = $('<div class="image-display"><img src="' + raw_gpt_response + '" width="200"></div>')
+                            var imgBlob = "data:image/png;base64,"+ raw_gpt_response;
+                            var imageDisplayDiv = $('<div class="image-display"><img src="' + imgBlob + '" width="200"></div>')
                             assistantMessageElement.append(imageDisplayDiv);
                             // Append the assistant message to the chat container
                             chatContainer.append(assistantMessageElement);
@@ -396,7 +397,8 @@ function displayMessages(chatMessages) {
                 chatContainer.append(assistantMessageElement);
                 addCopyButton(assistantMessageElement, message.reply);
             } else {
-                var imageDisplayDiv = $('<div class="image-display"><img src="' + message.reply + '" width="200"></div>');
+                var imgBlob = "data:image/png;base64,"+ message.reply;
+                var imageDisplayDiv = $('<div class="image-display"><img src="' + imgBlob + '" width="200"></div>');
                 assistantMessageElement.html(imageDisplayDiv);
                 // Add the assistant's icon
                 assistantMessageElement.prepend(openaiIcon);
@@ -518,7 +520,7 @@ function addCopyButton(messageElement, rawMessageContent) {
     });
 }
 
-function addDownloadIcon(imgElement, imgUrl){
+function addDownloadIcon(imgElement, imgBlob){
     var downloadIcon = $(`
         <button class="image-download-button" title="Download" aria-label="Download">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
@@ -529,21 +531,21 @@ function addDownloadIcon(imgElement, imgUrl){
     `);
     imgElement.append(downloadIcon);
     downloadIcon.on('click', function() {
-        fetch(imgUrl)
-        .then(resp => resp.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            // the filename you want
-            a.download = 'myDalleImage.png';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(() => alert('An error in getting image blob'));
-
+    //     fetch(imgUrl)
+    //     .then(resp => resp.blob())
+    //     .then(blob => {
+    //         const url = window.URL.createObjectURL(blob);
+        imgBlob = "data:image/png;base64,"+ imgBlob;
+        var a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = imgBlob;
+        // the filename you want
+        a.download = 'myDalleImage.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        // })
+        // .catch(() => alert('An error in getting image blob'));
     });
 }
 

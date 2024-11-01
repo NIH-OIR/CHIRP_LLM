@@ -269,8 +269,8 @@ function call_azure_api($config, $msg) {
         $payload = [];
         $payload = ['prompt' => $msg[0]['content'],
                     'n' => 1,
-                    // 'size' => 1024*1024,
-                    // 'response_format' => 'url',
+                    'size' => "1024x1024",
+                    'response_format' => 'b64_json',
                     'quality' => "standard",
                     'style' => "vivid"
         ];
@@ -319,13 +319,13 @@ function process_api_response($response, $deployment, $chat_id, $message) {
                 'message' => $response_data['error']['inner_error']['message']             
             ];
         } else {
-            $image_url = $response_data['data'][0]['url'];
+            $image_blob = $response_data['data'][0]['b64_json'];
             $revised_prompt = $response_data['data'][0]['revised_prompt'];
-            create_exchange($chat_id, $message, $image_url);
+            create_exchange($chat_id, $message, $image_blob);
             return [
                 'deployment' => $deployment,
                 'error' => false,
-                'message' => $image_url,
+                'message' => $image_blob,
                 'revised_prompt' => $revised_prompt
             ];
         }
