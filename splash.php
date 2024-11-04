@@ -245,16 +245,17 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
             } else {
                 $('#capReachedExplnDlg').dialog("open");
             }
+            $("#proceedLink").removeAttr("href").addClass("proceedDisabled");
+            $('div#scrollContent').on('scroll', function() {
+                var elem = $(this);
+                if (userExist && elem.scrollTop() > 0 && 
+                    ((elem[0].scrollHeight - elem.scrollTop()) <= (elem.outerHeight() + 1))) {
+                    console.log("scroll to the bottom");
+                    $("#proceedLink").prop("href", "index.php").removeClass("proceedDisabled").addClass("proceedEnabled");
+                }
+            });
         } 
-        $("#proceedLink").removeAttr("href").addClass("proceedDisabled");
-        $('div#scrollContent').on('scroll', function() {
-            var elem = $(this);
-            if (userExist && elem.scrollTop() > 0 && 
-                ((elem[0].scrollHeight - elem.scrollTop()) <= (elem.outerHeight() + 1))) {
-                console.log("scroll to the bottom");
-                $("#proceedLink").prop("href", "index.php").removeClass("proceedDisabled").addClass("proceedEnabled");
-            }
-        });
+
 
 
     });
