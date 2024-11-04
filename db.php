@@ -307,4 +307,18 @@ function update_chat_title($user, $chat_id, $updated_title) {
     $stmt->execute(['title' => $updated_title, 'new_title' => '0', 'id' => $chat_id]);
 }
 
+function totalUserCount() {
+    global $pdo;
+    $count = 0;
+    try {
+        $stmt = $pdo->prepare("SELECT count(*) FROM users");
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+        
+    } catch (PDOException $e) {
+        error_log('Failed to check if user is an admin user: ' . $e->getMessage());
+    }
+    return $count;
+}
+
 

@@ -46,28 +46,6 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
 ?>
             </div>
         </div>
-        <div id="roleSelectionDlg" style="display:hidden">
-            <div>
-            Welcome to Chirp (Chat for IRP), a secure Large Language Models (LLMs) Environment Pilot.<br>
-            Please indicate your main responsibility (functional role) at NIH:</br>
-            <table style="width: 80%;text-align: center;"><tr>
-            <td style="width: 33%;">
-                <label for="administrative">Administrative</label>
-                <input type="radio" id="administrative" name="userRole" value="Administrative">
-            </td>
-            <td >
-                <label for="research">Research</label>
-                <input type="radio" id="research" name="userRole" value="Research">
-            </td>
-            <td >
-                <label for="other">Other</label>
-                <input type="radio" id="other" name="userRole" value="Other">
-            </td>
-            </tr></table>
-            <br>
-            By clicking the “Accept” button, you agree to allow us to collect your data entries (prompts) and responses from each LLM tool for aggregated usage analysis and statistical reporting purposes. If you do not wish to participate, click “Cancel” to be removed from this pilot.
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-12 columns">
                 <div>
@@ -148,14 +126,45 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
             </div>
         </div>
     </div>
+    <div id="roleSelectionDlg" style="display:hidden">
+        <div>
+        Welcome to Chirp (Chat for IRP), a secure Large Language Models (LLMs) Environment Pilot.<br>
+        Please indicate your main responsibility (functional role) at NIH:</br>
+        <table style="width: 80%;text-align: center;"><tr>
+        <td style="width: 33%;">
+            <label for="administrative">Administrative</label>
+            <input type="radio" id="administrative" name="userRole" value="Administrative">
+        </td>
+        <td >
+            <label for="research">Research</label>
+            <input type="radio" id="research" name="userRole" value="Research">
+        </td>
+        <td >
+            <label for="other">Other</label>
+            <input type="radio" id="other" name="userRole" value="Other">
+        </td>
+        </tr></table>
+        </br>
+        <p>
+        By clicking the “Accept” button, you agree to allow us to collect your data entries (prompts) and responses from each LLM tool for aggregated usage analysis and statistical reporting purposes. If you do not wish to participate, click “Cancel” to be removed from this pilot.
+        </p>
+        </div>
+    </div>
+    <div id="capReachedExplnDlg" style="display:hidden">
+        <div>
+        Thank you for insteresting in Chirp (Chat for IRP). Please note our user limit has been reached. 
+        No more new users can access Chirp at this point. </br>
+        </div>
+    </div>
 </body>
 </html>
 <script>
     $(document).ready(function(){
+        var userExist = <?php isUserExist($_SESSION['user_data']); ?>;
         $('#roleSelectionDlg').dialog({
             width: 960,
             autoOpen: false,
-            title: '',
+            title: 'Please Select a Role',
             open: function( event, ui ) {
                 $(".ui-dialog-titlebar-close").hide();
                 $("input[type='radio']").each(function(){
@@ -174,52 +183,79 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                         var ic = "<?php if (!empty($_SESSION['user_data']['department'])) echo $_SESSION['user_data']['department']; else echo ""; ?>";
                         var email = "<?php if (!empty($_SESSION['user_data']['email'])) echo $_SESSION['user_data']['email']; else echo ""; ?>";
 
-                        $.ajax({
-                            url: "db.php",
-                            type: 'POST',
-                            data: {"callInsertUserData": "1", 
-                                    "selectedRole": selectedRole,
-                                    "first_name": firstName,
-                                    "last_name": lastName,
-                                    "preferred_username": preferredUsername,
-                                    "userid": userid,
-                                    "ic": ic,
-                                    "email": email
-                                  },
-                            success: function(response) {                              
-                                if (response) {
-                                    // console.log("insert user data ajax response: "+response);
-                                    // $("#proceedLink")[0].click();
+                        if (typeof selectedRole == 'undefined') {
+                            alert("Please select a role to proceed to the chat.");
+                        } else {
+                            $.ajax({
+                                url: "db.php",
+                                type: 'POST',
+                                data: {"callInsertUserData": "1", 
+                                        "selectedRole": selectedRole,
+                                        "first_name": firstName,
+                                        "last_name": lastName,
+                                        "preferred_username": preferredUsername,
+                                        "userid": userid,
+                                        "ic": ic,
+                                        "email": email
+                                    },
+                                success: function(response) {                              
+                                    if (response) {
+                                        // console.log("insert user data ajax response: "+response);
+                                        // $("#proceedLink")[0].click();
+                                        userExist = true;
+                                    }
                                 }
-                            }
-                        }); 
-                        
-                        $( this ).dialog( "close" );
+                            }); 
+                            
+                            $( this ).dialog( "close" );
+                        }
                     }
                 },
                 {
                     text: "Cancel",
                     click: function() {
                         $( this ).dialog( "close" );
+                        window.location.href = "logout.php";
                     }
                 },
             ]
         });
-        var userExist = <?php isUserExist($_SESSION['user_data']); ?>;
+        $("#capReachedExplnDlg").dialog({
+            width: 500,
+            autoOpen: false,
+            title: 'Thank you',
+            open: function( event, ui ) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: [
+                {
+                    text: "Exit",
+                    click: function() {
+                        $( this ).dialog( "close" );
+                        window.location.href = "logout.php";
+                    }
+                },
+            ]
+        });
+        var allowNewUser = <?php checkIfAllowNewUser($_SESSION['user_data']['userid']); ?>;
         // console.log("userExist: "+userExist);
         if (!userExist) {
-            $('#roleSelectionDlg').dialog("open");
-
-            $("#proceedLink").removeAttr("href").addClass("proceedDisabled");
-            $('div#scrollContent').on('scroll', function() {
-                var elem = $(this);
-                if (elem.scrollTop() > 0 && 
-                    ((elem[0].scrollHeight - elem.scrollTop()) <= (elem.outerHeight() + 1))) {
-                    console.log("scroll to the bottom");
-                    $("#proceedLink").prop("href", "index.php").removeClass("proceedDisabled").addClass("proceedEnabled");
-                }
-            });
+            if (allowNewUser) {
+                $('#roleSelectionDlg').dialog("open");
+            } else {
+                $('#capReachedExplnDlg').dialog("open");
+            }
         } 
+        $("#proceedLink").removeAttr("href").addClass("proceedDisabled");
+        $('div#scrollContent').on('scroll', function() {
+            var elem = $(this);
+            if (userExist && elem.scrollTop() > 0 && 
+                ((elem[0].scrollHeight - elem.scrollTop()) <= (elem.outerHeight() + 1))) {
+                console.log("scroll to the bottom");
+                $("#proceedLink").prop("href", "index.php").removeClass("proceedDisabled").addClass("proceedEnabled");
+            }
+        });
+
 
     });
 </script>
