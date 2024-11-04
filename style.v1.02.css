@@ -42,7 +42,7 @@ body {
 .message {
     margin: 0px 0 0px 0;
     padding: 10px;
-    /*border-radius: 10px;*/
+    border-radius: 10px;
 }
 .assistant-message {
     background-color: #f0f0f0;
@@ -124,7 +124,7 @@ body {
 }
 .form-control {
     width: 99%;
-    margin: 5px auto;
+    /* margin: 5px auto; */
 }
 .waiting-indicator {
     position: fixed;
