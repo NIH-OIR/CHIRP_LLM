@@ -186,6 +186,7 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                         if (typeof selectedRole == 'undefined') {
                             alert("Please select a role to proceed to the chat.");
                         } else {
+                            //insert into users table
                             $.ajax({
                                 url: "db.php",
                                 type: 'POST',
@@ -237,10 +238,11 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                 },
             ]
         });
-        var allowNewUser = <?php checkIfAllowNewUser($_SESSION['user_data']['userid']); ?>;
+        var reachUserCap = <?php checkIfReachUserCap(); ?>;
+        var checkExistingUserAccess = <?php checkExistingUserAccess($_SESSION['user_data']['userid']); ?>;
         // console.log("userExist: "+userExist);
-        if (!userExist) {
-            if (allowNewUser) {
+        if (!userExist) { //new user
+            if (!reachUserCap) {
                 $('#roleSelectionDlg').dialog("open");
             } else {
                 $('#capReachedExplnDlg').dialog("open");
@@ -254,9 +256,13 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                     $("#proceedLink").prop("href", "index.php").removeClass("proceedDisabled").addClass("proceedEnabled");
                 }
             });
-        } 
-
-
+        } else { //existing user
+            if (checkExistingUserAccess) { //allow access and update user info
+                <?php update_user_info($_SESSION['user_data']); ?>                
+            } else { //block the inactive user when user cap is reached
+                $('#capReachedExplnDlg').dialog("open"); 
+            }
+        }
 
     });
 </script>

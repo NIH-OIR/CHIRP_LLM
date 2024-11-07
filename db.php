@@ -174,17 +174,21 @@ function user_exists($userid) {
         return false;
     }
 }
-
+//update user ic and email if ic changed or ic didn't catched before
 function update_user($userid, $userIc, $userEmail) {
     global $pdo;
-
-    // prepare a sql statement to update the deployment of a chat where the id matches the $chat_id
     $stmt = $pdo->prepare("update users set ic = :ic1, email = :email where userid = :userid and (ic = '' or ic != :ic2)");
     $stmt->execute(['ic1' => $userIc, 
                     'userid' => $userid, 
                     'ic2' => $userIc,
                     'email' => $userEmail,
                    ]);
+}
+
+function update_user_last_logon($userid) {
+    global $pdo;
+    $stmt = $pdo->prepare("update users set last_logon = NOW(), is_active = true where userid = :userid");
+    $stmt->execute(['userid' => $userid]);
 }
 
 
@@ -203,8 +207,8 @@ function insert_user_data($first_name, $last_name, $preferred_username, $userid,
 
     try {
         // Prepare the SQL statement to insert the user data
-        $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, preferred_username, userid, role, ic, pilot_api_keys, llms_permitted, updated_at, email) 
-                                VALUES (:first_name, :last_name, :preferred_username, :userid, :role, :ic, :pilot_api_keys, :llms_permitted, NOW(), :email)");
+        $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, preferred_username, userid, role, ic, pilot_api_keys, llms_permitted, updated_at, email, last_logon, is_active) 
+                                VALUES (:first_name, :last_name, :preferred_username, :userid, :role, :ic, :pilot_api_keys, :llms_permitted, NOW(), :email, NOW(), true)");
 
         // Execute the statement with the session data
         $stmt->execute([
@@ -307,18 +311,32 @@ function update_chat_title($user, $chat_id, $updated_title) {
     $stmt->execute(['title' => $updated_title, 'new_title' => '0', 'id' => $chat_id]);
 }
 
-function totalUserCount() {
+function totalActiveUserCount() {
     global $pdo;
     $count = 0;
     try {
-        $stmt = $pdo->prepare("SELECT count(*) FROM users");
+        $stmt = $pdo->prepare("SELECT count(*) FROM users where is_active = true");
         $stmt->execute();
-        $count = $stmt->fetchColumn();
-        
+        $count = $stmt->fetchColumn();       
     } catch (PDOException $e) {
         error_log('Failed to check if user is an admin user: ' . $e->getMessage());
     }
+    #error_log("db.php -> totalActiveUserCount: ".$count);
     return $count;
+}
+
+function isActiveUser($userid) {
+    global $pdo;
+    $isActive = true;
+    try {
+        $stmt = $pdo->prepare("SELECT is_active FROM users where userid = :userid");
+        $stmt->execute(['userid' => $userid]);
+        $isActive = $stmt->fetchColumn();       
+    } catch (PDOException $e) {
+        error_log('Failed to check if user is an admin user: ' . $e->getMessage());
+    }
+    #error_log("db.php -> isActiveUser ".$isActive);
+    return $isActive;
 }
 
 

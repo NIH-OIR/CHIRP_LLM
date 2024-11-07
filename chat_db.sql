@@ -63,4 +63,8 @@ ALTER TABLE `chat` ADD COLUMN `document_type` varchar(255);
 -- Add column new_title to chat table
 ALTER TABLE `chat` ADD COLUMN `new_title` tinyint(4) DEFAULT 1;
 
+-- Add last_logon to users table
+ALTER TABLE `users` ADD COLUMN `last_logon` timestamp DEFAULT NOW();
 
+-- Add is_active to users table
+ALTER TABLE `users` ADD COLUMN `is_active` bool DEFAULT true;

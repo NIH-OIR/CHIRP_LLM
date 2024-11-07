@@ -484,20 +484,40 @@ function approximateTokenCountByChars($text) {
 
 function isUserExist($userData) {
     if (user_exists($userData['userid'])) {
-        if (!isset($userData['department'])) {
-            $userData['department'] = '';
-        }
-        update_user($userData['userid'], $userData['department'], $userData['email']); 
         echo "true";  
-  } else echo "false";
-}
-
-function checkIfAllowNewUser($userId) {
-    global $config;
-    if (totalUserCount() < $config['app']['user_count_cap']) {
-        echo "true"; 
     } else {
         echo "false";
     }
 }
+
+function checkIfReachUserCap() { //count active users
+    global $config;
+    if (totalActiveUserCount() < $config['app']['user_count_cap']) {
+        echo "false"; 
+    } else {
+        echo "true";
+    }
+}
+
+function checkExistingUserAccess($userid) {
+    global $config;
+    $isActiveUser = isActiveUser($userid);
+    $totalActiveUserCnt = totalActiveUserCount();
+    $userCap = $config['app']['user_count_cap'];
+    if (!$isActiveUser && $totalActiveUserCnt >= $userCap) { //not allow inactive user access when user cap is reached
+        echo "false";
+    } else {
+        echo "true";
+    }
+}
+/* update user last_logon and update user ic/email if these hasn't been capture */
+function update_user_info($userData) {
+    update_user_last_logon($userData['userid']);
+    if (!isset($userData['department'])) {
+        $userData['department'] = '';
+    }
+    update_user($userData['userid'], $userData['department'], $userData['email']); 
+}
+
+
 
