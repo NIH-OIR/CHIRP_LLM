@@ -177,7 +177,7 @@ function user_exists($userid) {
 //update user ic and email if ic changed or ic didn't catched before
 function update_user($userid, $userIc, $userEmail) {
     global $pdo;
-    $stmt = $pdo->prepare("update users set ic = :ic1, email = :email where userid = :userid and (ic = '' or ic != :ic2)");
+    $stmt = $pdo->prepare("update users set ic = :ic1, email = :email, updated_at = NOW() where userid = :userid and (ic = '' or ic != :ic2)");
     $stmt->execute(['ic1' => $userIc, 
                     'userid' => $userid, 
                     'ic2' => $userIc,
