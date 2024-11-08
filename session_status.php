@@ -17,5 +17,5 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] < 
 } else {
     // If the session has expired
     echo json_encode(['session_active' => false]);
-
+}
 
