@@ -75,6 +75,14 @@ function piiDetection($message) {
             'error' => true,
             'message' => $response_data['results']['errors'][0]['error']
         ];
+    } else if (isset($response_data['error'])){
+        error_log('API error code ' . $response_data['error']['code']
+                                    . " and message: " . $response_data['error']['message']);
+        return [
+            'code' => $response_data['error']['code'],
+            'error' => true,
+            'message' => $response_data['error']['message']
+        ];
     } else {
         $redactedTextArr = [];
         $returnTextArr = $response_data['results']['documents'];

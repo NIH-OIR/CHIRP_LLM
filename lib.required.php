@@ -206,7 +206,8 @@ function get_gpt_response($message, $chat_id, $user) {
     $selectedModel = $GLOBALS['deployment'];
     #error_log("DEBUG lib.required.php get_gpt_response() selected model: ".$selectedModel);
 
-        $config = load_configuration($selectedModel);
+    $config = load_configuration($selectedModel);
+    if (!is_array($message)) { //no error in PII detection api call
         $msg = get_chat_thread($message, $chat_id, $user, $config);
 
         if ($selectedModel == 'gemini-1.5-pro') {
@@ -220,8 +221,11 @@ function get_gpt_response($message, $chat_id, $user) {
         } else {
             $response = call_azure_api($config, $msg);
         }
-        
         return process_api_response($response, $selectedModel, $chat_id, $message);
+    } else {
+        return $message;
+    }
+       
 }
 
 // Call Azure OpenAI API
