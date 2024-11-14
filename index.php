@@ -322,8 +322,89 @@ foreach(array_keys($models) as $m) {
         <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> 
         <hr>
         <h5>Acknowledgement</h5>
-        <p>acknowledgement content
-        </p>
+        <table>
+            <tr>
+                <td colspan="3"><h6><b>Office of the Director (OD)</b></h6></td>
+            </tr>
+            <tr>
+                <td width="20%">Nick Andrade</td><td width="20%">| nick.andrade@nih.gov</td><td>| Training Specialist, Office of Data Science Strategy</td>
+            </tr>
+            <tr>
+                <td>Evelyn Botchway</td><td>| botchwaye@od.nih.gov</td><td>| Program Analyst, Office of Data Science Strategy</td>
+            </tr>
+            <tr>
+                <td>Philip Chiang</td><td>| chiangpt@od.nih.gov</td><td>| Program Officer, Office of Intramural Research</td>
+            </tr>
+            <tr>
+                <td>Bryant Jen</td><td>| jenb2@od.nih.gov</td><td>| Program Officer, Office of Intramural Research</td>
+            </tr>
+            <tr>
+                <td>Nitin Kumar</td><td>| kumarn6@od.nih.gov</td><td>| Infrastructure Systems officer, Office of Intramural Research</td>
+            </tr>
+            <tr>
+                <td>Dr. Alison Lin</td><td>| alison.lin@nih.gov</td><td>| Program Director, Office of Data Science Strategy</td>
+            </tr>
+            <tr>
+                <td>Abhradeep Mukherjee</td><td>| mukherjeea7@od.nih.gov</td><td>| Data Scientist, Office of Intramural Research</td>
+            </tr>
+            <tr>
+                <td>Dr. Steevenson Nelson</td><td>| nelsons2@od.nih.gov</td><td>| Program Director, Executive Office</td>
+            </tr>
+            <tr>
+                <td>Rashod Qaim</td><td>| qaimra@od.nih.gov</td><td>| Program Officer, Executive Office</td>
+            </tr>
+            <tr>
+                <td>Carlos Sanchez</td><td>| sanchezc3@od.nih.gov</td><td>| Program Officer, Executive Office</td>
+            </tr>            
+            <tr>
+                <td>Ylang Tsou</td><td>| tsouyh@od.nih.gov</td><td>| Program Officer, Executive Office</td>
+            </tr>
+            <tr>
+                <td>Honghou Zhou</td><td>| zhouh5@od.nih.gov</td><td>| Program Officer, Executive Office</td>
+            </tr>
+            <tr>
+                <td  colspan="3"><h6><b>Center for Information Technology (CIT)</b></h6></td>
+            </tr>
+            <tr>
+                <td>Olanrewaju Balogun</td><td>| balogunog@cit.nih.gov</td><td>	| Cloud Computing Services Officer</td>
+            </tr>
+            <tr>
+                <td>Wayne Chen</td><td>| chenwae@cit.nih.gov</td><td>| Cloud Computing Services Officer</td>
+            </tr>
+            <tr>
+                <td>Ted Edwards</td><td>| edwardswt@cit.nih.gov</td><td>| Cloud Computing Services Officer</td>
+            </tr>
+            <tr>
+                <td>Henrique Ludwig</td><td>| ludwighd@cit.nih.gov</td><td>| Cloud Computing Services Officer</td>
+            </tr>          
+            <tr>
+                <td>Warren Mattocks</td><td>| mattockswa@cit.nih.gov</td><td>| Cloud Computing Services Officer</td>
+            </tr>
+            <tr>
+                <td colspan="3"><h6><b>National Heart Lung and Blood Institute (NHLBI)</b></h6></td>
+            </tr>
+            <tr>
+                <td>Dr. Nick Asendorf</td><td>| asendorfna@nhlbi.nih.gov</td><td>| Scientific Information Director</td>
+            </tr>
+            <tr>
+                <td>Robyn Wyrick</td><td>| wyrickrv@nhlbi.nih.gov</td><td>| System Administrator and Application Developer</td>
+            </tr>
+            <tr>
+                <td colspan="3"><h6><b>National Institutes of Aging (NIA)</b></h6></td>
+            </tr>
+            <tr>
+                <td>Dr. Faraz Faghri</td><td>| faraz.faghri@nih.gov</td><td> | Computer Science Lead Scientist, Center for Alzheimer's and Related</td>
+            </tr>
+            <tr>
+                <td>Dr. Michael Nalls</td><td>| nallsm@nih.gov</td><td>| Project Lead, Advanced Analytics, Center for Alzheimer's and Related Dementias</td>
+            </tr>
+            <tr>
+                <td colspan="3"><h6><b>National Institutes of Neurological Disorders and Stroke (NINDS)b></h6></td>
+            </tr>
+            <tr>
+                <td>Linpei Fan</td><td>| linpei.fan@nih.gov</td><td>| Program Officer, Informatics Management Section</td>
+            </tr>
+        </table>
     </div>
     </div>
     <!-- end contact acknowledge tab-->
