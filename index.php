@@ -184,9 +184,9 @@ foreach(array_keys($models) as $m) {
                 <table style = "width:100%">
                 <tr>
                 <td style="width: 30%;">
-                <form onsubmit="saveMessage()" id="model_select" action="" method="post" style="margin: 5px 0 10px 20px;">
+                <form id="model_select" action="" method="post" style="margin: 5px 0 10px 20px;">
                     <label for="model">Select Model:</label>
-                    <select  id="model" name="model" onchange="document.getElementById('model_select').submit();">
+                    <select  id="model" name="model">
                         <?php
                         $retiredModels = array("azure-llama3", "mistral-nemo", "gemini-1.5-pro");
                         foreach ($models as $m => $modelconfig) {
@@ -214,11 +214,11 @@ foreach(array_keys($models) as $m) {
                 </form>
                 </td>
                 <td style="width: 25%;">
-                <form onsubmit="saveMessage()" id="temperature_select" action="" method="post" style="margin: 5px 0 10px 0;">
+                <form id="temperature_select" action="" method="post" style="margin: 5px 0 10px 0;">
                     <label for="temperature" >
                         Select Temperature:
                     </label> 
-                    <select  name="temperature" style="width:70px;" onchange="document.getElementById('temperature_select').submit();">
+                    <select  name="temperature" style="width:70px;">
                         <?php
                         foreach ($temperatures as $t) {
                             $sel = ($t == $_SESSION['temperature']) ? 'selected="selected"' : '';
@@ -237,11 +237,11 @@ foreach(array_keys($models) as $m) {
                 <!-- File Upload Form -->
                 <form id="fileUpload" method="post" action="upload.php" id="document-uploader" enctype="multipart/form-data">
                     <!-- Hidden input for chat_id -->
-                    <input type="hidden" name="chat_id" aria-label="Hidden field with Chat ID" value="<?php echo htmlspecialchars($_GET['chat_id']); ?>">
-
+                    <input type="hidden" id="chat_id" name="chat_id" aria-label="Hidden field with Chat ID" value="<?php echo htmlspecialchars($_GET['chat_id']); ?>">
+                    <input type="hidden" id="uploadedFilename"  aria-label="Hidden field for uploaded file name" value="">
                     <?php if (!empty($_SESSION['document_name'])){ ?>
                           
-                        <p style="font-size: small; margin-bottom:0;">Uploaded file: 
+                        <p id="uploadeFilePElem" style="font-size: small; margin-bottom:0;">Uploaded file: 
 
                         <?php if (!empty($_SESSION['document_type']) && strpos($_SESSION['document_type'], 'image/') === 0){ ?>
                             <img src="<?php echo $_SESSION['document_text']; ?>" alt="Uploaded Image Thumbnail" style="max-width: 60px; max-height: 60px;margin-top: -10px;" />
@@ -250,7 +250,8 @@ foreach(array_keys($models) as $m) {
                                 <?php echo htmlspecialchars($_SESSION['document_name']); ?>
                             </span>
                         <?php } ?>
-                            <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
+                            <!-- <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a> -->
+                            <a href="javascript:removeUploadedFile();" style="color: blue">Remove</a>
                         </p>                    
                     <?php } else { ?>
                         <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml,.png,.jpg,.jpeg,.gif" style="width:15em;" required onchange="javascript:fileUpload();" />

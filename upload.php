@@ -10,23 +10,23 @@ require_once 'piiDetection.php';
 
 // Get the chat_id if present
 $chat_id = isset($_REQUEST['chat_id']) ? $_REQUEST['chat_id'] : '';
-
+#error_log("chat_id: ".$chat_id);
 // Create a new chat session if no chat ID is provided
 if (empty($chat_id)) {
     $chat_id = $new_chat_id = create_chat($user, 'New Chat', '', $_SESSION['deployment'], '', '');
 }
 
 // Check if there's a request to remove the uploaded file
-if (isset($_GET['remove']) && $_GET['remove'] == '1') {
-
+if (isset($_REQUEST['remove']) && $_REQUEST['remove'] == '1') {
+    #error_log("remove file");
     // Clear the session variables
     unset($_SESSION['document_text']);
     unset($_SESSION['document_name']);
     update_chat_document($user,$chat_id,'','','');
 
     // Redirect to the main page with chat_id
-    header('Location: index.php?chat_id='.urlencode($chat_id));
-    exit;
+    //header('Location: index.php?chat_id='.urlencode($chat_id));
+    //exit();
 
 }
 
@@ -43,12 +43,13 @@ if (isset($_FILES['uploadDocument'])) {
         $_SESSION['document_type'] = $mimeType;
         $_SESSION['document_name'] = basename($file['name']);
         update_chat_document($user, $chat_id, $_SESSION['document_name'], $_SESSION['document_type'], $_SESSION['document_text']);
+        echo $_SESSION['document_text'];
     } else {
 
         // Ensure that your script is executable and has the correct shebang line
         #$command = escapeshellcmd(__DIR__."/venv/bin/python ".__DIR__."/parser_multi.py \"".$file['tmp_name']."\" \"".$file['name']."\"") . " 2>&1";
         $command = "python3 ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
-
+        #$command = "python ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
         $output = shell_exec($command);
         #echo "2 - <pre>".print_r($output,1)."</pre>"; die("got here");
 
@@ -70,8 +71,8 @@ if (isset($_FILES['uploadDocument'])) {
         }
     }
     // Redirect back to the index page
-    header('Location: index.php?chat_id='.urlencode($chat_id));
-
+    //header('Location: index.php?chat_id='.urlencode($chat_id));
+    exit();
 } else {
     header('Location: index.php?chat_id='.urlencode($chat_id));
     // Handle no file uploaded scenario
