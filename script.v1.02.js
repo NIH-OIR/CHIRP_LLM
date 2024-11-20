@@ -151,12 +151,17 @@ function fileUpload() {
 
     var isValidFileName = false;
     var isValidFileSize = false;
+    var isImage = false;
     if (filename.length > 0 && /\.(pdf|docx|txt|md|json|xml|png|jpg|jpeg|gif)$/i.test(filename)) {
         isValidFileName = true;
     } 
     if (fileSize / 1024 / 1024 < fileSizeLimit) {//file size less than 5MB
         isValidFileSize = true;
     }
+    if (filename.length > 0 && /\.(png|jpg|jpeg|gif)$/i.test(filename)) {
+        isImage = true;
+    }
+    $("#uploadedFilename").val(filename);
     if (!isValidFileName) {
         if (!isValidFileSize) {
             alert("The accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
@@ -166,9 +171,61 @@ function fileUpload() {
     } else if (!isValidFileSize) {
         alert("The uploaded file size is too large. The limit size of uploaded file is " + fileSizeLimit + "MB.");
     } else {
-        $("#fileUpload").submit();
+        // $("#fileUpload").submit();
+        var formData = new FormData(); 
+        formData.append('chat_id', chatId);
+        formData.append('uploadDocument', fileUpload.files[0]);
+        $.ajax({
+            url: "upload.php",
+            type: 'POST',
+            data: formData,
+            contentType: false, 
+            processData: false,
+            success: function (response) { 
+                console.log('File uploaded successfully!'); 
+                if (isImage){
+                    var showUpdateImageElem = (`                        
+                        <p style="font-size: small; margin-bottom:0;">Uploaded file:                    
+                        <img src=`+response+` alt="Uploaded Image Thumbnail" style="max-width: 60px; max-height: 60px;margin-top: -10px;" />
+                        <a href="upload.php?remove=1&chat_id=`+chatId+`" style="color: blue">Remove</a>
+                        </p> `);
+                    $("#fileUpload").append(showUpdateImageElem);  
+                } else {
+                    var uploadedFileName = $("#uploadedFilename").val();
+                    var showUpdateFileElem = (`                        
+                        <p style="font-size: small; margin-bottom:0;">Uploaded file: 
+                        <span class="uploadFileSpan" title="`+uploadedFileName+`">`
+                        +uploadedFileName+`</span>
+                        <a href="upload.php?remove=1&chat_id=`+chatId+`" style="color: blue">Remove</a>
+                        </p> `);
+
+                    $("#fileUpload").append(showUpdateFileElem);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) { 
+                error.log('Error: ' + textStatus + ' - ' + ' - ' + errorThrown);
+            }
+        });
     }
 
+}
+
+function removeUploadedFile() {
+    var formData = new FormData(); 
+    formData.append('chat_id', chatId);
+    formData.append('remove', 1);
+    $.ajax({
+        url: "upload.php",
+        data: formData,
+        type: 'POST',
+        success: function (response) { 
+            console.log('File removed successfully!'); 
+            $("#uploadeFilePElem").remove();
+        },
+        error: function (jqXHR, textStatus, errorThrown) { 
+            error.log('Error: ' + textStatus + ' - ' + ' - ' + errorThrown);
+        }
+    });
 }
 
 $(document).ready(function(){
