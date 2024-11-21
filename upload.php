@@ -17,7 +17,7 @@ if (empty($chat_id)) {
 }
 
 // Check if there's a request to remove the uploaded file
-if (isset($_REQUEST['remove']) && $_REQUEST['remove'] == '1') {
+if (isset($POST['remove'])) {
     #error_log("remove file");
     // Clear the session variables
     unset($_SESSION['document_text']);
@@ -26,7 +26,8 @@ if (isset($_REQUEST['remove']) && $_REQUEST['remove'] == '1') {
 
     // Redirect to the main page with chat_id
     //header('Location: index.php?chat_id='.urlencode($chat_id));
-    //exit();
+    echo "Success";
+    exit();
 
 }
 
@@ -73,13 +74,14 @@ if (isset($_FILES['uploadDocument'])) {
     // Redirect back to the index page
     //header('Location: index.php?chat_id='.urlencode($chat_id));
     exit();
-} else {
-    header('Location: index.php?chat_id='.urlencode($chat_id));
-    // Handle no file uploaded scenario
-}
+} 
+// else {
+//     header('Location: index.php?chat_id='.urlencode($chat_id));
+//     // Handle no file uploaded scenario
+// }
 
 // Prevent accidental output by stopping the script here
-exit;
+//exit;
 
 // Function to convert a local image to a base64 data URL
 function local_image_to_data_url($image_path, $mimeType)
