@@ -210,23 +210,23 @@ function fileUpload() {
 
 }
 
-function removeUploadedFile() {
+// function removeUploadedFile() {
 
-    $.ajax({
-        url: "upload.php",
-        data: {"remove": "1", 
-               "chat_id": chatId
-            },
-        type: 'POST',
-        success: function (response) { 
-            console.log('File removed successfully!'); 
-            $("#uploadeFilePElem").remove();
-        },
-        error: function (jqXHR, textStatus, errorThrown) { 
-            error.log('Error: ' + textStatus + ' - ' + ' - ' + errorThrown);
-        }
-    });
-}
+//     $.ajax({
+//         url: "upload.php",
+//         data: {"remove": "1", 
+//                "chat_id": chatId
+//             },
+//         type: 'POST',
+//         success: function (response) { 
+//             console.log('File removed successfully!'); 
+//             $("#uploadeFilePElem").remove();
+//         },
+//         error: function (jqXHR, textStatus, errorThrown) { 
+//             error.log('Error: ' + textStatus + ' - ' + ' - ' + errorThrown);
+//         }
+//     });
+// }
 
 $(document).ready(function(){
     chatContainer = $(".chat-container");
