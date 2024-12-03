@@ -8,6 +8,8 @@ define('GET_TITLE_DEPLOYMENT',$config['azure']['default']);
 
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['deployment'] = $_POST['model'];
+    #error_log("selected model: ".$_SESSION['deployment']);
 
     // Get the user's message from the POST data
     $user_message = base64_decode($_POST['message']); // Decode from Base64
