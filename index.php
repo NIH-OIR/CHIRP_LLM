@@ -250,8 +250,8 @@ foreach(array_keys($models) as $m) {
                                 <?php echo htmlspecialchars($_SESSION['document_name']); ?>
                             </span>
                         <?php } ?>
-                            <!-- <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a> -->
-                            <a href="javascript:removeUploadedFile();" style="color: blue">Remove</a>
+                            <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
+                            <!-- <a href="javascript:removeUploadedFile();" style="color: blue">Remove</a> -->
                         </p>                    
                     <?php } else { ?>
                         <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml,.png,.jpg,.jpeg,.gif" style="width:15em;" required onchange="javascript:fileUpload();" />

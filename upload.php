@@ -17,7 +17,7 @@ if (empty($chat_id)) {
 }
 
 // Check if there's a request to remove the uploaded file
-if (isset($POST['remove'])) {
+if (isset($_GET['remove']) && $_GET['remove'] == '1') {
     #error_log("remove file");
     // Clear the session variables
     unset($_SESSION['document_text']);
@@ -25,8 +25,8 @@ if (isset($POST['remove'])) {
     update_chat_document($user,$chat_id,'','','');
 
     // Redirect to the main page with chat_id
-    //header('Location: index.php?chat_id='.urlencode($chat_id));
-    echo "Success";
+    header('Location: index.php?chat_id='.urlencode($chat_id));
+    //echo "Success";
     exit();
 
 }
@@ -34,7 +34,7 @@ if (isset($POST['remove'])) {
 if (isset($_FILES['uploadDocument'])) {
     $file = $_FILES['uploadDocument'];
     #echo "1 - <pre>".print_r($_FILES,1)."</pre>"; die("got here");
-
+    error_log("upload.php tmp_name: ".$file['tmp_name']);
     $mimeType = mime_content_type($file['tmp_name']);
     if (strpos($mimeType, 'image/') === 0) {
         // Handle image uploads
