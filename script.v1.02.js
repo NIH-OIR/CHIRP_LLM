@@ -331,6 +331,7 @@ $(document).ready(function(){
                 type: "POST",
                 url: "ajax_handler.php",
                 data: {
+                    model: $("#model option:selected").val(),
                     message: messageContent,
                     chat_id: chatId, // Assuming chatId is defined and holds the correct value
                     user: user // Assuming user is defined and holds the correct value
