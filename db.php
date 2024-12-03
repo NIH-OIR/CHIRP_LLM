@@ -175,13 +175,26 @@ function user_exists($userid) {
     }
 }
 //update user ic and email if ic changed or ic didn't catched before
-function update_user($userid, $userIc, $userEmail) {
+function update_user($userData) {
     global $pdo;
-    $stmt = $pdo->prepare("update users set ic = :ic1, email = :email, updated_at = NOW() where userid = :userid and (ic = '' or ic != :ic2)");
+    $userid = $userData['userid'];
+    $userIc = $userData['department']; 
+    $userEmail = $userData['email'];
+    $first_name = $userData['first_name'];
+    $last_name = $userData['last_name'];
+    $preferred_username = $userData['preferred_username'];
+    $stmt = $pdo->prepare("update users set ic = :ic1, email = :email1, first_name = :first_name, last_name = :last_name, 
+                                  preferred_username = :preferred_username, userid = :userid1, updated_at = NOW() 
+                            where (userid = :userid2 or email = :email2) and (ic = '' or ic != :ic2)");
     $stmt->execute(['ic1' => $userIc, 
-                    'userid' => $userid, 
-                    'ic2' => $userIc,
-                    'email' => $userEmail,
+                    'email1' => $userEmail,
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'preferred_username' => $preferred_username,
+                    'userid1' => $userid, 
+                    'userid2' => $userid,
+                    'email2' => $userEmail,
+                    'ic2' => $userIc                   
                    ]);
 }
 
@@ -325,12 +338,13 @@ function totalActiveUserCount() {
     return $count;
 }
 
-function isActiveUser($userid) {
+function isActiveUser($userid, $userEmail) {
     global $pdo;
     $isActive = true;
     try {
-        $stmt = $pdo->prepare("SELECT is_active FROM users where userid = :userid");
-        $stmt->execute(['userid' => $userid]);
+        $stmt = $pdo->prepare("SELECT is_active FROM users where userid = :userid or email = :email");
+        $stmt->execute(['userid' => $userid,
+                        'email' => $userEmail]);
         $isActive = $stmt->fetchColumn();       
     } catch (PDOException $e) {
         error_log('Failed to check if user is an admin user: ' . $e->getMessage());
