@@ -503,9 +503,9 @@ function checkIfReachUserCap() { //count active users
     }
 }
 
-function checkExistingUserAccess($userid) {
+function checkExistingUserAccess($userid, $userEmail) {
     global $config;
-    $isActiveUser = isActiveUser($userid);
+    $isActiveUser = isActiveUser($userid, $userEmail);
     $totalActiveUserCnt = totalActiveUserCount();
     $userCap = $config['app']['user_count_cap'];
     if (!$isActiveUser && $totalActiveUserCnt >= $userCap) { //not allow inactive user access when user cap is reached
@@ -520,7 +520,7 @@ function update_user_info($userData) {
     if (!isset($userData['department'])) {
         $userData['department'] = '';
     }
-    update_user($userData['userid'], $userData['department'], $userData['email']); 
+    update_user($userData); 
 }
 
 

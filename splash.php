@@ -239,7 +239,7 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
             ]
         });
         var reachUserCap = <?php checkIfReachUserCap(); ?>;
-        var checkExistingUserAccess = <?php checkExistingUserAccess($_SESSION['user_data']['userid']); ?>;
+        var checkExistingUserAccess = <?php checkExistingUserAccess($_SESSION['user_data']['userid'], $_SESSION['user_data']['email']); ?>;
         // console.log("userExist: "+userExist);
         if (!userExist) { //new user
             if (!reachUserCap) {
