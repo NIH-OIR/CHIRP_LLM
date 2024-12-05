@@ -46,25 +46,30 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
 ?>
             </div>
         </div>
+        <div id="bannerWrapperV">
+            <div id="bannerTransV"></div>
+            <div id="bannerTextV">
+                <div class="bannerTextCenterV">
+                    <p>B</p><p>E</p><p>T</p><p>A</p><p>&nbsp;</q><p>T</p><p>E</p><p>S</p><p>T</p><p>I</p><p>N</p><p>G</p>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12 columns">
                 <div>
-                    <p class="newchat" style="text-align: center;">
+                    <p class="newchat" style="">
                     Chirp is a secure chatbot enabling NIH staff to use generative AI for their day-to-day work.
                     </p>
                 </div>
                 <div id="scrollContent">
-                    <p>Chirp stores all data locally in the NIH data center and uses a secure NIH STRIDES cloud account to host AI models. This enables staff to use NHLBI Chat for sensitive data workloads including:</p>
+                    <p>Chirp stores all data locally in the NIH data center and uses a secure NIH STRIDES cloud account to host AI models. This enables staff to use Chirp Chat for sensitive data workloads including:</p>
                     <ul>
                         <li>De-identified and anonymized clinical data</li>
                         <li>Pre-decisional and draft policy</li>
                         <li>Nonpublic data including scientific data and draft manuscripts</li>
                     </ul>
                     <p>
-                        Currently, PII and identifiable clinical data is not permitted in Chirp. Please us de-identified and anonymized data. We are actively working with HHS security to enable this use-case.
-                    </p>
-                    <p>
-                        Please note that these use cases are specific to Chirp, which is different than public AI tooling like ChatGPT, Meta.AI, and Google Gemini. When using any public AI tooling, please follow OCIO Guidance, which prohibits these sensitive workloads. Unlike the public tooling, data entered into Chirp is not shared with Microsoft or OpenAI. This enables the sensitive workloads described above.
+                        Please note that these use cases are specific to Chirp, which is different than public AI tooling like ChatGPT, Meta.AI, and Google Gemini. When using any public AI tooling, please follow OCIO Guidance, which prohibits these sensitive workloads. Unlike the public tooling, data entered into Chirp is not shared with Microsoft or OpenAI. This enables the sensitive workloads described above. Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email.
                     </p>
                     <p>When using Chirp, you must abide by these following guidelines:</p>
                     <ol type="1">
@@ -86,21 +91,6 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
                             <b>Training Data:</b> Chirp uses commercial models. It is not fine-tuned on NIH, OD, or biomedical topics. Do not expect Chirp to have any internal knowledge of the NIH or OD.
                         </li>
                     </ol>
-                    <p>
-                        You are accessing a U.S. Government information system, which includes (1) this computer, (2) this computer network, (3) all computers connected to this network, and (4) all devices and storage media attached to this network or to a computer on this network. This information system is provided for U.S. Government-authorized use only.
-                    </p>
-                    <p>
-                        Unauthorized or improper use of this system may result in disciplinary action, as well as civil and criminal penalties.
-                    </p>
-                    <p>
-                        By using this information system, you understand and consent to the following.
-                    </p>
-                    <p>
-                        You have no reasonable expectation of privacy regarding any communications or data transiting or stored on this information system. At any time, and for any lawful Government purpose, the government may monitor, intercept, record, and search and seize any communication or data transiting or stored on this information system.
-                    </p>
-                    <p>
-                        Any communication or data transiting or stored on this information system may be disclosed or used for any lawful Government purpose.
-                    </p>
 <?php
 
 //if (!empty($error)) echo '<span style="color:red">'.$error.'</span></p>'."\n";
@@ -112,14 +102,14 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
 
                 </div>
                 <div class="footer" style="margin-top: 10px;">
-                    <p style="margin-bottom:5px;">
-                        <a title="Open the training video in a new window" href="<?php echo $config['app']['video_link']; ?>" target="_blank">Training Video</a><br>
-                        <span>By clicking on Proceed you are agreeing to the above terms and conditions.</span>
+                    <p style="margin-bottom:5px; font-size:small;">
+                        
+                        <span><b>By clicking on Proceed you are agreeing to the above terms and conditions.</b></span>
                     </p>
-                    <p id="proceedContainer" class="newchat" style="text-align: center;display: inline-block;background-color: #f8f9fa;">
-                    <a title="Click here to go to proceed" href="index.php" id="proceedLink" >Proceed</a></p>
+                    <p id="proceedContainer">
+                    <button class="proceedBtn" title="Click here to go to proceed" onclick="javascript: window.location.href = 'index.php';" id="proceedLink" >Proceed</button></p>
                     <!-- Chat messages will be added here -->
-                    <p><a title="Open the disclosure information in a new window" href="<?php echo $config['app']['disclosure_link']; ?>" target="_Blank" title="Vulnerability Disclosure">Vulnerability Disclosure</a></p>
+                    <!-- <p><a title="Open the disclosure information in a new window" href="<?php echo $config['app']['disclosure_link']; ?>" target="_Blank" title="Vulnerability Disclosure">Vulnerability Disclosure</a></p> -->
                 </div>
             </div>
             <div class="col-md-2 columns">
