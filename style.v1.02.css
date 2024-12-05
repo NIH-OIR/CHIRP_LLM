@@ -171,17 +171,33 @@ nav, div::-webkit-scrollbar-thumb {
     background-color: #c1c1c1;
   }
 .newchat {
-    border: solid gray 1px;
-    border-radius: 5px;
+    /*border: solid gray 1px;*/
+    /* border-radius: 5px; */
     padding: 5px;
     margin: 5px 0px;
-    display: inline-flex;
+    display: inline-block;
     width: 100%;
+    text-align: center;
+}
+.proceedBtn {
+    padding: 5px;
+    margin: 5px 0px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    background-color: #f4f1f1;
+    border-radius: 5px;
+    border: solid gray 1px;
 }
 #scrollContent {
     height: 50vh;
     overflow-y: auto;
     overflow-x: hidden;
+    background-color: #f4f1f1;
+    padding: 10px;
+    border: solid gray 1px;
+    border-radius: 5px;
 }
 .chat-item {
     position: relative;
@@ -262,6 +278,11 @@ nav, div::-webkit-scrollbar-thumb {
         font-size: 1vw;
     }   
 }
+@media(max-width: 1210px) {
+    body {
+        overflow-x: scroll;
+    }
+}
 /* Show the navbar with the hamburger menu on small screens */
 @media (max-width: 767.98px) {    
     .navbar {
@@ -313,7 +334,7 @@ nav, div::-webkit-scrollbar-thumb {
 
 @media (min-height: 562px) { 
     #scrollContent {
-        height: calc(100vh - 350px); /* Fill the height minus header */
+        height: calc(100vh - 230px); /* Fill the height minus header */
     }
 }
 
@@ -707,3 +728,46 @@ input[type=button]:hover{
     background: none;
     padding: 0;
 }
+
+#bannerWrapperV {
+    height: 100%;
+    width: 30px;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    z-index: 9998;
+    background: none;
+  }
+#bannerTransV {
+    height: 100%;
+    width: 30px;
+    background-color: red;
+    zoom: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+    filter: alpha(opacity=85);
+    -moz-opacity: 0.85;
+    -khtml-opacity: 0.85;
+    opacity: 0.85;
+    position: absolute;
+    top: 0px;
+    z-index: 9999;  
+}
+#bannerTextV {
+    margin: 0 auto;
+    padding: 30px 0px 0px 8px;
+    z-index: 100000;
+    position: absolute;
+    left: 0px;
+    pointer-events: none
+  }
+#bannerTextV p {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    pointer-events: none
+}
+.bannerTextCenterV {
+    position: relative;
+    pointer-events: none;
+}
+
