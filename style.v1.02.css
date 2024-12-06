@@ -171,8 +171,14 @@ nav, div::-webkit-scrollbar-thumb {
     background-color: #c1c1c1;
   }
 .newchat {
-    /*border: solid gray 1px;*/
-    /* border-radius: 5px; */
+    border: solid gray 1px;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0px;
+    display: inline-block;
+    width: 100%;
+}
+.chatIntro {
     padding: 5px;
     margin: 5px 0px;
     display: inline-block;
@@ -190,6 +196,10 @@ nav, div::-webkit-scrollbar-thumb {
     border-radius: 5px;
     border: solid gray 1px;
 }
+.proceedBtn:hover {
+    background-color: #d0dbe3;
+    color: white;
+  }
 #scrollContent {
     height: 50vh;
     overflow-y: auto;
