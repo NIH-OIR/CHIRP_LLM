@@ -110,8 +110,13 @@ function editChat(chatId) {
     var chatLink = chatItem.find(".chat-link");
 
     // Replace the chat link with an input field and a submit button
-    chatLink.replaceWith('<input class="edit-field" id="edit-input-' + chatId + '" type="text" aria-label="Chat title edit link" value="' + chatLink.text() + '"><img class="edit-confirm-icon" src="images/chat_check.png" alt="Check mark to confirm chat name edit">');
-
+    chatLink.replaceWith('<input class="edit-field" id="edit-input-' + chatId + '" type="text" aria-label="Chat title edit link" value="' + chatLink.text() 
+                        + '"><svg class="edit-confirm-icon" title="Confirm" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+                        + '<polyline points="20 6 9 17 4 12" /></svg>');
+    $('.edit-confirm-icon').tooltip({
+        html : true,
+        placement : "bottom",
+    });
     // Add event listener for 'Enter' key on the input
     $("#edit-input-" + chatId).keypress(function(e) {
         if (e.which == 13) { // Check if the key pressed is 'Enter'

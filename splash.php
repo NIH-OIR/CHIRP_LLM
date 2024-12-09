@@ -50,14 +50,14 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
             <div id="bannerTransV"></div>
             <div id="bannerTextV">
                 <div class="bannerTextCenterV">
-                    <p>B</p><p>E</p><p>T</p><p>A</p><p>&nbsp;</q><p>T</p><p>E</p><p>S</p><p>T</p><p>I</p><p>N</p><p>G</p>
+                    <p>P</p><p>I</p><p>L</p><p>O</p><p>T</p><p>&nbsp;</q><p>T</p><p>E</p><p>S</p><p>T</p><p>I</p><p>N</p><p>G</p>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 columns">
                 <div>
-                    <p class="newchat" style="">
+                    <p class="chatIntro" >
                     Chirp is a secure chatbot enabling NIH staff to use generative AI for their day-to-day work.
                     </p>
                 </div>
