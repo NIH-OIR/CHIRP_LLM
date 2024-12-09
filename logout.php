@@ -15,13 +15,13 @@ require_once 'get_config.php';
     
 </head>
 <body>
-    <div class="row header d-flex align-items-center"> <!-- Header Row -->
+    <div class="row header d-flex align-items-center" style="max-height: 102px;"> <!-- Header Row -->
         <!-- <div class="col d-flex justify-content-start">
             <img src="images/<?php echo $config['app']['app_logo']; ?>" class="logo" alt="<?php echo $config['app']['app_logo_alt']; ?>">
         </div> -->
         <div class="col d-flex col-1"></div>
-        <div class="col d-flex justify-content-center" style="padding-left: 3px;width: 100%;">
-            <img width="100%" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
+        <div class="col d-flex justify-content-center" style="padding-left: 3px;width: 100%;height:102px;">
+            <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
         </div>
         <div class="col d-flex col-1">          
         </div>

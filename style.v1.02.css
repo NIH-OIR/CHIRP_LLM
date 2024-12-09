@@ -6,6 +6,10 @@ body {
     overflow-x:hidden;
     overflow-y: hidden;
 }
+.chirp_log {
+    object-fit: scale-down;
+    width: 100%;
+}
 .p-2 {
     width: 100%;
 }
@@ -54,11 +58,15 @@ body {
 #username {
     margin-right: 10px; /* add some space to the right */
     white-space: nowrap;
+    margin-top: 70px;
+}
+.greeting {
+    margin-left: 15px;
 }
 .header {
     /*text-decoration: underline;*/
     background-color: #f8f9fa; /* Light gray background */
-    border: solid 1px lightgray;
+    /* border: solid 1px lightgray; */
 }
 .logo {
     max-width: 260px;
@@ -273,7 +281,7 @@ nav, div::-webkit-scrollbar-thumb {
 }
 
 .logout-link {
-    margin-left: 10px;
+    /* margin-left: 10px; */
     /*background-color: #007bff;*/
     /*color: #fff;*/
     padding: 5px 10px;
@@ -590,7 +598,7 @@ input[type=button]:hover{
 }
 .ui-tabs .ui-tabs-panel {
     padding: 0 0 0 4px;
-    height: calc(100vh - 100vh* 0.25);
+    height: calc(100vh - 140px);
 }
 .ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
     cursor: pointer;
