@@ -20,7 +20,7 @@ body {
     width: 100%;
     min-height: 55%;
     max-height: 70%;
-    height: calc(100vh - 330px);
+    height: calc(100vh - 320px);
 }
 .maincol-bottom {
     margin-bottom: 10px;
