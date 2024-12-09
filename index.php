@@ -530,7 +530,7 @@ foreach(array_keys($models) as $m) {
             html : true,
             placement : "top",
         });
-        $('.edit-icon, .delete-icon').tooltip({
+        $('.edit-icon, .delete-icon, #printButton').tooltip({
             html : true,
             placement : "bottom",
         });
