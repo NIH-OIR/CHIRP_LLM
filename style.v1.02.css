@@ -90,7 +90,7 @@ body {
     /* background-color: #1e558a; */
     background-color:#f4f5f7;
     color: white;
-    padding: 15px;
+    padding: 12px;
     height: 96%;
     position: relative;
     margin-top:8px;
@@ -100,13 +100,12 @@ body {
 }
 
 .menu a {
-    display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 165px;
-    /* color: white; */
     text-decoration: none;
+    font-size: 12px;
 }
 .menu a:hover {
     text-decoration: underline;
@@ -150,7 +149,7 @@ body {
 
 .left-nav-chat-list {
     width: 100%;
-    height: 80%;
+    height: 86%;
     overflow-y: auto;   
     overflow-x: hidden;
 }
@@ -212,18 +211,23 @@ nav, div::-webkit-scrollbar-thumb {
 .chat-item {
     position: relative;
     width: 100%;
-    padding: 5px 10px;
+    padding: 5px;
     border-radius: 5px;
+    display: flex;
 }
 
 .chat-icon {
     position: absolute;
     right: 0;
     visibility: hidden;
+    background-color: rgb(200 186 237 / 50%);
+    color: rgb(59, 59, 82);
+    opacity: 0.8;
+    border-radius: 20%;
 }
 
 .edit-icon {
-    right: 30px;
+    right: 22px;
 }
 
 .delete-icon {
@@ -231,7 +235,14 @@ nav, div::-webkit-scrollbar-thumb {
 }
 
 .edit-confirm-icon {
-    margin-left: 10px;
+    background-color: rgb(200 186 237 / 50%);
+    margin-left: 5px;
+    opacity: 0.8;
+    border-radius: 20%;
+}
+.edit-icon:hover, .delete-icon:hover, .edit-confirm-icon:hover {
+    background-color: rgba(112, 104, 134, 0.5);
+    cursor: pointer;
 }
 
 .chat-title {
@@ -243,7 +254,8 @@ nav, div::-webkit-scrollbar-thumb {
 }
 
 .edit-field {
-    width: 70%;
+    width: 90%;
+    font-size: 11px !important;
 }
 
 .current-chat {
@@ -379,14 +391,15 @@ nav, div::-webkit-scrollbar-thumb {
 .tooltip {
     max-width: 40%;
     width:fit-content;
-    --bs-tooltip-bg: #f0f0f0;
+    --bs-tooltip-bg: rgba(229,246,253,0.5);
     --bs-tooltip-arrow-height: 0.6rem;
 }
 .tooltip-inner {
     max-width: 100% !important;
-    background-color: #f0f0f0;
+    background-color: rgba(229,246,253,0.5);
     color: #1b1b1b;
     text-align: left;
+    font-size: 12px;
 }
 .tooltip-content {
     text-align: left;
