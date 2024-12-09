@@ -29,7 +29,7 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
 </head>
 <body>
     <div class="container">
-        <div class="header row align-items-center">
+        <div class="header row align-items-center" style="max-height: 102px;">
             <!-- <div class="col-sm-4">
             <img src="images/<?php echo $config['app']['app_logo']; ?>" class="logo" alt="<?php echo $config['app']['app_logo_alt']; ?>">
             </div>
@@ -37,13 +37,12 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
                 <h1><?php echo $config['app']['app_title']; ?></h1>
             </div> -->
             <div class="col d-flex justify-content-center" style="padding-left: 3px;">
-                <img width="100%" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
+                <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">
             </div>
             <div class="col-sm-2 text-end">
-<?php
-
-if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SESSION['user_data']['name'].'</p>'."\n";
-?>
+                <?php
+                if (!empty($_SESSION['user_data']['name'])) echo '<div id="username">Hello '.$_SESSION['user_data']['name'].'</div>'."\n";
+                ?>
             </div>
         </div>
         <div id="bannerWrapperV">
@@ -101,8 +100,8 @@ if (!empty($_SESSION['user_data']['name'])) echo '<p id="username">Hello '.$_SES
 
 
                 </div>
-                <div class="footer" style="margin-top: 10px;">
-                    <p style="margin-bottom:5px; font-size:small;">
+                <div class="footer">
+                    <p style="margin:10px 0 0 0; font-size:small;">
                         
                         <span><b>By clicking on Proceed you are agreeing to the above terms and conditions.</b></span>
                     </p>
