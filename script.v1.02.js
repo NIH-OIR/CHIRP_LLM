@@ -192,7 +192,7 @@ function fileUpload() {
                     var showUpdateImageElem = (`                        
                         <p style="font-size: small; margin-bottom:0;">Uploaded file:                    
                         <img src=`+response+` alt="Uploaded Image Thumbnail" style="max-width: 60px; max-height: 60px;margin-top: -10px;" />
-                        <a href="javascript:removeUploadedFile();" style="color: blue">Remove</a>
+                        <a href="upload.php?remove=1&chat_id=`+chatId+`" style="color: blue">Remove</a>
                         </p> `);
                     $("#fileUpload").append(showUpdateImageElem);  
                 } else {
@@ -201,7 +201,7 @@ function fileUpload() {
                         <p style="font-size: small; margin-bottom:0;">Uploaded file: 
                         <span class="uploadFileSpan" title="`+uploadedFileName+`">`
                         +uploadedFileName+`</span>
-                        <a href="javascript:removeUploadedFile();" style="color: blue">Remove</a>
+                        <a href="upload.php?remove=1&chat_id=`+chatId+`" style="color: blue">Remove</a>
                         </p> `);
 
                     $("#fileUpload").append(showUpdateFileElem);
