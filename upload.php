@@ -53,10 +53,11 @@ if (isset($_FILES['uploadDocument'])) {
         #$command = "python ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
         $output = shell_exec($command);
         #echo "2 - <pre>".print_r($output,1)."</pre>"; die("got here");
+        #error_log("upload.php python parser output: ".print_r($output,1));
 
         if (strpos($output, 'ValueError') === false) {
             
-            $redactedOutput = piiDetection($output);
+            $redactedOutput = piiDetection(htmlspecialchars($output));
 
             // Store the text and the original filename in session variables
             $_SESSION['document_text'] = $redactedOutput;
