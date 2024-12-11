@@ -27,6 +27,7 @@ function piiDetection($message) {
                          ];
         $inputTextArr[] = $inputTextItem;
     };
+    #error_log("piiDetection line 30 inputTextArr : ".print_r($inputTextArr, 1));
 
     $piiDetectionBody = ['kind' => 'PiiEntityRecognition',
                          'parameters' => ['modelVersion' => 'latest',
