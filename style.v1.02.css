@@ -203,7 +203,7 @@ nav, div::-webkit-scrollbar-thumb {
     border-radius: 5px;
     border: solid gray 1px;
 }
-.proceedBtn:hover {
+.proceedBtn:hover:enabled {
     background-color: #d0dbe3;
     color: white;
   }
@@ -800,5 +800,22 @@ input[type=button]:hover{
 .bannerTextCenterV {
     position: relative;
     pointer-events: none;
+}
+
+/*registration page*/
+form#registrationForm > div.row {
+    height: 45px;
+}
+
+form#registrationForm input[type=text], form#registrationForm input[type=email] {
+    width: 280px;
+}
+
+form#registrationForm .error {
+    color: red;
+}
+
+form#registrationForm input[type=button] {
+    width: 105px;
 }
 

@@ -253,6 +253,7 @@ if (isset($_POST['callInsertUserData'])) {
     $ic = $_POST['ic'];
     $email = $_POST['email'];
     $returnData = insert_user_data($first_name, $last_name, $preferred_username, $userid, $role, $ic, $email);
+    update_registration($userid, $email);
     echo $returnData;
 }
 
@@ -352,5 +353,58 @@ function isActiveUser($userid, $userEmail) {
     #error_log("db.php -> isActiveUser ".$isActive);
     return $isActive;
 }
+
+function create_registration($first_name, $last_name, $user_id, $email) {
+    global $pdo;
+    error_log("Insert data into registration table");
+    try {
+        // Prepare the SQL statement to insert the registration data
+        $stmt = $pdo->prepare("INSERT INTO registration (first_name, last_name, user_id, email, registration_date) 
+                                VALUES (:first_name, :last_name, :user_id, :email, NOW())");
+
+        // Execute the statement with the session data
+        $stmt->execute([
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'user_id' => $user_id,
+            'email' => $email
+        ]);
+
+        return true; // Indicate success
+    } catch (PDOException $e) {
+        error_log('Failed to insert registration data: ' . $e->getMessage());
+        return false;
+    }
+}
+
+// Update the chat title in the database
+function update_registration($userid, $userEmail) {
+    global $pdo;
+    error_log("db.php -> update_registration()");
+    // Prepare a SQL statement to update the registration
+    $stmt = $pdo->prepare("UPDATE registration SET is_moved_to_users = true, registration_date = NOW() WHERE user_id = :user_id or email = :email");
+    $stmt->execute(['user_id' => $userid,
+                    'email' => $userEmail]);
+}
+
+function isRegistered($userid, $userEmail) {
+    global $pdo;
+    $count = 0;
+    $isRegistered = false;
+    try {
+        $stmt = $pdo->prepare("SELECT count(*) FROM registration where user_id = :userid or email = :email");
+        $stmt->execute(['userid' => $userid,
+                        'email' => $userEmail]);
+        $count = $stmt->fetchColumn();       
+    } catch (PDOException $e) {
+        error_log('Failed to check if user is registered: ' . $e->getMessage());
+    }
+    if ($count > 0){
+        $isRegistered = true;
+    }
+    error_log("db.php -> isRegistered ".$isRegistered);
+    return $isRegistered;
+}
+
 
 

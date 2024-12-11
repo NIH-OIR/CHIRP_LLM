@@ -503,7 +503,7 @@ function checkIfReachUserCap() { //count active users
     }
 }
 
-function checkExistingUserAccess($userid, $userEmail) {
+function checkExistingUserAccess($userid, $userEmail) { 
     global $config;
     $isActiveUser = isActiveUser($userid, $userEmail);
     $totalActiveUserCnt = totalActiveUserCount();
@@ -514,6 +514,13 @@ function checkExistingUserAccess($userid, $userEmail) {
         echo "true";
     }
 }
+
+function is_user_active($userid, $userEmail) {
+    $isActive = isActiveUser($userid, $userEmail);
+    $isUserActive = $isActive ? 'true' : 'false';
+    echo $isUserActive;
+}
+
 /* update user last_logon and update user ic/email if these hasn't been capture */
 function update_user_info($userData) {
     update_user_last_logon($userData['userid']);
@@ -521,6 +528,34 @@ function update_user_info($userData) {
         $userData['department'] = '';
     }
     update_user($userData); 
+}
+
+if (isset($_POST['callUpdateUserInfo'])) {
+    $userData = $_POST['user_data'];
+    update_user_info($userData);
+}
+
+if (isset($_POST['callClearSession'])) {
+    session_unset();
+}
+
+function is_allow_access($userid, $userEmail) {
+    global $config;
+    $is_allow = true;
+    error_log("db.php -> is_allow_registration()");
+    $isActiveUser = isActiveUser($userid, $userEmail);
+    $isRegistered = isRegistered($userid, $userEmail);
+
+    if (!$isActiveUser && !$isRegistered) {
+        $is_allow = false;
+    }
+    return $is_allow;
+}
+
+function is_user_registered($userid, $userEmail) {
+    $isRegistered = isRegistered($userid, $userEmail);
+    $isUserRegistered = $isRegistered ? 'true' : 'false';
+    echo $isUserRegistered;
 }
 
 

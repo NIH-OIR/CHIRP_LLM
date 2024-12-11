@@ -34,7 +34,7 @@ if (isset($_GET['remove']) && $_GET['remove'] == '1') {
 if (isset($_FILES['uploadDocument'])) {
     $file = $_FILES['uploadDocument'];
     #echo "1 - <pre>".print_r($_FILES,1)."</pre>"; die("got here");
-    error_log("upload.php tmp_name: ".$file['tmp_name']);
+    error_log("upload.php upload file info: ".print_r($_FILES,1));
     $mimeType = mime_content_type($file['tmp_name']);
     if (strpos($mimeType, 'image/') === 0) {
         // Handle image uploads
