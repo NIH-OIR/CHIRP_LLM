@@ -79,11 +79,25 @@ function piiDetection($message) {
     } else if (isset($response_data['error'])){
         error_log('API error code ' . $response_data['error']['code']
                                     . " and message: " . $response_data['error']['message']);
-        return [
-            'code' => $response_data['error']['code'],
-            'error' => true,
-            'message' => $response_data['error']['message']
-        ];
+        if (isset($response_data['error']['innererror'])) {
+            error_log('API error code ' . $response_data['error']['innererror']['code']
+                                    . " and message: " . $response_data['error']['innererror']['message']);
+            $errorMsg = $response_data['error']['innererror']['message'];
+            if ($response_data['error']['innererror']['code'] == 'InvalidDocumentBatch') {
+                $errorMsg .= " The total character of the uploaded file has to be less than 25600 characters.";
+            }
+            return [
+                'code' => $response_data['error']['innererror']['code'],
+                'error' => true,
+                'message' => $errorMsg
+            ];
+        } else {
+            return [
+                'code' => $response_data['error']['code'],
+                'error' => true,
+                'message' => $response_data['error']['message']
+            ];
+        }
     } else {
         $redactedTextArr = [];
         $returnTextArr = $response_data['results']['documents'];

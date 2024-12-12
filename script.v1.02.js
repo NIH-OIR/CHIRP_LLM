@@ -152,7 +152,7 @@ function fileUpload() {
     var fileUpload = $('input[type=file]')[0];
     var filename = fileUpload.files.length ? fileUpload.files[0].name : "";
     var fileSize = fileUpload.files[0].size;
-    const fileSizeLimit = 5;
+    const fileSizeLimit = 20;
 
     var isValidFileName = false;
     var isValidFileSize = false;
