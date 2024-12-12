@@ -523,6 +523,7 @@ function is_user_active($userid, $userEmail) {
 
 /* update user last_logon and update user ic/email if these hasn't been capture */
 function update_user_info($userData) {
+    error_log("update_user_info");
     update_user_last_logon($userData['userid']);
     if (!isset($userData['department'])) {
         $userData['department'] = '';
@@ -531,7 +532,7 @@ function update_user_info($userData) {
 }
 
 if (isset($_POST['callUpdateUserInfo'])) {
-    $userData = $_POST['user_data'];
+    $userData = $_SESSION['user_data'];
     update_user_info($userData);
 }
 
