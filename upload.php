@@ -34,7 +34,7 @@ if (isset($_GET['remove']) && $_GET['remove'] == '1') {
 if (isset($_FILES['uploadDocument'])) {
     $file = $_FILES['uploadDocument'];
     #echo "1 - <pre>".print_r($_FILES,1)."</pre>"; die("got here");
-    error_log("upload.php tmp_name: ".$file['tmp_name']);
+    error_log("upload.php upload file info: ".print_r($_FILES,1));
     $mimeType = mime_content_type($file['tmp_name']);
     if (strpos($mimeType, 'image/') === 0) {
         // Handle image uploads
@@ -56,9 +56,17 @@ if (isset($_FILES['uploadDocument'])) {
         #error_log("upload.php python parser output: ".print_r($output,1));
 
         if (strpos($output, 'ValueError') === false) {
+            $outputArr = str_split($output, 20000);
+            error_log("outputArr length: ".count($outputArr));
+            $redactedOutput = "";
+            foreach($outputArr as $key=>$output) {                
+                $redactedOutput .= piiDetection(htmlspecialchars($output));
+                #error_log("upload.php python parser redactedOutput: ".$redactedOutput);
+            }
             
-            $redactedOutput = piiDetection(htmlspecialchars($output));
+            // $redactedOutput = piiDetection(htmlspecialchars($output));
 
+            #error_log("upload.php python parser redactedOutput: ".$redactedOutput);
             // Store the text and the original filename in session variables
             $_SESSION['document_text'] = $redactedOutput;
             $_SESSION['document_type'] = $mimeType;
