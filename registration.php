@@ -76,7 +76,7 @@ session_destroy();
                 </div>
                 <div class="row">
                     <div class="col-md-2 columns">
-                        <label for="user_id">NIH NED ID:</label>
+                        <label for="user_id">NIH Username:</label>
                     </div>
                     <div class="col-md-4 columns">
                         <input type="text" id="user_id" name="user_id" required minlength="2" maxlength="50" pattern="[a-zA-Z0-9_]+">
