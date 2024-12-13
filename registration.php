@@ -3,6 +3,7 @@ require_once 'get_config.php';
 require_once 'process_registration.php';
 
 $userCap = $config['app']['user_count_cap'];
+$availableSpots = availableSpots();
 session_start();
 
 // If it's desired to kill the session, also delete the session cookie.
@@ -49,7 +50,7 @@ session_destroy();
         </div>
         <div id="registration" class="col-md-8 columns">
             <h4>Register Now - First Come, First Served!</h4>
-            <p>We're excited to have you experience Chirp! Please note that registrations are limited and will be accepted on a first-come, first-served basis. To secure your spot, make sure to register as soon as possible before the user limit is reached.</p>
+            <p>We're excited to have you experience Chirp! Please note that registrations are limited and will be accepted on a first-come, first-served basis. There are <?php echo $availableSpots; ?> available spots now. To secure your spot, make sure to register as soon as possible before the user limit is reached.</p>
             <p id="registrationError" style="color:red;">Error occurs in saving registration information. Please fill out the form and re-submit the form.</p>
             <form id="registrationForm"  method="POST">
                 <div class="row">

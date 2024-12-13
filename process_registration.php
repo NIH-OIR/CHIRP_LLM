@@ -39,5 +39,13 @@ function checkIfReachUserLimit() { //count active users
     }
 }
 
+function availableSpots() {
+    $user_cap = 1000;
+    $num_registrered = countRegistrationForAccess();
+    $availableSpots = $user_cap - $num_registrered;
+    error_log("availableSpots: ".$availableSpots);
+    return $availableSpots;
+}
+
 
 ?>

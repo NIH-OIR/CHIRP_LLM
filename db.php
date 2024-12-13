@@ -359,8 +359,8 @@ function create_registration($first_name, $last_name, $user_id, $email) {
     error_log("Insert data into registration table");
     try {
         // Prepare the SQL statement to insert the registration data
-        $stmt = $pdo->prepare("INSERT INTO registration (first_name, last_name, user_id, email, registration_date) 
-                                VALUES (:first_name, :last_name, :user_id, :email, NOW())");
+        $stmt = $pdo->prepare("INSERT INTO registration (first_name, last_name, user_id, email, registration_date, is_moved_to_users) 
+                                VALUES (:first_name, :last_name, :user_id, :email, NOW(), false)");
 
         // Execute the statement with the session data
         $stmt->execute([
@@ -404,6 +404,21 @@ function isRegistered($userid, $userEmail) {
     }
     error_log("db.php -> isRegistered ".$isRegistered);
     return $isRegistered;
+}
+
+function countRegistrationForAccess() {
+    global $pdo;
+    $count = 0;
+    try {
+        $stmt = $pdo->prepare("SELECT count(*) FROM registration where is_moved_to_users = false");
+        $stmt->execute();
+        $count = $stmt->fetchColumn();       
+    } catch (PDOException $e) {
+        error_log('Failed to check if user is registered: ' . $e->getMessage());
+    }
+
+    error_log("db.php -> countRegistrationForAccess ".$count);
+    return $count;
 }
 
 
