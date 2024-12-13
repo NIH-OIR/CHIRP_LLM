@@ -294,6 +294,7 @@ foreach(array_keys($models) as $m) {
     <!-- announcement tab-->
     <div id="tabs-announcement">
     <div class="tabsContainer tabsText">
+        <p>All accounts that are inactive for 14 calendar days will be deactivated.</p>
         <p>Current Limitations of Document Upload Function:</p>
             <ul>
             <li>Files that work: .pdf, .json, .docx, .txt, .md, .xml, .png, .jpg, .jpeg, .gif</li>
@@ -351,16 +352,19 @@ foreach(array_keys($models) as $m) {
                 <td>Dr. Alison Lin</td><td>| alison.lin@nih.gov</td><td>| Program Director, Office of Data Science Strategy</td>
             </tr>
             <tr>
-                <td>Abhradeep Mukherjee</td><td>| mukherjeea7@od.nih.gov</td><td>| Data Scientist, Office of Intramural Research</td>
+                <td>Dr. Steevenson Nelson</td><td>| nelsons2@od.nih.gov</td><td>| Program Director, Executive Office</td>
             </tr>
             <tr>
-                <td>Dr. Steevenson Nelson</td><td>| nelsons2@od.nih.gov</td><td>| Program Director, Executive Office</td>
+                <td>Etan Kuperberg</td><td>| etan.kuperberg@nih.gov</td><td>| Program Officer, Executive Office</td>
             </tr>
             <tr>
                 <td>Rashod Qaim</td><td>| qaimra@od.nih.gov</td><td>| Program Officer, Executive Office</td>
             </tr>
             <tr>
                 <td>Carlos Sanchez</td><td>| sanchezc3@od.nih.gov</td><td>| Program Officer, Executive Office</td>
+            </tr> 
+            <tr>
+                <td>Chris Sowards</td><td>| chris.sowards@nih.gov</td><td>| Program Officer, Executive Office</td>
             </tr>            
             <tr>
                 <td>Ylang Tsou</td><td>| tsouyh@od.nih.gov</td><td>| Program Officer, Executive Office</td>
@@ -373,6 +377,12 @@ foreach(array_keys($models) as $m) {
             </tr>
             <tr>
                 <td>Olanrewaju Balogun</td><td>| balogunog@cit.nih.gov</td><td>	| Cloud Computing Services Officer</td>
+            </tr>
+            <tr>
+                <td>Ben Richmond</td><td>| ben.richmond@nih.gov</td><td>| Cloud Computing Services Officer</td>
+            </tr>
+            <tr>
+                <td>Jonny Coleman</td><td>| jonny.coleman@nih.gov</td><td>| Cloud Computing Services Officer</td>
             </tr>
             <tr>
                 <td>Wayne Chen</td><td>| chenwae@cit.nih.gov</td><td>| Cloud Computing Services Officer</td>
