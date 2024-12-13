@@ -101,7 +101,7 @@ session_destroy();
                 <div class="row">
                     <div class="col-md-4 columns"></div>
                     <div class="col-md-2 columns">
-                        <input type="button" value="Regitration" id="regitrationBtn" class ="regitrationBtn"  onclick="submitRegistration()"/>
+                        <input type="button" value="Register" id="regitrationBtn" class ="regitrationBtn"  onclick="submitRegistration()"/>
                     </div>
                     <div class="col-md-2 columns">
                         <input type="button" value="Cancel" id="cancelRegistrationBtn" class ="cancelRegistrationBtn" onclick="cancelRegistration()"/>
