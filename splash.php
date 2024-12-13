@@ -289,14 +289,22 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
                 showNotAllowAccessDlg(newUser);
             }
             
-            $('div#scrollContent').on('scroll', function() {
-                var elem = $(this);
-                if (userExist && elem.scrollTop() > 0 && 
-                    ((elem[0].scrollHeight - elem.scrollTop()) <= (elem.outerHeight() + 1))) {
-                    console.log("scroll to the bottom");
+            var scrollBarVisible = $('div#scrollContent').get(0).scrollHeight > $('div#scrollContent').innerHeight() ? true : false;
+            //console.log("has scroll bar: " +scrollBarVisible);
+            if (scrollBarVisible) {
+                $('div#scrollContent').on('scroll', function() {
+                    var elem = $(this);
+                    if (userExist && elem.scrollTop() > 0 && 
+                        ((elem[0].scrollHeight - elem.scrollTop()) <= (elem.outerHeight() + 1))) {
+                        console.log("scroll to the bottom");
+                        $("button.proceedBtn").prop("disabled", false);
+                    }
+                });
+            } else {
+                setTimeout(function() {
                     $("button.proceedBtn").prop("disabled", false);
-                }
-            });
+                }, 10000);
+            }
         } else { //existing user
             if (checkExistingUserAccess) { //allow access and update user info
                 // console.log("Update user info");
