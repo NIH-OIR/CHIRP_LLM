@@ -1,5 +1,5 @@
 <?php
-// require_once 'get_config.php';
+require_once 'get_config.php';
 require_once 'db.php';
 
 error_log("process_registration.php");
@@ -40,9 +40,10 @@ function checkIfReachUserLimit() { //count active users
 }
 
 function availableSpots() {
-    $user_cap = 1000;
-    $num_registrered = countRegistrationForAccess();
-    $availableSpots = $user_cap - $num_registrered;
+    global $config;
+    $userCap = $config['app']['user_count_cap'];
+    $totalActvieUser = totalActiveUserCount();
+    $availableSpots = $userCap - $totalActvieUser;
     error_log("availableSpots: ".$availableSpots);
     return $availableSpots;
 }

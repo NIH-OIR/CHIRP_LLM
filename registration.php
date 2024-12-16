@@ -2,7 +2,6 @@
 require_once 'get_config.php';
 require_once 'process_registration.php';
 
-$userCap = $config['app']['user_count_cap'];
 $availableSpots = availableSpots();
 session_start();
 
