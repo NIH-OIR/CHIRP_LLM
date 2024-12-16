@@ -38,7 +38,7 @@ session_destroy();
             <img src="images/<?php echo $config['app']['app_logo']; ?>" class="logo" alt="<?php echo $config['app']['app_logo_alt']; ?>">
         </div> -->
         <div class="col d-flex col-1"></div>
-        <div class="col d-flex justify-content-center" style="padding-left: 3px;width: 100%;height:102px;">
+        <div class="col d-flex justify-content-center  chirp_header">
             <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
         </div>
         <div class="col d-flex col-1">          
