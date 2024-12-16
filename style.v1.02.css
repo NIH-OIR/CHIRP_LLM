@@ -209,7 +209,7 @@ nav, div::-webkit-scrollbar-thumb {
     border: solid gray 1px;
 }
 .proceedBtn:hover:enabled {
-    background-color: #d0dbe3;
+    background-color: #86bfc4;
     color: white;
   }
 #scrollContent {
@@ -546,12 +546,12 @@ input[type=button] {
     border-radius: 50px;
     flex-grow: 2;
     border: none;
-    background-color: #6c757d;
+    background-color: #0D7F89;
     color:white;
 }
 
 input[type=button]:hover{
-    background-color: #a6a3a3;
+    background-color: #86bfc4;
 }
 
 .adminToolBtn {
