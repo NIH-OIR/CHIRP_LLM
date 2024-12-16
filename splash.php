@@ -36,7 +36,7 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
             <div class="col-sm-4 text-center">
                 <h1><?php echo $config['app']['app_title']; ?></h1>
             </div> -->
-            <div class="col d-flex justify-content-center" style="padding-left: 3px;">
+            <div class="col d-flex justify-content-center chirp_header" >
                 <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">
             </div>
             <div class="col-sm-2 text-end">
