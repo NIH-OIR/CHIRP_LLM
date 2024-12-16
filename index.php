@@ -91,7 +91,7 @@ foreach(array_keys($models) as $m) {
     
 
     <div class="row header d-flex align-items-center" style="max-height: 102px;"> <!-- Header Row -->
-        <div class="col d-flex justify-content-center" style="padding-left: 3px;width: 100%; height:102px;">
+        <div class="col d-flex justify-content-center chirp_header" >
             <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">
             <div id="username"><span class="greeting">Hello </span><span class="user-name"><?php echo $username; ?></span> <a title="Log out of the chat interface" href="logout.php" class="logout-link" style="display:inline-block;">Logout</a></div>
         </div>
