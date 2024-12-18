@@ -147,14 +147,14 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
     </div>
     <div id="existUserCapReachedExplnDlg" style="display:hidden">
         <div>
-        Thank you for insteresting in Chirp (Chat for IRP). Please note our user limit has been reached. 
+        Thank you for your interest in ChIRP (Chat for IRP). Please note our user limit has been reached. 
         Inactive user can not access Chirp at this point. Please go to <a href="registration.php">registration</a> page to register in the waiting list. </br>
         </div>
     </div>
     <div id="notRegisteredDlg" style="display:hidden">
         <div>
-        Thank you for insteresting in Chirp (Chat for IRP). Registration is required to access Chirp. 
-        Please go to <a href="registration.php">registration</a> page. </br>
+        Thank you for your interest in ChIRP (Chat for IRP). Registration is required for access. 
+        Please go to the <a href="registration.php">registration</a> page to register. </br>
         </div>
     </div>
 </body>
