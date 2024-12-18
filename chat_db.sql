@@ -68,3 +68,14 @@ ALTER TABLE `users` ADD COLUMN `last_logon` timestamp DEFAULT NOW();
 
 -- Add is_active to users table
 ALTER TABLE `users` ADD COLUMN `is_active` bool DEFAULT true;
+
+-- Create registration table
+CREATE TABLE `registration` (
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `first_name` VARCHAR(50) NOT NULL,
+    `last_name` VARCHAR(50) NOT NULL,
+    `user_id` VARCHAR(50) UNIQUE NOT NULL,
+    `email` VARCHAR(100) UNIQUE NOT NULL,
+    `registration_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `is_moved_to_users` BOOLEAN DEFAULT false
+);
