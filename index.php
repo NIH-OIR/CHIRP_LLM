@@ -471,8 +471,8 @@ foreach(array_keys($models) as $m) {
                 <th class="filterhead"></th><!--Role -->
                 <th class="filterhead"></th><!--IC -->
                 <th class="filterhead"></th><!--Is Admin -->
-                <th class="filterhead"></th><!--API Keys -->
-                <th class="filterhead"></th><!--LLMs Permitted -->
+                <!-- <th class="filterhead"></th> --><!-- API Keys -->
+                <!-- <th class="filterhead"></th>--><!-- LLMs Permitted -->
                 <th class="filterhead dtDateCol"></th><!--Accepted Date -->
             </tr>
             <tr>
@@ -482,8 +482,8 @@ foreach(array_keys($models) as $m) {
                 <th style="width: 10%;"></th><!--Role -->
                 <th style="width: 10%;"></th><!--IC -->
                 <th style="width: 10%;"></th><!--Is Admin -->
-                <th></th><!--API Keys -->
-                <th></th><!--LLMs Permitted -->
+                <!-- <th></th> --><!-- API Keys -->
+                <!-- <th></th> --><!-- LLMs Permitted -->
                 <th></th><!--Accepted Date -->
             </tr>
             </thead>

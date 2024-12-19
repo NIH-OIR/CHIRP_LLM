@@ -139,10 +139,22 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
         </p>
         </div>
     </div>
-    <div id="capReachedExplnDlg" style="display:hidden">
+    <div id="newUserCapReachedExplnDlg" style="display:hidden">
         <div>
         Thank you for insteresting in Chirp (Chat for IRP). Please note our user limit has been reached. 
         No more new users can access Chirp at this point. </br>
+        </div>
+    </div>
+    <div id="existUserCapReachedExplnDlg" style="display:hidden">
+        <div>
+        Thank you for your interest in ChIRP (Chat for IRP). Please note our user limit has been reached. 
+        Inactive user can not access Chirp at this point. Please go to <a href="registration.php">registration</a> page to register in the waiting list. </br>
+        </div>
+    </div>
+    <div id="notRegisteredDlg" style="display:hidden">
+        <div>
+        Thank you for your interest in ChIRP (Chat for IRP). Registration is required for access. 
+        Please go to the <a href="registration.php">registration</a> page to register. </br>
         </div>
     </div>
 </body>
@@ -210,7 +222,7 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
                 },
             ]
         });
-        $("#capReachedExplnDlg").dialog({
+        $("#newUserCapReachedExplnDlg").dialog({
             width: 500,
             autoOpen: false,
             title: 'Thank you',
@@ -227,16 +239,56 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
                 },
             ]
         });
+        $("#existUserCapReachedExplnDlg").dialog({
+            width: 500,
+            autoOpen: false,
+            title: 'Thank you',
+            open: function( event, ui ) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: [
+                {
+                    text: "Register",
+                    click: function() {
+                        $( this ).dialog( "close" );
+                        window.location.href = "registration.php";
+                    }
+                },
+            ]
+        });
+        $("#notRegisteredDlg").dialog({
+            width: 500,
+            autoOpen: false,
+            title: 'Thank you',
+            open: function( event, ui ) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: [
+                {
+                    text: "Register",
+                    click: function() {
+                        $( this ).dialog( "close" );
+                        window.location.href = "registration.php";
+                    }
+                },
+            ]
+        });
+
         var reachUserCap = <?php checkIfReachUserCap(); ?>;
+        var isUserRegistered = <?php is_user_registered($_SESSION['user_data']['userid'], $_SESSION['user_data']['email']); ?>;
+        var isUserActive = <?php is_user_active($_SESSION['user_data']['userid'], $_SESSION['user_data']['email']); ?>;
         var checkExistingUserAccess = <?php checkExistingUserAccess($_SESSION['user_data']['userid'], $_SESSION['user_data']['email']); ?>;
         // console.log("userExist: "+userExist);
+
         if (!userExist) { //new user
-            if (!reachUserCap) {
+            if (isUserRegistered && !reachUserCap) {
                 $('#roleSelectionDlg').dialog("open");
+                $("button.proceedBtn").prop("disabled", true);
             } else {
-                $('#capReachedExplnDlg').dialog("open");
+                var newUser = true;
+                showNotAllowAccessDlg(newUser);
             }
-            $("button.proceedBtn").prop("disabled", true);
+            
             var scrollBarVisible = $('div#scrollContent').get(0).scrollHeight > $('div#scrollContent').innerHeight() ? true : false;
             //console.log("has scroll bar: " +scrollBarVisible);
             if (scrollBarVisible) {
@@ -255,10 +307,41 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
             }
         } else { //existing user
             if (checkExistingUserAccess) { //allow access and update user info
-                <?php update_user_info($_SESSION['user_data']); ?>                
+                // console.log("Update user info");
+                $.ajax({
+                    url: "lib.required.php",
+                    type: 'POST',
+                    data: {"callUpdateUserInfo": "1"
+                        },
+                    success: function(response) {                              
+                    }
+                });                
             } else { //block the inactive user when user cap is reached
-                $('#capReachedExplnDlg').dialog("open"); 
+                var newUser = false;
+                showNotAllowAccessDlg();
             }
+        }
+
+        function showNotAllowAccessDlg(newUser) {
+            if (!isUserRegistered) {
+                    $("#notRegisteredDlg").dialog("open");
+                } else if (reachUserCap) {
+                    if (newUser) {
+                        $('#newUserCapReachedExplnDlg').dialog("open");
+                    } else {
+                        $('#existUserCapReachedExplnDlg').dialog("open");
+                    }
+                        
+                }
+                $("button.proceedBtn").prop("disabled", true);
+                //console.log("User is not allowed to access and clear the session.")
+                $.ajax({
+                    url: "lib.required.php",
+                    type: 'POST',
+                    data: {"callClearSession": "1"},
+                    success: function(response) {                              
+                    }
+                });
         }
 
     });

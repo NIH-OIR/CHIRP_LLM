@@ -807,3 +807,20 @@ input[type=button]:hover{
     pointer-events: none;
 }
 
+/*registration page*/
+form#registrationForm > div.row {
+    height: 45px;
+}
+
+form#registrationForm input[type=text], form#registrationForm input[type=email] {
+    width: 280px;
+}
+
+form#registrationForm .error {
+    color: red;
+}
+
+form#registrationForm input[type=button] {
+    width: 105px;
+}
+

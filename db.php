@@ -253,6 +253,7 @@ if (isset($_POST['callInsertUserData'])) {
     $ic = $_POST['ic'];
     $email = $_POST['email'];
     $returnData = insert_user_data($first_name, $last_name, $preferred_username, $userid, $role, $ic, $email);
+    update_registration($userid, $email);
     echo $returnData;
 }
 
@@ -266,6 +267,19 @@ function get_all_users() {
         $output[] = $r;
     }
     #error_log("db.php->get_all_users() row: " . print_r($output,1));
+    return $output;
+}
+
+function get_all_active_users() {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT * FROM users where is_active = true");
+    $stmt->execute([]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $output = [];
+    foreach($rows as $r) {
+        $output[] = $r;
+    }
+    #error_log("db.php->get_all_active users() row: " . print_r($output,1));
     return $output;
 }
 
@@ -283,8 +297,9 @@ function isAdminUser($userid) {
 
 }
 if (isset($_POST['callGetUsersData'])) {
-    error_log("Calling function get_all_users().");
+    error_log("Calling function get_all_active_users().");
     $returnData = get_all_users();
+    //$returnData = get_all_active_users();
     echo json_encode(array($returnData));
 }
 
@@ -352,5 +367,73 @@ function isActiveUser($userid, $userEmail) {
     #error_log("db.php -> isActiveUser ".$isActive);
     return $isActive;
 }
+
+function create_registration($first_name, $last_name, $user_id, $email) {
+    global $pdo;
+    error_log("Insert data into registration table");
+    try {
+        // Prepare the SQL statement to insert the registration data
+        $stmt = $pdo->prepare("INSERT INTO registration (first_name, last_name, user_id, email, registration_date, is_moved_to_users) 
+                                VALUES (:first_name, :last_name, :user_id, :email, NOW(), false)");
+
+        // Execute the statement with the session data
+        $stmt->execute([
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'user_id' => $user_id,
+            'email' => $email
+        ]);
+
+        return true; // Indicate success
+    } catch (PDOException $e) {
+        error_log('Failed to insert registration data: ' . $e->getMessage());
+        return false;
+    }
+}
+
+// Update the chat title in the database
+function update_registration($userid, $userEmail) {
+    global $pdo;
+    error_log("db.php -> update_registration()");
+    // Prepare a SQL statement to update the registration
+    $stmt = $pdo->prepare("UPDATE registration SET is_moved_to_users = true, registration_date = NOW() WHERE user_id = :user_id or email = :email");
+    $stmt->execute(['user_id' => $userid,
+                    'email' => $userEmail]);
+}
+
+function isRegistered($userid, $userEmail) {
+    global $pdo;
+    $count = 0;
+    $isRegistered = false;
+    try {
+        $stmt = $pdo->prepare("SELECT count(*) FROM registration where user_id = :userid or email = :email");
+        $stmt->execute(['userid' => $userid,
+                        'email' => $userEmail]);
+        $count = $stmt->fetchColumn();       
+    } catch (PDOException $e) {
+        error_log('Failed to check if user is registered: ' . $e->getMessage());
+    }
+    if ($count > 0){
+        $isRegistered = true;
+    }
+    error_log("db.php -> isRegistered ".$isRegistered);
+    return $isRegistered;
+}
+
+function countRegistrationForAccess() {
+    global $pdo;
+    $count = 0;
+    try {
+        $stmt = $pdo->prepare("SELECT count(*) FROM registration where is_moved_to_users = false");
+        $stmt->execute();
+        $count = $stmt->fetchColumn();       
+    } catch (PDOException $e) {
+        error_log('Failed to check if user is registered: ' . $e->getMessage());
+    }
+
+    error_log("db.php -> countRegistrationForAccess ".$count);
+    return $count;
+}
+
 
 
