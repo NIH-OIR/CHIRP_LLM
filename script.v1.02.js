@@ -687,8 +687,8 @@ $(document).ready(function(){
                         'role': value.role,
                         'ic':value.ic,
                         'isAdmin':value.is_admin ? 'Yes' : 'No',
-                        'api_keys':value.pilot_api_keys,
-                        'llms_permitted':value.llms_permitted,
+                       // 'api_keys':value.pilot_api_keys,
+                       // 'llms_permitted':value.llms_permitted,
                         'accepted_date':value.updated_at
                     });
                 });
@@ -725,14 +725,14 @@ $(document).ready(function(){
                         "name": "isAdmin",
                         "data": "isAdmin" 
                     },
-                    {   "title": "API Keys",
-                        "name": "api_keys",
-                        "data": "api_keys" 
-                    },
-                    {   "title": "LLMs Permitted",
-                        "name": "llms_permitted",
-                        "data": "llms_permitted" 
-                    },
+                    // {   "title": "API Keys",
+                    //     "name": "api_keys",
+                    //     "data": "api_keys" 
+                    // },
+                    // {   "title": "LLMs Permitted",
+                    //     "name": "llms_permitted",
+                    //     "data": "llms_permitted" 
+                    // },
                     {   "title": "Accepted Date",
                         "name": "accepted_date",
                         "data": function (data, type, full, meta) { //get the date only

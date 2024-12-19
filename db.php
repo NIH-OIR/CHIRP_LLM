@@ -270,6 +270,19 @@ function get_all_users() {
     return $output;
 }
 
+function get_all_active_users() {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT * FROM users where is_active = true");
+    $stmt->execute([]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $output = [];
+    foreach($rows as $r) {
+        $output[] = $r;
+    }
+    #error_log("db.php->get_all_active users() row: " . print_r($output,1));
+    return $output;
+}
+
 function isAdminUser($userid) {
     global $pdo;
     try {
@@ -284,8 +297,9 @@ function isAdminUser($userid) {
 
 }
 if (isset($_POST['callGetUsersData'])) {
-    error_log("Calling function get_all_users().");
+    error_log("Calling function get_all_active_users().");
     $returnData = get_all_users();
+    //$returnData = get_all_active_users();
     echo json_encode(array($returnData));
 }
 
