@@ -68,7 +68,7 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
                         <li>Nonpublic data including scientific data and draft manuscripts</li>
                     </ul>
                     <p>
-                        Please note that these use cases are specific to CHIRP, which is different than public AI tooling like ChatGPT, Meta.AI, and Google Gemini. When using any public AI tooling, please follow <a target="_blank" href="https://wiki.ocio.nih.gov/wiki/index.php/NIH_Artificial_Intelligence_(AI)_Cybersecurity_Guidance">OCIO Guidance</a>, which prohibits these sensitive workloads. Unlike the public tooling, data entered into CHIRP is not shared with Microsoft or OpenAI. This enables the sensitive workloads described above. Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email.
+                        Please note that these use cases are specific to CHIRP, which is different than public AI tooling like ChatGPT, Meta.AI, and Google Gemini. When using any public AI tooling, please follow <a target="_blank" href="https://wiki.ocio.nih.gov/wiki/index.php/NIH_Artificial_Intelligence_(AI)_Cybersecurity_Guidance">OCIO Guidance</a>, which prohibits these sensitive workloads. Unlike the public tooling, data entered into CHIRP is not shared with Microsoft or OpenAI. This enables the sensitive workloads described above. Any questions, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email.
                     </p>
                     <p>When using CHIRP, you must abide by these following guidelines:</p>
                     <ol type="1">

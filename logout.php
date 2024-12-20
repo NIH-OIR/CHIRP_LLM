@@ -32,7 +32,7 @@ require_once 'get_config.php';
         <div class="col-md-6 columns">
             <div style="text-align:center">
                 <p>Thank you for using <a id="domainUrl" href="/">CHIRP</a>!</p> 
-                <p>Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
+                <p>Any questions, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
             </div>
         </div>
         <div class="col-md-3 columns">
