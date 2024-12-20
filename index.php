@@ -294,7 +294,7 @@ foreach(array_keys($models) as $m) {
     <!-- announcement tab-->
     <div id="tabs-announcement">
     <div class="tabsContainer tabsText">
-        <p>All accounts that are inactive for 14 calendar days will be deactivated.</p>
+        <p>All accounts that are inactive for <b>14</b> calendar days will be deactivated.</p>
         <p>Current Limitations of Document Upload Function:</p>
             <ul>
             <li>Files that work: .pdf, .json, .docx, .txt, .md, .xml, .png, .jpg, .jpeg, .gif</li>
@@ -302,6 +302,9 @@ foreach(array_keys($models) as $m) {
             <li>Can not upload: .xlsx, .csv, and all other image formats</li>
             </ul>
         <p>This will be patched in future iterations. Please contact us if any additional issues arise.</p>
+        <?php 
+            require_once 'faq.php';
+        ?>
     </div>
     </div>
     <!-- end announcement tab-->
