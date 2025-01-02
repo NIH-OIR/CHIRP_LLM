@@ -92,7 +92,7 @@ foreach(array_keys($models) as $m) {
 
     <div class="row header d-flex align-items-center" style="max-height: 102px;"> <!-- Header Row -->
         <div class="col d-flex justify-content-center chirp_header" >
-            <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">
+            <img class ="chirp_log" src="images/chirp-logo.png" alt="ChIRP Log" title="ChIRP">
             <div id="username"><span class="greeting">Hello </span><span class="user-name"><?php echo $username; ?></span> <a title="Log out of the chat interface" href="logout.php" class="logout-link" style="display:inline-block;">Logout</a></div>
         </div>
         <!-- <div class="col d-flex col-2">
@@ -103,7 +103,7 @@ foreach(array_keys($models) as $m) {
     <div class="row ui-tabs" id="tabs" style="display:none;">
         <ul class="topNav ui-tabs-nav">
             <li><a href="#tabs-chat" id ="chatAnchor">My Chat</a></li>
-            <li><a href="#tabs-about" id ="aboutAnchor">About Chirp</a></li>
+            <li><a href="#tabs-about" id ="aboutAnchor">About ChIRP</a></li>
             <li><a href="#tabs-announcement" id ="announcementAnchor">Announcement</a></li>
             <li><a href="#tabs-trainingSupport" id ="trainingSupportAnchor">Training & Support</a></li>
             <li><a href="#tabs-contactAcknowledgement" id ="tabs-contactAcknowledgementAnchor">Contact & Acknowledgement</a></li>
@@ -294,7 +294,7 @@ foreach(array_keys($models) as $m) {
     <!-- announcement tab-->
     <div id="tabs-announcement">
     <div class="tabsContainer tabsText">
-        <p>All accounts that are inactive for 14 calendar days will be deactivated.</p>
+        <p>All accounts that are inactive for <b>14</b> calendar days will be deactivated.</p>
         <p>Current Limitations of Document Upload Function:</p>
             <ul>
             <li>Files that work: .pdf, .json, .docx, .txt, .md, .xml, .png, .jpg, .jpeg, .gif</li>
@@ -302,6 +302,9 @@ foreach(array_keys($models) as $m) {
             <li>Can not upload: .xlsx, .csv, and all other image formats</li>
             </ul>
         <p>This will be patched in future iterations. Please contact us if any additional issues arise.</p>
+        <?php 
+            require_once 'faq.php';
+        ?>
     </div>
     </div>
     <!-- end announcement tab-->

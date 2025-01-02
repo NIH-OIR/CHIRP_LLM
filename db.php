@@ -406,7 +406,7 @@ function isRegistered($userid, $userEmail) {
     $count = 0;
     $isRegistered = false;
     try {
-        $stmt = $pdo->prepare("SELECT count(*) FROM registration where user_id = :userid or email = :email");
+        $stmt = $pdo->prepare("SELECT count(*) FROM registration where (user_id = :userid or email = :email) and is_moved_to_users = 0");
         $stmt->execute(['userid' => $userid,
                         'email' => $userEmail]);
         $count = $stmt->fetchColumn();       
