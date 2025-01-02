@@ -21,7 +21,7 @@ require_once 'get_config.php';
         </div> -->
         <div class="col d-flex col-1"></div>
         <div class="col d-flex justify-content-center chirp_header" >
-            <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
+            <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="ChIRP">'
         </div>
         <div class="col d-flex col-1">          
         </div>
@@ -31,7 +31,7 @@ require_once 'get_config.php';
         </div>
         <div class="col-md-6 columns">
             <div style="text-align:center">
-                <p>Thank you for using <a id="domainUrl" href="/">CHIRP</a>!</p> 
+                <p>Thank you for using <a id="domainUrl" href="/">ChIRP</a>!</p> 
                 <p>Any questions, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
             </div>
         </div>

@@ -92,7 +92,7 @@ foreach(array_keys($models) as $m) {
 
     <div class="row header d-flex align-items-center" style="max-height: 102px;"> <!-- Header Row -->
         <div class="col d-flex justify-content-center chirp_header" >
-            <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">
+            <img class ="chirp_log" src="images/chirp-logo.png" alt="ChIRP Log" title="ChIRP">
             <div id="username"><span class="greeting">Hello </span><span class="user-name"><?php echo $username; ?></span> <a title="Log out of the chat interface" href="logout.php" class="logout-link" style="display:inline-block;">Logout</a></div>
         </div>
         <!-- <div class="col d-flex col-2">
@@ -103,7 +103,7 @@ foreach(array_keys($models) as $m) {
     <div class="row ui-tabs" id="tabs" style="display:none;">
         <ul class="topNav ui-tabs-nav">
             <li><a href="#tabs-chat" id ="chatAnchor">My Chat</a></li>
-            <li><a href="#tabs-about" id ="aboutAnchor">About Chirp</a></li>
+            <li><a href="#tabs-about" id ="aboutAnchor">About ChIRP</a></li>
             <li><a href="#tabs-announcement" id ="announcementAnchor">Announcement</a></li>
             <li><a href="#tabs-trainingSupport" id ="trainingSupportAnchor">Training & Support</a></li>
             <li><a href="#tabs-contactAcknowledgement" id ="tabs-contactAcknowledgementAnchor">Contact & Acknowledgement</a></li>

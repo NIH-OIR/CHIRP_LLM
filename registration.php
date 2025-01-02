@@ -39,7 +39,7 @@ session_destroy();
         </div> -->
         <div class="col d-flex col-1"></div>
         <div class="col d-flex justify-content-center  chirp_header">
-            <img class ="chirp_log" src="images/chirp-logo.png" alt="Chirp Log" title="Chirp">'
+            <img class ="chirp_log" src="images/chirp-logo.png" alt="ChIRP Log" title="ChIRP">'
         </div>
         <div class="col d-flex col-1">          
         </div>
@@ -49,7 +49,7 @@ session_destroy();
         </div>
         <div id="registration" class="col-md-8 columns">
             <h4>Register Now - First Come, First Served!</h4>
-            <p>We're excited to have you experience Chirp! Please note that registrations are limited and will be accepted on a first-come, first-served basis. Currently, <?php echo $availableSpots; ?> spots are available. Please register promptly to secure your spot before the limit is reached.</p>
+            <p>We're excited to have you experience ChIRP! Please note that registrations are limited and will be accepted on a first-come, first-served basis. Currently, <?php echo $availableSpots; ?> spots are available. Please register promptly to secure your spot before the limit is reached.</p>
             <p id="registrationError" style="color:red;">Error occurs in saving registration information. Please fill out the form and re-submit the form.</p>
             <form id="registrationForm"  method="POST">
                 <div class="row">
@@ -109,10 +109,10 @@ session_destroy();
             </form>
         </div>
         <div id="registrationSuccess" class="col-md-8 columns" >
-            <p>Thank you for registering Chirp!<p>
+            <p>Thank you for registering ChIRP!<p>
         </div>
         <div id="registrationExist" class="col-md-8 columns" >
-            <p>You've registered in Chirp. Registration infomation has been updated.<p>
+            <p>You've registered in ChIRP. Registration infomation has been updated.<p>
         </div>
         <div class="col-md-3 columns">
     </div>
@@ -124,9 +124,9 @@ $(document).ready(function(){
 
     var reachUserLimit = <?php checkIfReachUserLimit(); ?>;
     if (reachUserLimit) {
-        $("#registrationSuccess").append("<p>The user limit in Chirp has been reached. Please visit our site frequently to check if spots are opened.</p>");
+        $("#registrationSuccess").append("<p>The user limit in ChIRP has been reached. Please visit our site frequently to check if spots are opened.</p>");
     } else {
-        $("#registrationSuccess").append('<p>Please visit <a href="index.php">Chirp</a></p>.');
+        $("#registrationSuccess").append('<p>Please visit <a href="index.php">ChIRP</a></p>.');
     }
 
 });
