@@ -73,7 +73,7 @@ $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 #logout();
 #echo '<pre>'.print_r($_SESSION,1).'</pre>'; #die("SHOULD BE LOGGED OUT<br>\n");
 
-if (empty($_SESSION['user_data']) || !user_exists($_SESSION['user_data']['userid'])) { #echo "THIS DOG"; #$_SESSION['user_data'] = [];
+if (empty($_SESSION['user_data']) || !user_exists($_SESSION['user_data']['userid'], $_SESSION['user_data']['email'])) { #echo "THIS DOG"; #$_SESSION['user_data'] = [];
     require_once 'splash.php';
     exit;
 }
@@ -487,7 +487,7 @@ function approximateTokenCountByChars($text) {
 
 
 function isUserExist($userData) {
-    if (user_exists($userData['userid'])) {
+    if (user_exists($userData['userid'], $userData['email'])) {
         echo "true";  
     } else {
         echo "false";

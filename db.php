@@ -154,15 +154,15 @@ function update_chat_document($user, $chat_id, $document_name, $document_type, $
 }
 
 // Check if a user with the given userid exists in the users table
-function user_exists($userid) {
+function user_exists($userid, $userEmail) {
     global $pdo;
 
     try {
         // Prepare the SQL statement to check if the user exists
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE userid = :userid");
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE userid = :userid or email = :userEmail");
         
         // Execute the statement with the provided userid
-        $stmt->execute(['userid' => $userid]);
+        $stmt->execute(['userid' => $userid, 'userEmail' => $userEmail]);
         
         // Fetch the result
         $count = $stmt->fetchColumn();
