@@ -25,7 +25,7 @@ try {
 }
 
 global $pdo;
-$stmt = $pdo->prepare("update users set is_active = false where DATEDIFF(NOW(), last_logon) > 14");
+$stmt = $pdo->prepare("update users set is_active = false where DATEDIFF(NOW(), last_logon) > 14 and is_in_whitelist = false");
 $stmt->execute();
 error_log("cron.php update user active status");
 ?>

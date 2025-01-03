@@ -69,6 +69,9 @@ ALTER TABLE `users` ADD COLUMN `last_logon` timestamp DEFAULT NOW();
 -- Add is_active to users table
 ALTER TABLE `users` ADD COLUMN `is_active` bool DEFAULT true;
 
+-- Add is_active to users table
+ALTER TABLE `users` ADD COLUMN `is_in_whitelist` bool DEFAULT false;
+
 -- Create registration table
 CREATE TABLE `registration` (
     `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
