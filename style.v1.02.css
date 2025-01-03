@@ -541,7 +541,10 @@ table.dataTable {
 .dt-type-date {
     text-align: left !important;
 }
-
+div.dt-buttons {
+    width: 50%;
+    margin-bottom: -35px;
+}
 input[type=button] {
     border-radius: 50px;
     flex-grow: 2;

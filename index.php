@@ -64,14 +64,14 @@ foreach(array_keys($models) as $m) {
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 
-<!--     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.print.min.js"></script>
     
 <!--custom js files -->
     <script src="session_handler.js"></script>
@@ -477,6 +477,8 @@ foreach(array_keys($models) as $m) {
                 <!-- <th class="filterhead"></th> --><!-- API Keys -->
                 <!-- <th class="filterhead"></th>--><!-- LLMs Permitted -->
                 <th class="filterhead dtDateCol"></th><!--Accepted Date -->
+                <th class="filterhead"></th><!--Is Active -->
+                <th class="filterhead"></th><!--Is In Whitelist -->
             </tr>
             <tr>
                 <th class="select-checkbox"></th><!--checkbox -->
@@ -488,6 +490,8 @@ foreach(array_keys($models) as $m) {
                 <!-- <th></th> --><!-- API Keys -->
                 <!-- <th></th> --><!-- LLMs Permitted -->
                 <th></th><!--Accepted Date -->
+                <th></th><!--Is Active -->
+                <th></th><!--Is In Whitelist -->
             </tr>
             </thead>
             </table>

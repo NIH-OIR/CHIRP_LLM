@@ -689,7 +689,9 @@ $(document).ready(function(){
                         'isAdmin':value.is_admin ? 'Yes' : 'No',
                        // 'api_keys':value.pilot_api_keys,
                        // 'llms_permitted':value.llms_permitted,
-                        'accepted_date':value.updated_at
+                        'accepted_date':value.updated_at,
+                        'isActive':value.is_active ? 'Yes' : 'No',
+                        'isInWhitelist':value.is_in_whitelist ? 'Yes' : 'No',
                     });
                 });
             });
@@ -739,6 +741,14 @@ $(document).ready(function(){
                             var dateTimeArr = data.accepted_date.split(" ");
                             return dateTimeArr[0];
                         }
+                    },
+                    {   "title": "Is Active",
+                        "name": "isActive",
+                        "data": "isActive" 
+                    },
+                    {   "title": "In Whitelist",
+                        "name": "isInWhitelist",
+                        "data": "isInWhitelist" 
                     }
                 ],
                 dom: 'Bfrtip',
@@ -761,23 +771,19 @@ $(document).ready(function(){
                         
                     }
                 ],
-                /* buttons: [
+                buttons: [
                     {
-                        text: "Edit",
-                        className: "editBtn",
-                        enableControl: {
-                            count: 1,
-                            invert:true
+                        text: "Export to CSV",
+                        className: "exportToCsvBtn",
+                        title: "ChIRP_userlist",
+                        extend: 'csv',
+                        extension: '.csv',
+                        enabled: true,
+                        exportOptions: {
+                            columns: 'th:not(:first-child)'
                         },
-                        action: function(e, dt, node, config) {
-                            var oTable = $('#usersTable').DataTable();
-                            var selectedRowData = oTable.rows('.selected').data();
-                            var selectedRowIdArr = [];
-                            var selectedRowIdsStr = "";
-                        }
-
                     }
-	            ], */
+	            ],
                 initComplete : function(settings, json) {
                     $("#usersTable_paginate > span > a").removeClass("paginate_button");
                     var api = this.api();
