@@ -120,7 +120,7 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
     </div>
     <div id="roleSelectionDlg" style="display:hidden">
         <div>
-        Welcome to ChIRP (Chat for IRP), a secure Large Language Models (LLMs) Environment Pilot.<br>
+        Welcome to ChIRP (Chatbot for Intramural Research Program), a secure Large Language Models (LLMs) Environment Pilot.<br>
         Please indicate your main responsibility (functional role) at NIH:</br>
         <table style="width: 80%;text-align: center;"><tr>
         <td style="width: 33%;">
