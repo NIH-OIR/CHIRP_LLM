@@ -155,13 +155,9 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
         </div>
     </div>
     <div id="notRegisteredDlg" style="display:hidden">
-        <!-- <div>
-        Thank you for your interest in ChIRP (Chat for IRP). Registration is required for access. 
-        Please go to the <a href="registration.php">registration</a> page to register. </br>
-        </div> -->
         <div>
         Thank you for your interest in ChIRP (Chat for IRP). Registration is required for access. 
-        Please go to the <a href="https://www.scgcorp.com/ChIRP2025/Registration">registration</a> page to register. </br>
+        Please go to the <a href="registration.php">registration</a> page to register. </br>
         </div>
     </div>
 </body>
@@ -275,8 +271,7 @@ if (!empty($_SESSION['user_data']['userid']) && (empty($_SESSION['authorized']) 
                     text: "Register",
                     click: function() {
                         $( this ).dialog( "close" );
-                        //window.location.href = "registration.php";
-                        window.location.href = "https://www.scgcorp.com/ChIRP2025/Registration";
+                        window.location.href = "registration.php";
                     }
                 },
             ]
