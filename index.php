@@ -361,6 +361,7 @@ foreach(array_keys($models) as $m) {
                 </video>
             </li>
             <li><a href="ChIRP_User_Guide.pdf" target="_blank" title="Open the user guide in a new window">User Guide<a></li>
+            <li><a href="https://www.scgcorp.com/ChIRP2025/PostMeetingMaterials" target="_blank" title="Open launch event materioa in a new window">Launch Event Materials<a></li>
         </ul>
         <p>Any question, please contact <a href="mailto:CRISPI-LLM@od.nih.gov">CRISPI-LLM@od.nih.gov</a> via email. </p>
         <p>Notes: The following NIH and HHS <a target="_blank" href="https://www.hhs.gov/sites/default/files/rules-of-behavior.pdf">Rules of Behavior for General Users</a> are applied to all resources provided in this pilot.</p>
