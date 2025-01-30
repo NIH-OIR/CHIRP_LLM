@@ -49,26 +49,28 @@ if (isset($_FILES['uploadDocument'])) {
 
         // Ensure that your script is executable and has the correct shebang line
         #$command = escapeshellcmd(__DIR__."/venv/bin/python ".__DIR__."/parser_multi.py \"".$file['tmp_name']."\" \"".$file['name']."\"") . " 2>&1";
-        $command = "python3 ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
-        #$command = "python ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
+        #$command = "python3 ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
+        $command = "python ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
         $output = shell_exec($command);
         #echo "2 - <pre>".print_r($output,1)."</pre>"; die("got here");
         #error_log("upload.php python parser output: ".print_r($output,1));
+        #error_log("upload.php has ValueError: ".strpos($output, 'ValueError'));
 
-        if (strpos($output, 'ValueError') === false) {
-            $outputArr = str_split($output, 20000);
-            error_log("outputArr length: ".count($outputArr));
-            $redactedOutput = "";
-            foreach($outputArr as $key=>$output) {                
-                $redactedOutput .= piiDetection(htmlspecialchars($output));
-                #error_log("upload.php python parser redactedOutput: ".$redactedOutput);
-            }
+        if (strpos($output, 'ValueError') === false && strpos($output, 'UnicodeEncodeError') === false) {
+            // $outputArr = str_split($output, 100000);
+            // error_log("outputArr length: ".count($outputArr));
+            // $redactedOutput = "";
+            // foreach($outputArr as $key=>$output) {                
+            //     $redactedOutput .= piiDetection(htmlspecialchars($output));
+            //     #error_log("upload.php python parser redactedOutput: ".$redactedOutput);
+            // }
             
             // $redactedOutput = piiDetection(htmlspecialchars($output));
 
             #error_log("upload.php python parser redactedOutput: ".$redactedOutput);
             // Store the text and the original filename in session variables
-            $_SESSION['document_text'] = $redactedOutput;
+            // $_SESSION['document_text'] = $redactedOutput;
+            $_SESSION['document_text'] = $output;
             $_SESSION['document_type'] = $mimeType;
             $_SESSION['document_name'] = basename($file['name']);
 

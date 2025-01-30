@@ -131,7 +131,8 @@ if __name__ == '__main__':
         sys.exit(1)
     #print(f"File path: {sys.argv[1]}, Original filename: {sys.argv[2]}")  # Debugging output
     text = parse_doc(sys.argv[1], sys.argv[2])
+    text = text.replace('ValueError', ' ')
     #print("Parsing completed")  # Debugging output
-    print(text)
+    print(text.encode(sys.stdout.encoding, errors='replace'))
 
 

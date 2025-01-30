@@ -208,20 +208,86 @@ function get_gpt_response($message, $chat_id, $user) {
 
     $config = load_configuration($selectedModel);
     if (!is_array($message)) { //no error in PII detection api call
-        $msg = get_chat_thread($message, $chat_id, $user, $config);
-
-        if ($selectedModel == 'gemini-1.5-pro') {
-            $msgArr = [];
-            foreach($msg as $msgItem) {
-                if ($msgItem['role'] == "user" || $msgItem['role'] == "system") {
-                    $msgArr[] = $msgItem['content'];
-                }
+        if (empty($_SESSION['document_text']) || strpos($_SESSION['document_type'], 'image') === 0) {
+            if (empty($_SESSION['document_text'])) {
+                $msg = get_chat_thread_without_doc($message, $chat_id, $user, $config);
             }
-            $response = callGeminiApi($msgArr);
+
+            if (strpos($_SESSION['document_type'], 'image') === 0) {
+                $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $_SESSION['document_text']);
+            }
+
+            if ($selectedModel == 'gemini-1.5-pro') {
+                $msgArr = [];
+                foreach($msg as $msgItem) {
+                    if ($msgItem['role'] == "user" || $msgItem['role'] == "system") {
+                        $msgArr[] = $msgItem['content'];
+                    }
+                }
+                $response = callGeminiApi($msgArr);
+            } else {
+                $response = call_azure_api($config, $msg);
+            }
+            return process_api_response($response, $selectedModel, $chat_id, $message);
         } else {
-            $response = call_azure_api($config, $msg);
+            $docTextArr = str_split($_SESSION['document_text'], 128000);
+
+            $processedresponse = [];
+            foreach($docTextArr as $docTextChunk) {
+                $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $docTextChunk);
+
+                if ($selectedModel == 'gemini-1.5-pro') {
+                    $msgArr = [];
+                    foreach($msg as $msgItem) {
+                        if ($msgItem['role'] == "user" || $msgItem['role'] == "system") {
+                            $msgArr[] = $msgItem['content'];
+                        }
+                    }
+                    $response = callGeminiApi($msgArr);
+                } else {
+                    $response = call_azure_api($config, $msg);
+                }
+                // $processedresponse[] = process_api_response($response, $selectedModel, $chat_id, $message);
+                $response_data = json_decode($response, true);
+                if (!isset($response_data['error'])) {
+                    if ($selectedModel != 'gemini-1.5-pro') {
+                        $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
+                    } else {
+                        $response_text = $response_data['candidates'][0]['content']['parts'][0]['text'];
+                    }
+                    error_log("DEBUG lib.required.php get_gpt_response() response_text: ". date('Y-m-d H:i:s'));
+                    $processedresponse[] = [
+                        'deployment' => $selectedModel,
+                        'error' => false,
+                        'message' => $response_text
+                    ];
+                } else {
+                    $processedresponse[] = [
+                        'deployment' => $selectedModel,
+                        'error' => true,
+                        'message' => $response_data['error']['message']
+                    ];
+                }
+
+            }
+            #error_log("DEBUG lib.required.php get_gpt_response() processedresponse: ". print_r($processedresponse, true));
+            $docRreponse['deployment'] = $processedresponse[0]['deployment'];
+
+            $err = false;
+            $responseMsg = "";
+            foreach($processedresponse as $processedresponseItem) {
+                if ($processedresponseItem['error']) {
+                    $err = true;
+                }
+                $responseMsg .= $processedresponseItem['message'] . "\n";
+            }
+            $docRreponse['error'] = $err;
+            $docRreponse['message'] = $responseMsg;
+            error_log("DEBUG lib.required.php get_gpt_response() before create_exchange ");
+            create_exchange($chat_id, $message, $responseMsg);
+            return $docRreponse;
         }
-        return process_api_response($response, $selectedModel, $chat_id, $message);
+
     } else {
         return $message;
     }
@@ -237,7 +303,7 @@ function call_azure_api($config, $msg) {
     } else if ($config['selected_model'] == "azure-dall-e-3") {
         $url = $config['base_url'] . "/openai/deployments/" . $config['deployment_name'] . "/images/generations?api-version=".$config['api_version'];
     }
-    #error_log("INFO: lib.required call_azure_api() url : ". $url."\n");
+   
     $payload = [
         'messages' => $msg,
         "max_tokens" => $config['max_tokens'] ?? MAX_TOKEN,
@@ -308,6 +374,11 @@ function execute_api_call($url, $payload, $headers) {
     curl_close($ch);
     return $response;
 }
+
+// function process_api_response_with_large_doc($response, $deployment, $chat_id, $message) {
+//     $response_data = json_decode($response, true);
+
+// }
 
 // Process API Response
 function process_api_response($response, $deployment, $chat_id, $message) {
@@ -394,42 +465,70 @@ function substringWords($text, $numWords) {
     return $subString;
 }
 
-function get_chat_thread($message, $chat_id, $user, $config)
-{
+function get_chat_thread_with_doc($message, $chat_id, $user, $config, $docTextChunk) {
+    if (strpos($_SESSION['document_type'], 'image/') === 0) {
+        // Handle image content (use image_url field with base64 encoded image)
+        $messages[] = [
+            "role" => "system",
+            "content" => "You are a helpful assistant to analyze images."
+        ];
+        $messages[] = [
+            "role" => "user",
+            "content" => [
+                ["type" => "text", "text" => $message],
+                ["type" => "image_url", "image_url" => ["url" => $_SESSION['document_text']]]
+            ]
+        ];
+    } else {
+        $messages = [
+            [
+                'role' => 'system',
+                'content' => $docTextChunk
+            ],
+            [
+                'role' => 'user',
+                'content' => $message
+            ]
+        ];
+    }
+    return $messages;
+}
+
+function get_chat_thread_without_doc($message, $chat_id, $user, $config){
     //global $config,$deployment;
 
     $context_limit = (int)($config['context_limit'] ?? CONTEXT_LIMIT);
     $messages = [];
     #echo "context limit: " . $context_limit;
 
-    if (!empty($_SESSION['document_text'])) {
-        if (strpos($_SESSION['document_type'], 'image/') === 0) {
-            // Handle image content (use image_url field with base64 encoded image)
-            $messages[] = [
-                "role" => "system",
-                "content" => "You are a helpful assistant to analyze images."
-            ];
-            $messages[] = [
-                "role" => "user",
-                "content" => [
-                    ["type" => "text", "text" => $message],
-                    ["type" => "image_url", "image_url" => ["url" => $_SESSION['document_text']]]
-                ]
-            ];
-        } else {
-            $messages = [
-                [
-                    'role' => 'system',
-                    'content' => $_SESSION['document_text']
-                ],
-                [
-                    'role' => 'user',
-                    'content' => $message
-                ]
-            ];
-        }
-        return $messages;
-    }
+    // if (!empty($_SESSION['document_text'])) {
+    //     if (strpos($_SESSION['document_type'], 'image/') === 0) {
+    //         // Handle image content (use image_url field with base64 encoded image)
+    //         $messages[] = [
+    //             "role" => "system",
+    //             "content" => "You are a helpful assistant to analyze images."
+    //         ];
+    //         $messages[] = [
+    //             "role" => "user",
+    //             "content" => [
+    //                 ["type" => "text", "text" => $message],
+    //                 ["type" => "image_url", "image_url" => ["url" => $_SESSION['document_text']]]
+    //             ]
+    //         ];
+    //     } else {
+    //         $messages = [
+    //             [
+    //                 'role' => 'system',
+    //                 'content' => $_SESSION['document_text']
+    //             ],
+    //             [
+    //                 'role' => 'user',
+    //                 'content' => $message
+    //             ]
+    //         ];
+    //     }
+    //     return $messages;
+    // }
 
     // Set up the chat messages array to send to the OpenAI API
     $messages = [
