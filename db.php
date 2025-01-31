@@ -64,6 +64,14 @@ function create_exchange($chat_id, $prompt, $reply) {
     return $pdo->lastInsertId();
 }
 
+function update_exchange_reply($id, $chat_id, $reply) {
+    global $pdo;
+    
+    // prepare a sql statement to update the deployment of a chat where the id matches the $chat_id
+    $stmt = $pdo->prepare("update exchange set reply = :reply, timestamp = NOW() where id = :id and chat_id = :chat_id");
+    $stmt->execute(['reply' => $reply,  'id' => $id, 'chat_id' => $chat_id]);
+}
+
 // Get all exchanges for a given chat ID from the database, ordered by timestamp
 function get_all_exchanges($chat_id, $user) {
     #echo "in get_all_exchanges\n";

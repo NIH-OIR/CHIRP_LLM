@@ -202,8 +202,17 @@ function load_configuration($deployment) {
     return $conf;
 }
 
+/**
+ * Get GPT response for the chat without uploaded file or with uploaded image
+ * This function takes in a message, a chat id, and a user, and returns the GPT response
+ * @param string $message The message to be sent to the GPT model
+ * @param int $chat_id The id of the chat session
+ * @param string $user The user id of the current user
+ * @return array The GPT response in the format of an array
+ */
 function get_gpt_response($message, $chat_id, $user) {
     $selectedModel = $GLOBALS['deployment'];
+    //error_log("DEBUG lib.required.php get_gpt_response() selected model: ".$selectedModel);
     #error_log("DEBUG lib.required.php get_gpt_response() selected model: ".$selectedModel);
 
     $config = load_configuration($selectedModel);
@@ -230,68 +239,70 @@ function get_gpt_response($message, $chat_id, $user) {
             }
             return process_api_response($response, $selectedModel, $chat_id, $message);
         } else {
-            $docTextArr = str_split($_SESSION['document_text'], 128000);
-
-            $processedresponse = [];
-            foreach($docTextArr as $docTextChunk) {
-                $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $docTextChunk);
-
-                if ($selectedModel == 'gemini-1.5-pro') {
-                    $msgArr = [];
-                    foreach($msg as $msgItem) {
-                        if ($msgItem['role'] == "user" || $msgItem['role'] == "system") {
-                            $msgArr[] = $msgItem['content'];
-                        }
-                    }
-                    $response = callGeminiApi($msgArr);
-                } else {
-                    $response = call_azure_api($config, $msg);
-                }
-                // $processedresponse[] = process_api_response($response, $selectedModel, $chat_id, $message);
-                $response_data = json_decode($response, true);
-                if (!isset($response_data['error'])) {
-                    if ($selectedModel != 'gemini-1.5-pro') {
-                        $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
-                    } else {
-                        $response_text = $response_data['candidates'][0]['content']['parts'][0]['text'];
-                    }
-                    error_log("DEBUG lib.required.php get_gpt_response() response_text: ". date('Y-m-d H:i:s'));
-                    $processedresponse[] = [
-                        'deployment' => $selectedModel,
-                        'error' => false,
-                        'message' => $response_text
-                    ];
-                } else {
-                    $processedresponse[] = [
-                        'deployment' => $selectedModel,
-                        'error' => true,
-                        'message' => $response_data['error']['message']
-                    ];
-                }
-
-            }
-            #error_log("DEBUG lib.required.php get_gpt_response() processedresponse: ". print_r($processedresponse, true));
-            $docRreponse['deployment'] = $processedresponse[0]['deployment'];
-
-            $err = false;
-            $responseMsg = "";
-            foreach($processedresponse as $processedresponseItem) {
-                if ($processedresponseItem['error']) {
-                    $err = true;
-                }
-                $responseMsg .= $processedresponseItem['message'] . "\n";
-            }
-            $docRreponse['error'] = $err;
-            $docRreponse['message'] = $responseMsg;
-            error_log("DEBUG lib.required.php get_gpt_response() before create_exchange ");
-            create_exchange($chat_id, $message, $responseMsg);
-            return $docRreponse;
+            return get_gpt_response_with_text_doc($selectedModel, $user, $config, $chat_id, $message);
         }
 
     } else {
         return $message;
     }
        
+}
+//Get GPT response for the chat with uploaded file other than image
+function get_gpt_response_with_text_doc($selectedModel, $user, $config, $chat_id, $message) {
+    $docTextArr = str_split($_SESSION['document_text'], 128000); // 128kb is the max token size of current model
+
+    $processedresponse = [];
+    $i = 0;
+    $processedresponseMsg = "";
+    $err = false;
+    $exchangeId = -1;
+    foreach($docTextArr as $docTextChunk) {
+        $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $docTextChunk);
+
+        if ($selectedModel == 'gemini-1.5-pro') {
+            $msgArr = [];
+            foreach($msg as $msgItem) {
+                if ($msgItem['role'] == "user" || $msgItem['role'] == "system") {
+                    $msgArr[] = $msgItem['content'];
+                }
+            }
+            $response = callGeminiApi($msgArr);
+        } else {
+            $response = call_azure_api($config, $msg);
+        }
+        // $processedresponse[] = process_api_response($response, $selectedModel, $chat_id, $message);
+        $response_data = json_decode($response, true);
+        if (!isset($response_data['error'])) {
+            if ($selectedModel != 'gemini-1.5-pro') {
+                $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
+            } else {
+                $response_text = $response_data['candidates'][0]['content']['parts'][0]['text'];
+            }
+            // error_log("DEBUG lib.required.php get_gpt_response() response_text: ". date('Y-m-d H:i:s'));
+
+            $processedresponseMsg .= $response_text . "\n";
+        } else {
+            $err = true;
+            $errMsg = $response_data['error']['message'];
+
+            $processedresponseMsg .= $errMsg . "\n";
+        }
+        
+        
+        if ($i == 0) {
+            $exchangeId = create_exchange($chat_id, $message, $processedresponseMsg);
+        } else { 
+            error_log("update_exchange_reply: " . $exchangeId . " " . $chat_id . " " . date('Y-m-d H:i:s') . " reply length: " . strlen($processedresponseMsg) . "\n");                   
+            update_exchange_reply($exchangeId, $chat_id, $processedresponseMsg);}
+        $i++;
+    }
+    #error_log("DEBUG lib.required.php get_gpt_response() processedresponse: ". print_r($processedresponse, true));
+    $docRreponse['deployment'] = $selectedModel;
+    $docRreponse['error'] = $err;
+    $docRreponse['message'] = $processedresponseMsg;
+    #error_log("DEBUG lib.required.php get_gpt_response() before create_exchange ");
+    
+    return $docRreponse;
 }
 
 // Call Azure OpenAI API
@@ -375,10 +386,6 @@ function execute_api_call($url, $payload, $headers) {
     return $response;
 }
 
-// function process_api_response_with_large_doc($response, $deployment, $chat_id, $message) {
-//     $response_data = json_decode($response, true);
-
-// }
 
 // Process API Response
 function process_api_response($response, $deployment, $chat_id, $message) {
