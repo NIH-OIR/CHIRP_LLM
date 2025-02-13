@@ -24,7 +24,6 @@ if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['us
             $response = "error";
         }
     } else {
-        update_registration($user_id, $email);
         $response = "existed";
     }
     echo $response;
