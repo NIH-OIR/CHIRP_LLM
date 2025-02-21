@@ -217,12 +217,12 @@ function get_gpt_response($message, $chat_id, $user) {
 
     $config = load_configuration($selectedModel);
     if (!is_array($message)) { //no error in PII detection api call
-        if (empty($_SESSION['document_text']) || strpos($_SESSION['document_type'], 'image') === 0) {
+        if (empty($_SESSION['document_text']) || !empty($_SESSION['document_type']) && strpos($_SESSION['document_type'], 'image') === 0) {
             if (empty($_SESSION['document_text'])) {
                 $msg = get_chat_thread_without_doc($message, $chat_id, $user, $config);
             }
-
-            if (strpos($_SESSION['document_type'], 'image') === 0) {
+            
+            if (!empty($_SESSION['document_type']) && strpos($_SESSION['document_type'], 'image') === 0) {
                 $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $_SESSION['document_text']);
             }
 
