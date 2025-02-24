@@ -10,6 +10,7 @@ require_once 'get_config.php';
 #echo '<pre>'.print_r($config,1).'</pre>';
 
 require_once 'geminiImpl.php'; 
+require_once 'awsClaudeImpl.php'; 
 
 
 // Start the session, if not already started
@@ -218,6 +219,14 @@ function get_gpt_response($message, $chat_id, $user) {
                 }
             }
             $response = callGeminiApi($msgArr);
+        } else if ($selectedModel == 'aws-claude2') { 
+            $msgArr = [];
+            foreach($msg as $msgItem) {
+                if ($msgItem['role'] == "user" || $msgItem['role'] == "assistant") {
+                    $msgArr[] = $msgItem['content'];
+                }
+            }
+            $response = callClaudeApi($config, $selectedModel, $msg);
         } else {
             $response = call_azure_api($config, $msg);
         }
@@ -334,25 +343,27 @@ function process_api_response($response, $deployment, $chat_id, $message) {
             ];
         }
     }
-    if (isset($response_data['error'])) {
+    if (isset($response_data['error'])) { //error occurs in azure-gpt-4o and aws-claude2
         error_log('API error: ' . $response_data['error']['message']);
         return [
             'deployment' => $deployment,
             'error' => true,
             'message' => $response_data['error']['message']
         ];
-    } else if ($deployment != 'gemini-1.5-pro' && !isset($response_data)) {
+    } else if ($deployment == 'gemini-1.5-pro' && !isset($response_data)) {
         error_log('Gemini API error: ');
         return [
             'deployment' => $deployment,
             'error' => true,
             'message' => "Error occurs in calling Gemini API"
         ];
-    }else {
-        if ($deployment != 'gemini-1.5-pro') {
-            $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
-        } else {
+    } else { //no errors
+        if ($deployment == 'gemini-1.5-pro') {
             $response_text = $response_data['candidates'][0]['content']['parts'][0]['text'];
+        } else if ($deployment == 'aws-claude2') {
+            $response_text = $response_data;
+        } else {
+            $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
         }
         create_exchange($chat_id, $message, $response_text);
         return [

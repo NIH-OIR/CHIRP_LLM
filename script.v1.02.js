@@ -29,10 +29,13 @@ function sanitizeString(str) {
     return div.innerHTML;
 }
 
-function startNewChat() {
+function startNewChat(selectedModel) {
     $.ajax({
         type: "POST",
         url: "new_chat.php",
+        data: {
+            model: selectedModel,
+        },
         dataType: 'json',
         success: function(response) {
             // The response should contain the new chat's ID
@@ -240,15 +243,41 @@ $(document).ready(function(){
     // Set focus on the message input
     userMessage.focus();
 
-    /*
-    $('#username').hover(function() {
-        $('.logout-link').show();
-    }, function() {
-        $('.logout-link').hide();
-    });
-    */
     console.log(chatId);
 
+    var selectedModel = $("#model option:selected").val(); console.log("selectedModel: " + selectedModel);
+    var gpt4AttachmentTooltip ="Document types accepted for GPT-4o include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4o does not support Excel or CSV files.";
+    var claudeAttachmentTooltip ="Document types accepted for Claude 2.1 include CSV, Excel, PDF, Text, Word. Please notes that Claude 2.1 does not support images.";
+    if (selectedModel == "azure-dall-e-3") {
+        $("#attachmentIcon").hide();
+        $("#model").prop("disabled", true);
+    } else  {
+        $("#attachmentIcon").show();
+        if (selectedModel == "aws-claude2") {
+            $("#attachmentIcon").attr("data-original-title", claudeAttachmentTooltip)
+                                .tooltip('show');
+        } else {
+            $("#attachmentIcon").attr("data-original-title", gpt4AttachmentTooltip)
+                                .tooltip('show');
+        }
+    } 
+
+    $("#model").change(function(){
+        var selectedModel = $(this).val();
+        if (selectedModel == "azure-dall-e-3") {
+            $("#attachmentIcon").hide();
+            startNewChat(selectedModel);
+        } else {
+            $("#attachmentIcon").show();
+            if (selectedModel == "aws-claude2") {
+                $("#attachmentIcon").attr("data-original-title", claudeAttachmentTooltip)
+                                    .tooltip('show');
+            } else {
+                $("#attachmentIcon").attr("data-original-title", gpt4AttachmentTooltip)
+                                    .tooltip('show');
+            }
+        }
+    });
     //load message
     $.ajax({
         url: "get_messages.php",

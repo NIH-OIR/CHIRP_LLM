@@ -436,13 +436,18 @@ textarea {
     resize: none;
 }
 
-.message-icon {
+.fileUpload-icon {
     position: absolute;   
-    width: 30px;
-    height: 30px;
     right: 6%;
     bottom: 10px;
     cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    color: #959799;
+}
+.fileUpload-icon:hover {
+    color:#007bff;
 }
 /* Style for the submit button */
 .submit-button {
