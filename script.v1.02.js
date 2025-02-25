@@ -160,7 +160,12 @@ function fileUpload() {
     var isValidFileName = false;
     var isValidFileSize = false;
     var isImage = false;
-    if (filename.length > 0 && /\.(pdf|docx|txt|md|json|xml|png|jpg|jpeg|gif)$/i.test(filename)) {
+    if (selectedModel == "azure-gpt4" && filename.length > 0 
+        && /\.(pdf|docx|txt|md|json|xml|png|jpg|jpeg|gif)$/i.test(filename)) {
+        isValidFileName = true;
+    } 
+    if (selectedModel == "aws-claude2" && filename.length > 0 
+        && /\.(pdf|docx|txt|csv|xls|xlsx)$/i.test(filename)) {
         isValidFileName = true;
     } 
     if (fileSize / 1024 / 1024 < fileSizeLimit) {//file size less than 5MB
@@ -171,10 +176,18 @@ function fileUpload() {
     }
     $("#uploadedFilename").val(filename);
     if (!isValidFileName) {
-        if (!isValidFileSize) {
-            alert("The accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
-        } else {
-            alert("The uploaded file type is not accepted. The accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
+        if (selectedModel == "azure-gpt4"){
+            if (!isValidFileSize) {
+                alert("GPT-4o accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
+            } else {
+                alert("The uploaded file type is not accepted. GPT-4o accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
+            }
+        } else if (selectedModel == "aws-claude2"){
+            if (!isValidFileSize) {
+                alert("Claude 2.1 accepted document types are as follows: PDF, Word, Text, CSV and Excel. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
+            } else {
+                alert("The uploaded file type is not accepted. Claude 2.1 accepted document types are as follows: PDF, Word, Text, CSV and Excel.");
+            }
         }
     } else if (!isValidFileSize) {
         alert("The uploaded file size is too large. The limit size of uploaded file is " + fileSizeLimit + "MB.");
@@ -254,11 +267,11 @@ $(document).ready(function(){
     } else  {
         $("#attachmentIcon").show();
         if (selectedModel == "aws-claude2") {
-            $("#attachmentIcon").attr("data-original-title", claudeAttachmentTooltip)
-                                .tooltip('show');
+            $("#attachmentIcon").attr("data-bs-original-title", claudeAttachmentTooltip)
+                                .attr("data-original-title", claudeAttachmentTooltip).tooltip('update');
         } else {
-            $("#attachmentIcon").attr("data-original-title", gpt4AttachmentTooltip)
-                                .tooltip('show');
+            $("#attachmentIcon").attr("data-bs-original-title", gpt4AttachmentTooltip)
+                                .attr("data-original-title", gpt4AttachmentTooltip).tooltip('update');
         }
     } 
 
@@ -270,11 +283,11 @@ $(document).ready(function(){
         } else {
             $("#attachmentIcon").show();
             if (selectedModel == "aws-claude2") {
-                $("#attachmentIcon").attr("data-original-title", claudeAttachmentTooltip)
-                                    .tooltip('show');
+                $("#attachmentIcon").attr("data-bs-original-title", claudeAttachmentTooltip)
+                                    .attr("data-original-title", claudeAttachmentTooltip).tooltip('update');
             } else {
-                $("#attachmentIcon").attr("data-original-title", gpt4AttachmentTooltip)
-                                    .tooltip('show');
+                $("#attachmentIcon").attr("data-bs-original-title", gpt4AttachmentTooltip)
+                                    .attr("data-original-title", gpt4AttachmentTooltip).tooltip('update');
             }
         }
     });
