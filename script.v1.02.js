@@ -29,10 +29,13 @@ function sanitizeString(str) {
     return div.innerHTML;
 }
 
-function startNewChat() {
+function startNewChat(selectedModel) {
     $.ajax({
         type: "POST",
         url: "new_chat.php",
+        data: {
+            model: selectedModel,
+        },
         dataType: 'json',
         success: function(response) {
             // The response should contain the new chat's ID
@@ -157,7 +160,12 @@ function fileUpload() {
     var isValidFileName = false;
     var isValidFileSize = false;
     var isImage = false;
-    if (filename.length > 0 && /\.(pdf|docx|txt|md|json|xml|png|jpg|jpeg|gif)$/i.test(filename)) {
+    if (selectedModel == "azure-gpt4" && filename.length > 0 
+        && /\.(pdf|docx|txt|md|json|xml|png|jpg|jpeg|gif)$/i.test(filename)) {
+        isValidFileName = true;
+    } 
+    if (selectedModel == "aws-claude2" && filename.length > 0 
+        && /\.(pdf|docx|txt|csv|xls|xlsx)$/i.test(filename)) {
         isValidFileName = true;
     } 
     if (fileSize / 1024 / 1024 < fileSizeLimit) {//file size less than 5MB
@@ -168,10 +176,18 @@ function fileUpload() {
     }
     $("#uploadedFilename").val(filename);
     if (!isValidFileName) {
-        if (!isValidFileSize) {
-            alert("The accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
-        } else {
-            alert("The uploaded file type is not accepted. The accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
+        if (selectedModel == "azure-gpt4"){
+            if (!isValidFileSize) {
+                alert("GPT-4o accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
+            } else {
+                alert("The uploaded file type is not accepted. GPT-4o accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
+            }
+        } else if (selectedModel == "aws-claude2"){
+            if (!isValidFileSize) {
+                alert("Claude 2.1 accepted document types are as follows: PDF, Word, Text, CSV and Excel. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
+            } else {
+                alert("The uploaded file type is not accepted. Claude 2.1 accepted document types are as follows: PDF, Word, Text, CSV and Excel.");
+            }
         }
     } else if (!isValidFileSize) {
         alert("The uploaded file size is too large. The limit size of uploaded file is " + fileSizeLimit + "MB.");
@@ -240,15 +256,41 @@ $(document).ready(function(){
     // Set focus on the message input
     userMessage.focus();
 
-    /*
-    $('#username').hover(function() {
-        $('.logout-link').show();
-    }, function() {
-        $('.logout-link').hide();
-    });
-    */
     console.log(chatId);
 
+    var selectedModel = $("#model option:selected").val(); console.log("selectedModel: " + selectedModel);
+    var gpt4AttachmentTooltip ="Document types accepted for GPT-4o include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4o does not support Excel or CSV files.";
+    var claudeAttachmentTooltip ="Document types accepted for Claude 2.1 include CSV, Excel, PDF, Text, Word. Please notes that Claude 2.1 does not support images.";
+    if (selectedModel == "azure-dall-e-3") {
+        $("#attachmentIcon").hide();
+        $("#model").prop("disabled", true);
+    } else  {
+        $("#attachmentIcon").show();
+        if (selectedModel == "aws-claude2") {
+            $("#attachmentIcon").attr("data-bs-original-title", claudeAttachmentTooltip)
+                                .attr("data-original-title", claudeAttachmentTooltip).tooltip('update');
+        } else {
+            $("#attachmentIcon").attr("data-bs-original-title", gpt4AttachmentTooltip)
+                                .attr("data-original-title", gpt4AttachmentTooltip).tooltip('update');
+        }
+    } 
+
+    $("#model").change(function(){
+        var selectedModel = $(this).val();
+        if (selectedModel == "azure-dall-e-3") {
+            $("#attachmentIcon").hide();
+            startNewChat(selectedModel);
+        } else {
+            $("#attachmentIcon").show();
+            if (selectedModel == "aws-claude2") {
+                $("#attachmentIcon").attr("data-bs-original-title", claudeAttachmentTooltip)
+                                    .attr("data-original-title", claudeAttachmentTooltip).tooltip('update');
+            } else {
+                $("#attachmentIcon").attr("data-bs-original-title", gpt4AttachmentTooltip)
+                                    .attr("data-original-title", gpt4AttachmentTooltip).tooltip('update');
+            }
+        }
+    });
     //load message
     $.ajax({
         url: "get_messages.php",
@@ -858,4 +900,3 @@ $(document).ready(function(){
         } // end success function
     }); //end ajax
 });
-

@@ -11,6 +11,9 @@ if (empty($user)) {
 // $retiredModels = array("azure-llama3", "mistral-nemo", "gemini-1.5-pro");
 // $deployment = (empty($_SESSION['deployment']) || in_array($_SESSION['deployment'], $retiredModels)) ? 'azure-gpt4' : $_SESSION['deployment'];
 $deployment = $config['azure']['default'];
+if (isset($_POST['model'])) {
+    $deployment = $_POST['model'];
+}
 $document_name = $_SESSION['document_name'] = '';
 $document_text = $_SESSION['document_text'] = '';
 
@@ -18,9 +21,8 @@ $document_text = $_SESSION['document_text'] = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Create a new chat in the database using the authenticated user's username as the chat's creator
     $newChatId = create_chat($user, 'New Chat', '', $deployment, $document_name, $document_text);
-    
+    $_SESSION['deployment'] = $deployment;
     // Return the ID of the new chat as a JSON object to the client
     echo json_encode(['chat_id' => $newChatId]);
 }
-
 
