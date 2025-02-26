@@ -196,6 +196,7 @@ function fileUpload() {
         var formData = new FormData(); 
         formData.append('chat_id', chatId);
         formData.append('uploadDocument', fileUpload.files[0]);
+        formData.append('deployment', selectedModel);
         $.ajax({
             url: "upload.php",
             type: 'POST',
@@ -285,9 +286,11 @@ $(document).ready(function(){
             if (selectedModel == "aws-claude2") {
                 $("#attachmentIcon").attr("data-bs-original-title", claudeAttachmentTooltip)
                                     .attr("data-original-title", claudeAttachmentTooltip).tooltip('update');
+                $("#fileUploadInput").prop("accept", ".csv,.pdf,.docx,.txt,.xlsx");
             } else {
                 $("#attachmentIcon").attr("data-bs-original-title", gpt4AttachmentTooltip)
                                     .attr("data-original-title", gpt4AttachmentTooltip).tooltip('update');
+                $("#fileUploadInput").prop("accept", ".pdf,.docx,.txt,.md,.json,.xml,.png,.jpg,.jpeg,.gif");
             }
         }
     });

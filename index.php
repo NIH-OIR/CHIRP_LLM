@@ -270,7 +270,7 @@ foreach(array_keys($models) as $m) {
                     ?>
                             <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml,.png,.jpg,.jpeg,.gif" style="width:15em;" required onchange="javascript:fileUpload();" />        
                     <?php } else if ($_SESSION['deployment'] == 'aws-claude2') { ?>
-                        <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".csv,.pdf,.docx,.txt,.xls,.xlsx" style="width:15em;" required onchange="javascript:fileUpload();" />
+                        <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".csv,.pdf,.docx,.txt,.xlsx" style="width:15em;" required onchange="javascript:fileUpload();" />
                     <?php }
                      } ?>
                 </form>

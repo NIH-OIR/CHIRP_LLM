@@ -11,6 +11,10 @@ require_once 'piiDetection.php';
 // Get the chat_id if present
 $chat_id = isset($_REQUEST['chat_id']) ? $_REQUEST['chat_id'] : '';
 #error_log("chat_id: ".$chat_id);
+if (isset($_REQUEST['deployment'])) {
+    $_SESSION['deployment'] = $_REQUEST['deployment'];
+}
+#error_log("upload.php selected model: ".$_SESSION['deployment']);
 // Create a new chat session if no chat ID is provided
 if (empty($chat_id)) {
     $chat_id = $new_chat_id = create_chat($user, 'New Chat', '', $_SESSION['deployment'], '', '');
@@ -52,7 +56,8 @@ if (isset($_FILES['uploadDocument'])) {
         $command = "python3 ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
         #$command = "python ".$_SERVER['DOCUMENT_ROOT']."/parser_multi.py \"".$file['tmp_name']."\" \"".$_SERVER['DOCUMENT_ROOT']."/".$file['name']."\" 2>&1";
         $output = shell_exec($command);
-        #echo "2 - <pre>".print_r($output,1)."</pre>"; die("got here");
+        #error_log("upload.php command".$command);
+        #error_log("2 - <pre>".print_r($output,1)."</pre>"); die("got here");
         #error_log("upload.php python parser output: ".print_r($output,1));
 
         if (strpos($output, 'ValueError') === false) {
