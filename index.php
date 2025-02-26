@@ -175,8 +175,16 @@ foreach(array_keys($models) as $m) {
                     <textarea class="form-control" id="userMessage" style="width: 92%;float: right; margin-right: 20px;"
                         aria-label="Main chat textarea" placeholder="Type your message..." rows="4" ></textarea>
                     <span>
-                        <img id="attachmentIcon" src="images/attachment.png" alt="Upload File" class="message-icon" 
-                            title="Document types accepted include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. At this time we do not support Excel or CSV files.">
+                        <!-- <img id="attachmentIcon" src="images/attachment.png" alt="Upload File" class="message-icon" 
+                            title="Document types accepted include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. At this time we do not support Excel or CSV files."> -->
+                        <button type="button" id="attachmentIcon" class="fileUpload-icon" aria-label="Upload File"
+                            data-tip="document-uploader" data-toggle="tooltip" data-container="body" data-placement="bottom" 
+                            title="Document types accepted for GPT-4o include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4o does not support Excel or CSV files.">
+                            <!-- Icon (paper clip) -->
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8v8a5 5 0 1 0 10 0V6.5a3.5 3.5 0 1 0-7 0V15a2 2 0 0 0 4 0V8"/>
+                            </svg>
+                        </button>
                         <button type="submit" class="submit-button" aria-label="Send message">
                             <!-- Icon (paper plane) -->
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="send-icon">
@@ -206,7 +214,7 @@ foreach(array_keys($models) as $m) {
                             if (isAdminUser($_SESSION['user_data']['userid'])) {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             } else if (!isAdminUser($_SESSION['user_data']['userid']) 
-                                        && $m != 'gemini-1.5-pro' && $m != 'azure-dall-e-3') {
+                                        && $m != 'gemini-1.5-pro' && $m != 'azure-dall-e-3' && $m != 'aws-claude2') {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             }
                         }
@@ -257,9 +265,14 @@ foreach(array_keys($models) as $m) {
                             <a href="upload.php?remove=1&chat_id=<?php echo htmlspecialchars($_GET['chat_id']); ?>" style="color: blue">Remove</a>
                             <!-- <a href="javascript:removeUploadedFile();" style="color: blue">Remove</a> -->
                         </p>                    
-                    <?php } else { ?>
-                        <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml,.png,.jpg,.jpeg,.gif" style="width:15em;" required onchange="javascript:fileUpload();" />
-                    <?php } ?>
+                    <?php } else { 
+                        if ($_SESSION['deployment'] == 'azure-gpt4') {
+                    ?>
+                            <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml,.png,.jpg,.jpeg,.gif" style="width:15em;" required onchange="javascript:fileUpload();" />        
+                    <?php } else if ($_SESSION['deployment'] == 'aws-claude2') { ?>
+                        <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".csv,.pdf,.docx,.txt,.xls,.xlsx" style="width:15em;" required onchange="javascript:fileUpload();" />
+                    <?php }
+                     } ?>
                 </form>
                 </td>
 <?php 
@@ -638,5 +651,4 @@ function cancelAdminUser() {
 
 </body>
 </html>
-
 
