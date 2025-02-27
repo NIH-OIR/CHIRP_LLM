@@ -266,7 +266,7 @@ $(document).ready(function(){
 
     $("#loadingDiv").dialog({
 		autoOpen: false,
-		height: 120,
+		height: 160,
 		width: 240,
 		dialogClass: 'no-close',
 		closeOnEscape: false,
