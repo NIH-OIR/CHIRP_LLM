@@ -165,7 +165,7 @@ function fileUpload() {
         isValidFileName = true;
     } 
     if (selectedModel == "aws-claude2" && filename.length > 0 
-        && /\.(pdf|docx|txt|csv|xls|xlsx)$/i.test(filename)) {
+        && /\.(pdf|docx|txt|csv|xlsx)$/i.test(filename)) {
         isValidFileName = true;
     } 
     if (fileSize / 1024 / 1024 < fileSizeLimit) {//file size less than 5MB
@@ -197,12 +197,16 @@ function fileUpload() {
         formData.append('chat_id', chatId);
         formData.append('uploadDocument', fileUpload.files[0]);
         formData.append('deployment', selectedModel);
+
         $.ajax({
             url: "upload.php",
             type: 'POST',
             data: formData,
             contentType: false, 
             processData: false,
+            beforeSend: function(){
+				$("#loadingDiv").dialog("open");
+			},
             success: function (response) { 
                 console.log('File uploaded successfully!'); 
                 if (isImage){
@@ -223,6 +227,7 @@ function fileUpload() {
 
                     $("#fileUpload").append(showUpdateFileElem);
                 }
+                $("#loadingDiv").dialog("close");
             },
             error: function (jqXHR, textStatus, errorThrown) { 
                 error.log('Error: ' + textStatus + ' - ' + ' - ' + errorThrown);
@@ -258,6 +263,24 @@ $(document).ready(function(){
     userMessage.focus();
 
     console.log(chatId);
+
+    $("#loadingDiv").dialog({
+		autoOpen: false,
+		height: 120,
+		width: 240,
+		dialogClass: 'no-close',
+		closeOnEscape: false,
+		position: { my: "center", at: "center", of: window },
+		open: function() {
+            $(".ui-dialog-titlebar").hide();
+			$("#tabs-chat").css('opacity', '0.5');	
+            $(".ui-dialog").css('border', 'none');
+		},
+		close: function() {
+			$("#tabs-chat").css('opacity', '');
+            $(".ui-dialog").css('border', '');
+		}
+	});
 
     var selectedModel = $("#model option:selected").val(); console.log("selectedModel: " + selectedModel);
     var gpt4AttachmentTooltip ="Document types accepted for GPT-4o include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4o does not support Excel or CSV files.";

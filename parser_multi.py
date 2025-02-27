@@ -151,7 +151,7 @@ def parse_xlsx(file):
     #print("Entering parse_xlsx")  # Debugging output   
     text = ''
     try:
-        df = pd.read_excel(file)
+        df = pd.read_excel(file, na_filter=False)
 
         text = df.to_string(index=False)
     except FileNotFoundError:

@@ -88,7 +88,9 @@ foreach(array_keys($models) as $m) {
 
 <div class="container-fluid"> <!-- start the Container-fluid -->
     <!-- <a href="#main-content" class="skip-link">Skip to main content</a> -->
-    
+    <div id="loadingDiv" style="display: none; background: url(/images/loading.gif) no-repeat center center; background-color:#f4f5f7;">
+	    <p id="processTxt" style="text-align: center; margin-bottom: 10px;">Uploading.....</p>
+    </div>
 
     <div class="row header d-flex align-items-center" style="max-height: 102px;"> <!-- Header Row -->
         <div class="col d-flex justify-content-center chirp_header" >
