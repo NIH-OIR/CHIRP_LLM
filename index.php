@@ -216,7 +216,7 @@ foreach(array_keys($models) as $m) {
                             if (isAdminUser($_SESSION['user_data']['userid'])) {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             } else if (!isAdminUser($_SESSION['user_data']['userid']) 
-                                        && $m != 'gemini-1.5-pro' && $m != 'azure-dall-e-3' && $m != 'aws-claude2') {
+                                        && $m != 'gemini-1.5-pro' && $m != 'aws-claude2') {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             }
                         }

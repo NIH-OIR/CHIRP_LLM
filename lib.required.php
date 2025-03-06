@@ -185,19 +185,31 @@ function load_configuration($deployment) {
     global $config;
 
     $context_limit = isset($config[$deployment]['context_limit']) ? (int)($config[$deployment]['context_limit']) *1.5 : (int)CONTEXT_LIMIT;
-    $conf = [
-        'selected_model' => $deployment,
-        'api_key' => trim($config[$deployment]['api_key'], '"'),
-        'base_url' => $config[$deployment]['url'],
-        'deployment_name' => $config[$deployment]['deployment_name'],
-        'api_version' => $config[$deployment]['api_version'],
-        'max_tokens' => (int) ($config[$deployment]['max_tokens'] ?? MAX_TOKEN),
-        'context_limit' => $context_limit,
-    ];
+    if ($deployment == "azure-gpt4" || $deployment == "azure-dall-e-3") {
+        $conf = [
+            'selected_model' => $deployment,
+            'api_key' => trim($config[$deployment]['api_key'], '"'),
+            'base_url' => $config[$deployment]['url'],
+            'deployment_name' => $config[$deployment]['deployment_name'],
+            'api_version' => $config[$deployment]['api_version'],
+            'max_tokens' => (int) ($config[$deployment]['max_tokens'] ?? MAX_TOKEN),
+            'context_limit' => $context_limit,
+        ];
 
-    if ($deployment == "azure-dall-e-3") {
-        unset($conf["max_tokens"]);
-        unset($conf["context_limit"]);
+        if ($deployment == "azure-dall-e-3") {
+            unset($conf["max_tokens"]);
+            unset($conf["context_limit"]);
+        }
+    } 
+    if ($deployment == "aws-claude2") { 
+        $conf = [
+            'selected_model' => $deployment,
+            'model_id' => trim($config[$deployment]['model_id'], '"'),
+            'access_key' => trim($config[$deployment]['access_key'], '"'),
+            'secret_key' => trim($config[$deployment]['secret_key'], '"'),
+            'max_tokens' => (int) ($config[$deployment]['max_tokens'] ?? MAX_TOKEN),
+            'bedrock_version' => trim($config[$deployment]['bedrock_version'], '"')
+        ];
     }
     #error_log("lib.required line 197 load_configuration conf: ". print_r($conf, true));
     return $conf;
@@ -210,7 +222,7 @@ function get_gpt_response($message, $chat_id, $user) {
     $config = load_configuration($selectedModel);
     if (!is_array($message)) { //no error in PII detection api call
         $msg = get_chat_thread($message, $chat_id, $user, $config);
-
+        // error_log("DEBUG lib.required.php get_gpt_response() response line 225: ".print_r($msg, true));
         if ($selectedModel == 'gemini-1.5-pro') {
             $msgArr = [];
             foreach($msg as $msgItem) {
@@ -218,18 +230,14 @@ function get_gpt_response($message, $chat_id, $user) {
                     $msgArr[] = $msgItem['content'];
                 }
             }
+            
             $response = callGeminiApi($msgArr);
         } else if ($selectedModel == 'aws-claude2') { 
-            $msgArr = [];
-            foreach($msg as $msgItem) {
-                if ($msgItem['role'] == "user" || $msgItem['role'] == "assistant") {
-                    $msgArr[] = $msgItem['content'];
-                }
-            }
-            $response = callClaudeApi($config, $selectedModel, $msg);
+            $response = callClaudeApi($config, $msg);
         } else {
             $response = call_azure_api($config, $msg);
         }
+        // error_log("DEBUG lib.required.php get_gpt_response() response line 245: ".json_encode($response));
         return process_api_response($response, $selectedModel, $chat_id, $message);
     } else {
         return $message;
@@ -320,9 +328,9 @@ function execute_api_call($url, $payload, $headers) {
 
 // Process API Response
 function process_api_response($response, $deployment, $chat_id, $message) {
-    #error_log("DEBUG lib.required.php process_api_response() selected model: ".$deployment);
+    // error_log("DEBUG lib.required.php process_api_response() selected model: ".$deployment);
 
-    #error_log("DEBUG lib.required.php process_api_response() api result: ".$response);
+    // error_log("DEBUG lib.required.php process_api_response() api result: ".$response);
     $response_data = json_decode($response, true);
     if ($deployment == 'azure-dall-e-3') {
         if (isset($response_data['error'])) { //return error msg if error occurs
@@ -361,7 +369,8 @@ function process_api_response($response, $deployment, $chat_id, $message) {
         if ($deployment == 'gemini-1.5-pro') {
             $response_text = $response_data['candidates'][0]['content']['parts'][0]['text'];
         } else if ($deployment == 'aws-claude2') {
-            $response_text = $response_data;
+            // error_log("DEBUG lib.required.php process_api_response() aws-claude2 api result: ".$response);
+            $response_text = $response;
         } else {
             $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
         }
@@ -411,7 +420,7 @@ function get_chat_thread($message, $chat_id, $user, $config)
 
     $context_limit = (int)($config['context_limit'] ?? CONTEXT_LIMIT);
     $messages = [];
-    #echo "context limit: " . $context_limit;
+    // error_log("DEBUG lib.required.php get_chat_thread() context limit: " . $context_limit);
 
     if (!empty($_SESSION['document_text'])) {
         if (strpos($_SESSION['document_type'], 'image/') === 0) {
@@ -453,7 +462,7 @@ function get_chat_thread($message, $chat_id, $user, $config)
 
     // Add the last 5 exchanges from the recent chat history to the messages array
     $recent_messages = get_recent_messages($chat_id, $user);
-    #print_r($recent_messages);
+    error_log("DEBUG lib.required.php get_chat_thread() recent messages: ".print_r($recent_messages,true));
     $tokenLimit = $context_limit ; // Set your token limit here
     #$currentTokens = str_word_count($message);
 	$currentTokens = approximateTokenCountByChars($message);

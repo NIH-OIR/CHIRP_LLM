@@ -1,53 +1,52 @@
 <?php
 require_once 'vendor/autoload.php';
 
-use Aws\Bedrock\BedrockClient;
-use Aws\Exception\AwsException;
+use Aws\BedrockRuntime\BedrockRuntimeClient;
+use AwsUtilities\AWSServiceClass;
 
-function callClaudeApi($config, $message) { //$selectedModel='aws-claude2'
+function callClaudeApi($config, $message) {
     $model_id = $config['model_id'];
     $response = '';
-    #error_log("claude msg: ".json_encode($message));
-
-    $client = new BedrockClient([
-        'region' => 'us-east-1', // Replace with your region
-        'version' => 'latest',
+    // error_log("DEBUG awsClaudeImpl.php callClaudeApi() claude msg: ".json_encode($message));
+    $settings = [
+        'region' => 'us-east-1',
         'credentials' => [
-            'key' => 'YOUR_ACCESS_KEY_ID',
-            'secret' => 'YOUR_SECRET_ACCESS_KEY',
+            'key'    => $config['access_key'],
+            'secret' => $config['secret_key'],
         ],
-    ]);
+    ];
+
+    $client = new BedrockRuntimeClient($settings);
+    // error_log("DEBUG awsClaudeImpl.php callClaudeApi() config: " . print_r($config, true) . "\n");
 
     try {   
         $body = [
-            "prompt" => "\n\nHuman:" . $message . "\n\nAssistant:",
-            "max_tokens_to_sample" => $config['max_tokens'] ?? MAX_TOKEN,
-            "temperature" => (float)$_SESSION['temperature'],
-            "top_k" => 250,
-            "top_p" => 1,
-            "stop_sequences" => ["\n\nHuman:"],
-            "anthropic_version" => $config['bedrock_version']
+            "anthropic_version" => $config['bedrock_version'],
+            "max_tokens" => (int)$config['max_tokens'] ?? (int)MAX_TOKEN,
+            'temperature' => (float)$_SESSION['temperature'],
+            "system" => "Please respond.",
+            'messages' => $message
+            
         ];
+        // error_log("DEBUG awsClaudeImpl.php callClaudeApi() body: " . print_r($body, true) . "\n");
         // Call the Bedrock AI model API
         $result = $client->invokeModel([
             "modelId" => $model_id, 
             "contentType" => "application/json",
-            "accept" => "application/json",
-            "body" => $body
+            "body" => json_encode($body)
         ]);
-        error_log("DEBUG awsClaudeImpl.php callClaudeApi() result: " . print_r($result, true) . "\n");
-        //$response = $result['content']['text'];
-        // reference: https://docs.aws.amazon.com/bedrock/latest/developerguide/bedrock-api-reference.html
-        $response = $result['completion'];
-        error_log("DEBUG awsClaudeImpl.php callClaudeApi() response: " . $response . "\n");
+        // error_log("DEBUG awsClaudeImpl.php callClaudeApi() result: " . print_r($result, true) . "\n");
+        // reference: https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/php/example_code/bedrock-runtime/BedrockRuntimeService.php#L31
+        $response = json_decode($result['body'])->content[0]->text;
         
-    } catch (AwsException $e) {
+        
+    } catch (Exception $e) {
         // Output error message if fails
-        $response = $e->getAwsErrorMessage();
+        $response = $e->getMessage();
         error_log("DEBUG awsClaudeImpl.php callClaudeApi() error: " . $response . "\n");
         
     }
-
+    // error_log("DEBUG awsClaudeImpl.php callClaudeApi() response: " . json_encode($response) . "\n");
     return $response;
 }
 ?>
