@@ -221,7 +221,7 @@ function get_gpt_response($message, $chat_id, $user) {
 
     $config = load_configuration($selectedModel);
     if (!is_array($message)) { //no error in PII detection api call
-        $msg = get_chat_thread($message, $chat_id, $user, $config);
+        $msg = get_chat_thread($message, $chat_id, $user, $config, $selectedModel);
         // error_log("DEBUG lib.required.php get_gpt_response() response line 225: ".print_r($msg, true));
         if ($selectedModel == 'gemini-1.5-pro') {
             $msgArr = [];
@@ -414,10 +414,9 @@ function substringWords($text, $numWords) {
     return $subString;
 }
 
-function get_chat_thread($message, $chat_id, $user, $config)
+function get_chat_thread($message, $chat_id, $user, $config, $selectedModel)
 {
     //global $config,$deployment;
-
     $context_limit = (int)($config['context_limit'] ?? CONTEXT_LIMIT);
     $messages = [];
     // error_log("DEBUG lib.required.php get_chat_thread() context limit: " . $context_limit);
@@ -437,17 +436,33 @@ function get_chat_thread($message, $chat_id, $user, $config)
                 ]
             ];
         } else {
-            $messages = [
-                [
-                    'role' => 'system',
-                    'content' => $_SESSION['document_text']
-                ],
-                [
-                    'role' => 'user',
-                    'content' => $message
-                ]
-            ];
+            if ($selectedModel == 'aws-claude2') {
+                $messages = [
+                    [
+                        'role' => 'user',
+                        'content' => [
+                            [
+                                "type" => "text",
+                                "text" => $_SESSION['document_text']
+                            ]
+                        ]
+                    ],
+
+                ];
+            } else {
+                $messages = [
+                    [
+                        'role' => 'system',
+                        'content' => $_SESSION['document_text']
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $message
+                    ]
+                ];
+            }
         }
+        // error_log("DEBUG lib.required.php get_chat_thread() with document messages: ".print_r($messages,true));
         return $messages;
     }
 
@@ -462,7 +477,7 @@ function get_chat_thread($message, $chat_id, $user, $config)
 
     // Add the last 5 exchanges from the recent chat history to the messages array
     $recent_messages = get_recent_messages($chat_id, $user);
-    error_log("DEBUG lib.required.php get_chat_thread() recent messages: ".print_r($recent_messages,true));
+    // error_log("DEBUG lib.required.php get_chat_thread() recent messages: ".print_r($recent_messages,true));
     $tokenLimit = $context_limit ; // Set your token limit here
     #$currentTokens = str_word_count($message);
 	$currentTokens = approximateTokenCountByChars($message);

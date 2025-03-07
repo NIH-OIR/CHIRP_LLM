@@ -14,7 +14,7 @@ $chat_id = isset($_REQUEST['chat_id']) ? $_REQUEST['chat_id'] : '';
 if (isset($_REQUEST['deployment'])) {
     $_SESSION['deployment'] = $_REQUEST['deployment'];
 }
-#error_log("upload.php selected model: ".$_SESSION['deployment']);
+error_log("upload.php selected model: ".$_SESSION['deployment']);
 // Create a new chat session if no chat ID is provided
 if (empty($chat_id)) {
     $chat_id = $new_chat_id = create_chat($user, 'New Chat', '', $_SESSION['deployment'], '', '');
@@ -26,7 +26,7 @@ if (isset($_GET['remove']) && $_GET['remove'] == '1') {
     // Clear the session variables
     unset($_SESSION['document_text']);
     unset($_SESSION['document_name']);
-    update_chat_document($user,$chat_id,'','','');
+    update_chat_document($user,$chat_id,$_SESSION['deployment'],'','','');
 
     // Redirect to the main page with chat_id
     header('Location: index.php?chat_id='.urlencode($chat_id));
@@ -47,7 +47,7 @@ if (isset($_FILES['uploadDocument'])) {
         $_SESSION['document_text'] = $base64Image;
         $_SESSION['document_type'] = $mimeType;
         $_SESSION['document_name'] = basename($file['name']);
-        update_chat_document($user, $chat_id, $_SESSION['document_name'], $_SESSION['document_type'], $_SESSION['document_text']);
+        update_chat_document($user, $chat_id, $_SESSION['deployment'], $_SESSION['document_name'], $_SESSION['document_type'], $_SESSION['document_text']);
         echo $_SESSION['document_text'];
     } else {
 
@@ -79,7 +79,7 @@ if (isset($_FILES['uploadDocument'])) {
 
             #echo "3 - <pre>".print_r($_SESSION,1)."</pre>"; die("got here");
             $documnet_text = mb_convert_encoding($_SESSION['document_text'], 'UTF-8', 'UTF-8');
-            update_chat_document($user, $chat_id, $_SESSION['document_name'], $_SESSION['document_type'], $documnet_text);
+            update_chat_document($user, $chat_id, $_SESSION['deployment'], $_SESSION['document_name'], $_SESSION['document_type'], $documnet_text);
 
         } else {
             $_SESSION['error'] = 'There was an error parsing the uploaded document. Please be sure that it is the correct file type. If you have further problems, please contact support.';

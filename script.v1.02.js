@@ -282,7 +282,7 @@ $(document).ready(function(){
 		}
 	});
 
-    var selectedModel = $("#model option:selected").val(); console.log("selectedModel: " + selectedModel);
+    var selectedModel = $("#model option:selected").val(); //console.log("selectedModel: " + selectedModel);
     var gpt4AttachmentTooltip ="Document types accepted for GPT-4o include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4o does not support Excel or CSV files.";
     var claudeAttachmentTooltip ="Document types accepted for Claude 2.1 include CSV, Excel, PDF, Text, Word. Please notes that Claude 2.1 does not support images.";
     if (selectedModel == "azure-dall-e-3") {

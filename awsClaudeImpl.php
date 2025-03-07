@@ -24,9 +24,8 @@ function callClaudeApi($config, $message) {
             "anthropic_version" => $config['bedrock_version'],
             "max_tokens" => (int)$config['max_tokens'] ?? (int)MAX_TOKEN,
             'temperature' => (float)$_SESSION['temperature'],
-            "system" => "Please respond.",
+            // "system" => "Please respond.",
             'messages' => $message
-            
         ];
         // error_log("DEBUG awsClaudeImpl.php callClaudeApi() body: " . print_r($body, true) . "\n");
         // Call the Bedrock AI model API

@@ -5,7 +5,7 @@
 var sessionTimer;       // Main session timer
 var serverPingTimer;    // Secondary timer for server pings
 var lastActivityTime = Date.now(); // Track the last time of user activity
-var pingInterval = 5 * 60 * 1000;  // 5 minutes (in milliseconds)
+var pingInterval = 3 * 60 * 1000;  // 5 minutes (in milliseconds)
 var sessionExpiresAt;   // Timestamp when the session will expire
 var nextServerPingAt;   // Timestamp when the next server ping will occur
 
@@ -40,6 +40,7 @@ function resetSessionTimer(remainingTime = sessionTimeout) {
 function resetActivityTimer() {
     lastActivityTime = Date.now(); // Update the last activity time
     resetSessionTimer();           // Reset the session timer on user activity
+    startServerPingInterval();     // Start the interval for server pings
 }
 
 // Event listeners for user activity (mouse movement, typing, etc.)

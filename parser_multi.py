@@ -7,6 +7,7 @@ import chardet
 import fitz  # PyMuPDF
 import csv
 import pandas as pd
+import codecs
 from pptx import Presentation
 from docx.table import Table
 from docx.text.paragraph import Paragraph
@@ -166,6 +167,7 @@ if __name__ == '__main__':
         #print("Usage: python3 parser_multi.py <tmp_file> <original_filename>")  # Debugging output
         sys.exit(1)
     #print(f"File path: {sys.argv[1]}, Original filename: {sys.argv[2]}")  # Debugging output
+    sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
     text = parse_doc(sys.argv[1], sys.argv[2])
     #print("Parsing completed")  # Debugging output
     print(text)
