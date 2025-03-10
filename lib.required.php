@@ -66,6 +66,7 @@ $sessionTimeout = $config['session']['timeout'];  // Load session timeout from c
 
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $sessionTimeout)) {
     // last request was more than 30 minutes ago
+    error_log("lib.required.php: logging out due to inactivity");
     header("Location: logout.php");
     exit();
 }
@@ -422,7 +423,7 @@ function get_chat_thread($message, $chat_id, $user, $config, $selectedModel)
     // error_log("DEBUG lib.required.php get_chat_thread() context limit: " . $context_limit);
 
     if (!empty($_SESSION['document_text'])) {
-        if (strpos($_SESSION['document_type'], 'image/') === 0) {
+        if ($_SESSION['document_type'] !== null &&strpos($_SESSION['document_type'], 'image/') === 0) {
             // Handle image content (use image_url field with base64 encoded image)
             $messages[] = [
                 "role" => "system",

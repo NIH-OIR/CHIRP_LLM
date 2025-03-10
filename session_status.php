@@ -13,6 +13,7 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] < 
 
     // Return the remaining time for client-side session management
     $timeLeft = $sessionTimeout - (time() - $_SESSION['LAST_ACTIVITY']);
+    error_log("session_status.php: Session still active. Time left: " . $timeLeft);
     echo json_encode(['session_active' => true, 'remaining_time' => $timeLeft]);
 } else {
     // If the session has expired
