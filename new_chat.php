@@ -15,7 +15,7 @@ if (isset($_POST['model'])) {
     $deployment = $_POST['model'];
 }
 $_SESSION['deployment'] = $deployment;
-error_log("upload.php selected model: ".$_SESSION['deployment']);
+error_log("new_chat.php selected model: ".$_SESSION['deployment']);
 $document_name = $_SESSION['document_name'] = '';
 $document_text = $_SESSION['document_text'] = '';
 
