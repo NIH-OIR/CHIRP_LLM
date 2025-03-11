@@ -40,7 +40,6 @@ function resetSessionTimer(remainingTime = sessionTimeout) {
 function resetActivityTimer() {
     lastActivityTime = Date.now(); // Update the last activity time
     resetSessionTimer();           // Reset the session timer on user activity
-    startServerPingInterval();     // Start the interval for server pings
 }
 
 // Event listeners for user activity (mouse movement, typing, etc.)
