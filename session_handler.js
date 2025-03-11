@@ -69,7 +69,6 @@ function startServerPingInterval() {
 // Logout function to handle session expiration
 function logoutUser() {
     //alert("Your session has expired. Please log in again.");
-    console.log("session_handler.js: logoutUser()");
     window.location.href = "logout.php";
 }
 
