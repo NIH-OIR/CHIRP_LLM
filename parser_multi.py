@@ -5,6 +5,9 @@ import os
 from docx import Document
 import chardet
 import fitz  # PyMuPDF
+import csv
+import pandas as pd
+import codecs
 from pptx import Presentation
 from docx.table import Table
 from docx.text.paragraph import Paragraph
@@ -38,6 +41,12 @@ def parse_doc(tmp_file, original_filename):
     elif original_filename.endswith('.pdf'):
         #print("File type: PDF")  # Debugging output
         return parse_pdf(tmp_file)
+    elif original_filename.endswith('.csv'):
+        #print("File type: CSV")  # Debugging output
+        return parse_csv(tmp_file)
+    elif original_filename.endswith('.xlsx'):
+        #print("File type: XLSX")  # Debugging output
+        return parse_xlsx(tmp_file)
     else:
         raise ValueError('File type not supported')
 
@@ -124,12 +133,41 @@ def parse_txt(file):
     #print("Text file parsing completed successfully")  # Debugging output
     return contents
 
+def parse_csv(file):
+    #print("Entering parse_csv")  # Debugging output
+    delimiter = ','
+
+    contents = ''
+    try:
+        df = pd.read_csv(file)
+        contents = df.to_csv(index=False)
+    
+    except FileNotFoundError:
+        print(f"Error: CSV file '{file}' not found.")
+
+    #print("csv file parsing completed successfully")  # Debugging output
+    return contents
+
+def parse_xlsx(file):
+    #print("Entering parse_xlsx")  # Debugging output   
+    text = ''
+    try:
+        df = pd.read_excel(file, na_filter=False)
+
+        text = df.to_string(index=False)
+    except FileNotFoundError:
+        print(f"Error: XLSX file '{file}' not found.")
+
+    #print("xlsx parsing completed successfully")  # Debugging output
+    return text
+
 if __name__ == '__main__':
     #print("Script started")  # Debugging output
     if len(sys.argv) < 3:
         #print("Usage: python3 parser_multi.py <tmp_file> <original_filename>")  # Debugging output
         sys.exit(1)
     #print(f"File path: {sys.argv[1]}, Original filename: {sys.argv[2]}")  # Debugging output
+    sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
     text = parse_doc(sys.argv[1], sys.argv[2])
     #print("Parsing completed")  # Debugging output
     print(text)

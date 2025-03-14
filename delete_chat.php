@@ -5,6 +5,7 @@ require_once 'db.php';
 
 // Check if the 'chat_id' is set in the POST data
 if(isset($_POST['chat_id'])) {
+    $_SESSION['document_name'] = '';
     // Assign the 'chat_id' from the POST data to the $chat_id variable
     $chat_id = filter_input(INPUT_POST, 'chat_id', FILTER_SANITIZE_STRING);
     
