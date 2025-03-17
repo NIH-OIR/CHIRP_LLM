@@ -1,6 +1,7 @@
 {
     "require": {
         "google/cloud": "^0.255.0",
-        "google/cloud-ai-platform": "*"
+        "google/cloud-ai-platform": "*",
+        "aws/aws-sdk-php": "^3.339"
     }
 }

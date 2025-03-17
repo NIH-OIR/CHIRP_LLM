@@ -44,6 +44,7 @@ function createGUID() {
 
 // Create a new chat in the database with the given user, title, and summary
 function create_chat($user, $title, $summary, $deployment, $document_name, $document_text) {
+    error_log("db.php create_chat deployment line 47: ".$deployment);
     global $pdo;
     $guid = createGUID();
     $guid = str_replace('-','',$guid);
@@ -149,7 +150,8 @@ function update_temperature($user, $chat_id, $temperature) {
 }
 
 // Update the document in the database
-function update_chat_document($user, $chat_id, $document_name, $document_type, $document_text) {
+function update_chat_document($user, $chat_id, $deployment, $document_name, $document_type, $document_text) {
+    error_log("db.php update_chat_document deployment line 146: ".$deployment);
     global $pdo;
 
     if (!verify_user_chat($user, $chat_id)) {
@@ -157,8 +159,8 @@ function update_chat_document($user, $chat_id, $document_name, $document_type, $
     }
     
     // prepare a sql statement to update the deployment of a chat where the id matches the $chat_id
-    $stmt = $pdo->prepare("update chat set document_name = :document_name, document_type = :document_type, document_text = :document_text where id = :id");
-    $stmt->execute(['document_name' => $document_name, 'document_type' => $document_type, 'document_text' => $document_text, 'id' => $chat_id]);
+    $stmt = $pdo->prepare("update chat set deployment = :deployment, document_name = :document_name, document_type = :document_type, document_text = :document_text where id = :id");
+    $stmt->execute(['deployment' => $deployment, 'document_name' => $document_name, 'document_type' => $document_type, 'document_text' => $document_text, 'id' => $chat_id]);
 }
 
 // Check if a user with the given userid exists in the users table

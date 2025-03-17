@@ -43,7 +43,8 @@ require_once 'get_config.php';
 session_start();
 // Unset all session variables
 //$_SESSION = array();
-
+if (!empty($_SESSION['user_data']['userid'])) 
+    error_log("logout.php: logging out user: ".$_SESSION['user_data']['userid']);
 // If it's desired to kill the session, also delete the session cookie.
 // Note: This will destroy the session, and not just the session data!
 if (ini_get("session.use_cookies")) {

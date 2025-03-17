@@ -10,6 +10,7 @@ require_once 'get_config.php';
 #echo '<pre>'.print_r($config,1).'</pre>';
 
 require_once 'geminiImpl.php'; 
+require_once 'awsClaudeImpl.php'; 
 
 
 // Start the session, if not already started
@@ -65,6 +66,7 @@ $sessionTimeout = $config['session']['timeout'];  // Load session timeout from c
 
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $sessionTimeout)) {
     // last request was more than 30 minutes ago
+    error_log("lib.required.php: logging out due to inactivity");
     header("Location: logout.php");
     exit();
 }
@@ -184,19 +186,31 @@ function load_configuration($deployment) {
     global $config;
 
     $context_limit = isset($config[$deployment]['context_limit']) ? (int)($config[$deployment]['context_limit']) *1.5 : (int)CONTEXT_LIMIT;
-    $conf = [
-        'selected_model' => $deployment,
-        'api_key' => trim($config[$deployment]['api_key'], '"'),
-        'base_url' => $config[$deployment]['url'],
-        'deployment_name' => $config[$deployment]['deployment_name'],
-        'api_version' => $config[$deployment]['api_version'],
-        'max_tokens' => (int) ($config[$deployment]['max_tokens'] ?? MAX_TOKEN),
-        'context_limit' => $context_limit,
-    ];
+    if ($deployment == "azure-gpt4" || $deployment == "azure-dall-e-3") {
+        $conf = [
+            'selected_model' => $deployment,
+            'api_key' => trim($config[$deployment]['api_key'], '"'),
+            'base_url' => $config[$deployment]['url'],
+            'deployment_name' => $config[$deployment]['deployment_name'],
+            'api_version' => $config[$deployment]['api_version'],
+            'max_tokens' => (int) ($config[$deployment]['max_tokens'] ?? MAX_TOKEN),
+            'context_limit' => $context_limit,
+        ];
 
-    if ($deployment == "azure-dall-e-3") {
-        unset($conf["max_tokens"]);
-        unset($conf["context_limit"]);
+        if ($deployment == "azure-dall-e-3") {
+            unset($conf["max_tokens"]);
+            unset($conf["context_limit"]);
+        }
+    } 
+    if ($deployment == "aws-claude2") { 
+        $conf = [
+            'selected_model' => $deployment,
+            'model_id' => trim($config[$deployment]['model_id'], '"'),
+            'access_key' => trim($config[$deployment]['access_key'], '"'),
+            'secret_key' => trim($config[$deployment]['secret_key'], '"'),
+            'max_tokens' => (int) ($config[$deployment]['max_tokens'] ?? MAX_TOKEN),
+            'bedrock_version' => trim($config[$deployment]['bedrock_version'], '"')
+        ];
     }
     #error_log("lib.required line 197 load_configuration conf: ". print_r($conf, true));
     return $conf;
@@ -223,7 +237,7 @@ function get_gpt_response($message, $chat_id, $user) {
             }
             
             if (!empty($_SESSION['document_type']) && strpos($_SESSION['document_type'], 'image') === 0) {
-                $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $_SESSION['document_text']);
+                $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $_SESSION['document_text'], $selectedModel);
             }
 
             if ($selectedModel == 'gemini-1.5-pro') {
@@ -234,9 +248,12 @@ function get_gpt_response($message, $chat_id, $user) {
                     }
                 }
                 $response = callGeminiApi($msgArr);
+            } else if ($selectedModel == 'aws-claude2') { 
+                $response = callClaudeApi($config, $msg);
             } else {
                 $response = call_azure_api($config, $msg);
             }
+            // error_log("DEBUG lib.required.php get_gpt_response() response line 245: ".json_encode($response));
             return process_api_response($response, $selectedModel, $chat_id, $message);
         } else {
             return get_gpt_response_with_text_doc($selectedModel, $user, $config, $chat_id, $message);
@@ -257,7 +274,7 @@ function get_gpt_response_with_text_doc($selectedModel, $user, $config, $chat_id
     $err = false;
     $exchangeId = -1;
     foreach($docTextArr as $docTextChunk) {
-        $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $docTextChunk);
+        $msg = get_chat_thread_with_doc($message, $chat_id, $user, $config, $docTextChunk, $selectedModel);
 
         if ($selectedModel == 'gemini-1.5-pro') {
             $msgArr = [];
@@ -266,7 +283,10 @@ function get_gpt_response_with_text_doc($selectedModel, $user, $config, $chat_id
                     $msgArr[] = $msgItem['content'];
                 }
             }
+            
             $response = callGeminiApi($msgArr);
+        } else if ($selectedModel == 'aws-claude2') { 
+            $response = callClaudeApi($config, $msg);
         } else {
             $response = call_azure_api($config, $msg);
         }
@@ -389,9 +409,9 @@ function execute_api_call($url, $payload, $headers) {
 
 // Process API Response
 function process_api_response($response, $deployment, $chat_id, $message) {
-    #error_log("DEBUG lib.required.php process_api_response() selected model: ".$deployment);
+    // error_log("DEBUG lib.required.php process_api_response() selected model: ".$deployment);
 
-    #error_log("DEBUG lib.required.php process_api_response() api result: ".$response);
+    // error_log("DEBUG lib.required.php process_api_response() api result: ".$response);
     $response_data = json_decode($response, true);
     if ($deployment == 'azure-dall-e-3') {
         if (isset($response_data['error'])) { //return error msg if error occurs
@@ -412,25 +432,28 @@ function process_api_response($response, $deployment, $chat_id, $message) {
             ];
         }
     }
-    if (isset($response_data['error'])) {
+    if (isset($response_data['error'])) { //error occurs in azure-gpt-4o and aws-claude2
         error_log('API error: ' . $response_data['error']['message']);
         return [
             'deployment' => $deployment,
             'error' => true,
             'message' => $response_data['error']['message']
         ];
-    } else if ($deployment != 'gemini-1.5-pro' && !isset($response_data)) {
+    } else if ($deployment == 'gemini-1.5-pro' && !isset($response_data)) {
         error_log('Gemini API error: ');
         return [
             'deployment' => $deployment,
             'error' => true,
             'message' => "Error occurs in calling Gemini API"
         ];
-    }else {
-        if ($deployment != 'gemini-1.5-pro') {
-            $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
-        } else {
+    } else { //no errors
+        if ($deployment == 'gemini-1.5-pro') {
             $response_text = $response_data['candidates'][0]['content']['parts'][0]['text'];
+        } else if ($deployment == 'aws-claude2') {
+            // error_log("DEBUG lib.required.php process_api_response() aws-claude2 api result: ".$response);
+            $response_text = $response;
+        } else {
+            $response_text = $response_data['response'] ?? $response_data['choices'][0]['message']['content'];
         }
         create_exchange($chat_id, $message, $response_text);
         return [
@@ -472,44 +495,59 @@ function substringWords($text, $numWords) {
     return $subString;
 }
 
-function get_chat_thread_with_doc($message, $chat_id, $user, $config, $docTextChunk) {
-    if (strpos($_SESSION['document_type'], 'image/') === 0) {
-        // Handle image content (use image_url field with base64 encoded image)
-        $messages[] = [
-            "role" => "system",
-            "content" => "You are a helpful assistant to analyze images."
-        ];
-        $messages[] = [
-            "role" => "user",
-            "content" => [
-                ["type" => "text", "text" => $message],
-                ["type" => "image_url", "image_url" => ["url" => $_SESSION['document_text']]]
-            ]
-        ];
-    } else {
-        $messages = [
-            [
-                'role' => 'system',
-                'content' => $docTextChunk
-            ],
-            [
-                'role' => 'user',
-                'content' => $message
-            ]
-        ];
-    }
-    return $messages;
+function get_chat_thread_with_doc($message, $chat_id, $user, $config, $docTextChunk, $selectedModel) {
+        if ($_SESSION['document_type'] !== null &&strpos($_SESSION['document_type'], 'image/') === 0) {
+            // Handle image content (use image_url field with base64 encoded image)
+            $messages[] = [
+                "role" => "system",
+                "content" => "You are a helpful assistant to analyze images."
+            ];
+            $messages[] = [
+                "role" => "user",
+                "content" => [
+                    ["type" => "text", "text" => $message],
+                    ["type" => "image_url", "image_url" => ["url" => $_SESSION['document_text']]]
+                ]
+            ];
+        } else {
+            if ($selectedModel == 'aws-claude2') {
+                $messages = [
+                    [
+                        'role' => 'user',
+                        'content' => [
+                            [
+                                "type" => "text",
+                                "text" => $_SESSION['document_text']
+                            ]
+                        ]
+                    ],
+
+                ];
+            } else {
+                $messages = [
+                    [
+                        'role' => 'system',
+                        'content' => $_SESSION['document_text']
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $message
+                    ]
+                ];
+            }
+        }
+        // error_log("DEBUG lib.required.php get_chat_thread() with document messages: ".print_r($messages,true));
+        return $messages;
 }
 
 function get_chat_thread_without_doc($message, $chat_id, $user, $config){
     //global $config,$deployment;
-
     $context_limit = (int)($config['context_limit'] ?? CONTEXT_LIMIT);
     $messages = [];
-    #echo "context limit: " . $context_limit;
+    // error_log("DEBUG lib.required.php get_chat_thread() context limit: " . $context_limit);
 
     // if (!empty($_SESSION['document_text'])) {
-    //     if (strpos($_SESSION['document_type'], 'image/') === 0) {
+    //     if ($_SESSION['document_type'] !== null &&strpos($_SESSION['document_type'], 'image/') === 0) {
     //         // Handle image content (use image_url field with base64 encoded image)
     //         $messages[] = [
     //             "role" => "system",
@@ -523,17 +561,33 @@ function get_chat_thread_without_doc($message, $chat_id, $user, $config){
     //             ]
     //         ];
     //     } else {
-    //         $messages = [
-    //             [
-    //                 'role' => 'system',
-    //                 'content' => $_SESSION['document_text']
-    //             ],
-    //             [
-    //                 'role' => 'user',
-    //                 'content' => $message
-    //             ]
-    //         ];
+    //         if ($selectedModel == 'aws-claude2') {
+    //             $messages = [
+    //                 [
+    //                     'role' => 'user',
+    //                     'content' => [
+    //                         [
+    //                             "type" => "text",
+    //                             "text" => $_SESSION['document_text']
+    //                         ]
+    //                     ]
+    //                 ],
+
+    //             ];
+    //         } else {
+    //             $messages = [
+    //                 [
+    //                     'role' => 'system',
+    //                     'content' => $_SESSION['document_text']
+    //                 ],
+    //                 [
+    //                     'role' => 'user',
+    //                     'content' => $message
+    //                 ]
+    //             ];
+    //         }
     //     }
+    //     // error_log("DEBUG lib.required.php get_chat_thread() with document messages: ".print_r($messages,true));
     //     return $messages;
     // }
 
@@ -548,7 +602,7 @@ function get_chat_thread_without_doc($message, $chat_id, $user, $config){
 
     // Add the last 5 exchanges from the recent chat history to the messages array
     $recent_messages = get_recent_messages($chat_id, $user);
-    #print_r($recent_messages);
+    // error_log("DEBUG lib.required.php get_chat_thread() recent messages: ".print_r($recent_messages,true));
     $tokenLimit = $context_limit ; // Set your token limit here
     #$currentTokens = str_word_count($message);
 	$currentTokens = approximateTokenCountByChars($message);
