@@ -303,7 +303,14 @@ $(document).ready(function(){
         var selectedModel = $(this).val();
         if (selectedModel == "azure-dall-e-3") {
             $("#attachmentIcon").hide();
-            startNewChat(selectedModel);
+
+            var hasPreviousChat = $("#messageList").text();
+            if (hasPreviousChat) {
+                startNewChat(selectedModel);
+            } else {
+                $("#model").prop("disabled", true);
+            }
+
         } else {
             $("#attachmentIcon").show();
             if (selectedModel == "aws-claude2") {
@@ -757,6 +764,7 @@ $(document).ready(function(){
                         'isAdmin':value.is_admin ? 'Yes' : 'No',
                        // 'api_keys':value.pilot_api_keys,
                        // 'llms_permitted':value.llms_permitted,
+                        'lastLogonDate':value.last_logon,
                         'accepted_date':value.updated_at,
                         'isActive':value.is_active ? 'Yes' : 'No',
                         'isInWhitelist':value.is_in_whitelist ? 'Yes' : 'No',
@@ -807,6 +815,13 @@ $(document).ready(function(){
                         "name": "accepted_date",
                         "data": function (data, type, full, meta) { //get the date only
                             var dateTimeArr = data.accepted_date.split(" ");
+                            return dateTimeArr[0];
+                        }
+                    },
+                    {   "title": "Last Logon Date",
+                        "name": "lastLogonDate",
+                        "data": function (data, type, full, meta) { //get the date only
+                            var dateTimeArr = data.lastLogonDate.split(" ");
                             return dateTimeArr[0];
                         }
                     },

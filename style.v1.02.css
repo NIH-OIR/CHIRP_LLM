@@ -519,11 +519,14 @@ textarea {
 .select2-search .select2-search__field {
     width: 100% !important;
 }
-.dtNameCol .dtDateCol{
-    width: 15%;
+.dtNameCol{
+    width: 13%;
+}
+.dtDateCol {
+    width: 10%;
 }
 .dtEmailCol {
-    width: 20%;
+    width: 22%;
 }
 .dt-search, .dt-paging{
     float: right;
