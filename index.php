@@ -520,19 +520,21 @@ foreach(array_keys($models) as $m) {
                 <!-- <th class="filterhead"></th> --><!-- API Keys -->
                 <!-- <th class="filterhead"></th>--><!-- LLMs Permitted -->
                 <th class="filterhead dtDateCol"></th><!--Accepted Date -->
+                <th class="filterhead dtDateCol"></th><!--Last Logon Date -->
                 <th class="filterhead"></th><!--Is Active -->
                 <th class="filterhead"></th><!--Is In Whitelist -->
             </tr>
             <tr>
                 <th class="select-checkbox"></th><!--checkbox -->
-                <th></th><!--Name -->
-                <th></th><!--Email -->
+                <th class="dtNameCol"></th><!--Name -->
+                <th class="dtEmailCol"></th><!--Email -->
                 <th style="width: 10%;"></th><!--Role -->
                 <th style="width: 10%;"></th><!--IC -->
                 <th style="width: 10%;"></th><!--Is Admin -->
                 <!-- <th></th> --><!-- API Keys -->
                 <!-- <th></th> --><!-- LLMs Permitted -->
                 <th></th><!--Accepted Date -->
+                <th></th><!--Last Logon Date -->
                 <th></th><!--Is Active -->
                 <th></th><!--Is In Whitelist -->
             </tr>

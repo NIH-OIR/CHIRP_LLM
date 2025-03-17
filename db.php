@@ -300,8 +300,8 @@ function isAdminUser($userid) {
 }
 if (isset($_POST['callGetUsersData'])) {
     error_log("Calling function get_all_active_users().");
-    $returnData = get_all_users();
     //$returnData = get_all_active_users();
+    $returnData = get_all_active_users();
     echo json_encode(array($returnData));
 }
 
