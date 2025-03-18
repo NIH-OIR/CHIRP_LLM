@@ -742,12 +742,19 @@ function isScrolledIntoView(elem)
 }
 
 //admin user datatable
-$(document).ready(function(){
+//$(document).ready(function(){
+
+
+
+function loadUsers() {
     $.ajax({
         url: "db.php",
         dataType: "json",
         method: "POST",
         data: {"callGetUsersData": "1"},
+        beforeSend: function(){
+            $("#loadingDiv").dialog("open");
+        },
         success: function(response){
 
             var return_data = new Array();
@@ -938,6 +945,8 @@ $(document).ready(function(){
                     });
                 }
             }); //end DataTable
+            $("#loadingDiv").dialog("close");
         } // end success function
     }); //end ajax
-});
+}
+//}); //end $(document).ready
