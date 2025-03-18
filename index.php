@@ -109,7 +109,8 @@ foreach(array_keys($models) as $m) {
             <li><a href="#tabs-announcement" id ="announcementAnchor">Announcement</a></li>
             <li><a href="#tabs-trainingSupport" id ="trainingSupportAnchor">Training & Support</a></li>
             <li><a href="#tabs-contactAcknowledgement" id ="tabs-contactAcknowledgementAnchor">Contact & Acknowledgement</a></li>
-            <li id ="adminToolTabList"><a href="#tabs-adminTool" >Admin Tool</a></li>
+            <!-- <li id ="adminToolTabList"><a href="#tabs-adminTool" >Admin Tool</a></li> -->
+            <li id ="adminToolTabList"><a href="#tabs-adminTool" id="adminToolAnchor" >Admin Tool</a></li>
         </ul>
     
 
@@ -567,6 +568,15 @@ foreach(array_keys($models) as $m) {
     }
     $(document).ready(function(){
         $( "#tabs" ).tabs().show();
+        
+        $( "#tabs" ).tabs().bind("click", function(event) {
+            if (event.target.id == "adminToolAnchor") {
+                if (!$.fn.DataTable.isDataTable('#usersTable')) {
+                    loadUsers();
+                }
+            }
+        });
+
 
         $(".ui-tabs-anchor").click(function(){
             //if ($(this).text() != "My Chat") {
