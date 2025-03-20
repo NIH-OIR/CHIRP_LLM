@@ -206,6 +206,7 @@ function fileUpload() {
             processData: false,
             beforeSend: function(){
 				$("#loadingDiv").dialog("open");
+                startServerPingInterval();
 			},
             success: function (response) { 
                 console.log('File uploaded successfully!'); 
