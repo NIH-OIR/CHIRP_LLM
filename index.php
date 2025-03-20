@@ -224,7 +224,7 @@ foreach(array_keys($models) as $m) {
                         ?>
                     </select>
                     <div style="display:inline;">
-                        <img id="modelQIcon" src="images/question_icon.svg" width="15px" title="Please select the available model."/>
+                        <img id="modelQIcon" src="images/question_icon.svg" width="15px" title="Please note that selecting DALL-E will disable the drop-down menu. To re-gain access to the menu, you will need to create a New Chat. Please refer to the user guide and the DALL-E training demonstration video for more information."/>
                     </div>
                 </form>
                 </td>
