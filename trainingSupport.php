@@ -5,6 +5,8 @@
 
             <li><a title="Open the training video in a new window" href="<?php echo $config['app']['video_link']; ?>" target="_blank">Training Video</a><br></li>
 
+            <li><a title="Open the DALL-E-3 training video in a new window" href="https://nih.sharepoint.com/:v:/s/OD-Crispi-LLM-Pilot/Ec49IXoNka9Kv44sHb41NKsB_TUEzBAI9qVdjsPEj6FeOA?e=JnRT1A" target="_blank">DALL-E-3 Training Video</a><br></li>
+
             <li><a href="https://www.scgcorp.com/ChIRP2025/PostMeetingMaterials" target="_blank" title="Open launch event materioa in a new window">Launch Event Materials<a></li>
 
             <li><a href="https://nih.sharepoint.com/:p:/r/sites/OD-Crispi-LLM-Pilot/_layouts/15/Doc.aspx?sourcedoc=%7BDB0F78AE-AEBF-468B-AF27-00A46C1A23D1%7D&file=The%20Responsible%20Use%20of%20AI%20in%20Scientific%20Writing_share.pptx&wdLOR=cC9BF71D0-F8A9-40E4-8650-7A7A0DAE38C9&fromShare=true&action=edit&mobileredirect=true" target="_blank" title="Open the user guide in a new window">The Responsible Use of AI in Scientific Writing<a>. Shared by Brenda Curtis (NIDA)</li>
