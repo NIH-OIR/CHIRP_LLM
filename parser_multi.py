@@ -171,6 +171,6 @@ if __name__ == '__main__':
     text = parse_doc(sys.argv[1], sys.argv[2])
     text = text.replace('ValueError', ' ')
     #print("Parsing completed")  # Debugging output
-    print(text.encode(sys.stdout.encoding, errors='replace'))
+    print(text)
 
 
