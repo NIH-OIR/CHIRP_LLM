@@ -75,7 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'error' => $gpt_response['error'] ?? null,
         'gpt_response' => $gpt_response['message'] ?? null, 
         'chat_id' => $chat_id,
-        'new_chat_id' => $new_chat_id
+        'new_chat_id' => $new_chat_id,
+        'chat_title' => $chat_title
     ];
 
     // Send the JSON-encoded response and exit the script

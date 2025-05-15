@@ -217,7 +217,7 @@ foreach(array_keys($models) as $m) {
                             if (isAdminUser($_SESSION['user_data']['userid'])) {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             } else if (!isAdminUser($_SESSION['user_data']['userid']) 
-                                        && $m != 'gemini-1.5-pro') {
+                                        && $m != 'gemini-1.5-pro' && $m != 'azure-gpt4-1') {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             }
                         }
@@ -269,7 +269,7 @@ foreach(array_keys($models) as $m) {
                             <!-- <a href="javascript:removeUploadedFile();" style="color: blue">Remove</a> -->
                         </p>                    
                     <?php } else { 
-                        if ($_SESSION['deployment'] == 'azure-gpt4') {
+                        if ($_SESSION['deployment'] == 'azure-gpt4' || $_SESSION['deployment'] == 'azure-gpt4-1') {
                     ?>
                             <input id="fileUploadInput" style="display: none"  type="file" name="uploadDocument" aria-label="File upload button" accept=".pdf,.docx,.txt,.md,.json,.xml,.png,.jpg,.jpeg,.gif" style="width:15em;" required onchange="javascript:fileUpload();" />        
                     <?php } else if ($_SESSION['deployment'] == 'aws-claude2') { ?>

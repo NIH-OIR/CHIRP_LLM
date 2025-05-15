@@ -84,6 +84,8 @@ $user = $_SESSION['user_data']['userid'];
 
 $application_path = (!empty($config['app']['application_path'])) ? $config['app']['application_path'] : "";
 
+$gptModels = array("azure-gpt4", "azure-gpt4-1", "azure-dall-e-3");
+
 // Verify that there is a chat with this id for this user
 // If a 'chat_id' parameter was passed, store its value as an integer in the session variable 'chat_id'
 $chat_id = filter_input(INPUT_GET, 'chat_id', FILTER_UNSAFE_RAW);
@@ -184,9 +186,10 @@ function get_recent_messages($chat_id, $user) {
 function load_configuration($deployment) {
     #error_log("lib.required line 180 deployment: ". $deployment);
     global $config;
-
+    global$gptModels;
     $context_limit = isset($config[$deployment]['context_limit']) ? (int)($config[$deployment]['context_limit']) *1.5 : (int)CONTEXT_LIMIT;
-    if ($deployment == "azure-gpt4" || $deployment == "azure-dall-e-3") {
+    //if ($deployment == "azure-gpt4" || $deployment == "azure-gpt4-1" || $deployment == "azure-dall-e-3") {
+    if (in_array($deployment, $gptModels)) {
         $conf = [
             'selected_model' => $deployment,
             'api_key' => trim($config[$deployment]['api_key'], '"'),
@@ -283,7 +286,9 @@ function call_azure_api($config, $msg) {
         $payload["safe_prompt"] = "false";
         $payload["stream"] = false;
     }
-    if ($config['selected_model'] == "azure-gpt4" || $config['selected_model'] == "azure-dall-e-3") {
+    global$gptModels;
+    // if ($config['selected_model'] == "azure-gpt4" || $config['selected_model'] == "azure-gpt4-1" || $config['selected_model'] == "azure-dall-e-3") {
+    if (in_array($config['selected_model'], $gptModels)) {
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'api-key: ' . $config['api_key'];
     }
