@@ -20,7 +20,7 @@ function pingServerToKeepSessionAlive() {
                 console.log("Session is active. Time remaining: " + response.remaining_time + " seconds");
                 resetSessionTimer(response.remaining_time * 1000); // Reset local client session timer
             } else {
-                logoutUser(); // If session has expired on the server
+                //logoutUser(); // If session has expired on the server
             }
         },
         error: function() {
@@ -33,7 +33,7 @@ function pingServerToKeepSessionAlive() {
 function resetSessionTimer(remainingTime = sessionTimeout) {
     clearTimeout(sessionTimer); // Clear the existing session timer
     sessionExpiresAt = Date.now() + remainingTime; // Update session expiration timestamp
-    sessionTimer = setTimeout(logoutUser, remainingTime); // Set a new session timer
+    //sessionTimer = setTimeout(logoutUser, remainingTime); // Set a new session timer
 }
 
 // Function to reset the activity timer (locally) and keep track of last activity time
