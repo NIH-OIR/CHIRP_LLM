@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $chat_id = filter_input(INPUT_POST, 'chat_id', FILTER_UNSAFE_RAW);
 
     $new_chat_id = '';
+    $chat_title = '';
     $document_name = $_SESSION['document_name'] ?? ''; // Use null coalescing operator for default values
     $document_text = $_SESSION['document_text'] ?? '';
     #$document_name = (empty($_SESSION['document_name'])) ? '' : $_SESSION['document_name'];
