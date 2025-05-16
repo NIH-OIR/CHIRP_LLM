@@ -182,7 +182,7 @@ foreach(array_keys($models) as $m) {
                             title="Document types accepted include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. At this time we do not support Excel or CSV files."> -->
                         <button type="button" id="attachmentIcon" class="fileUpload-icon" aria-label="Upload File"
                             data-tip="document-uploader" data-toggle="tooltip" data-container="body" data-placement="bottom" 
-                            title="Document types accepted for GPT-4o include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4o does not support Excel or CSV files.">
+                            title="Document types accepted for GPT-4 include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4 does not support Excel or CSV files.">
                             <!-- Icon (paper clip) -->
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8v8a5 5 0 1 0 10 0V6.5a3.5 3.5 0 1 0-7 0V15a2 2 0 0 0 4 0V8"/>

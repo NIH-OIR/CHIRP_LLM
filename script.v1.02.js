@@ -182,9 +182,9 @@ function fileUpload() {
         // if (selectedModel == "azure-gpt4"){
         if (gptTextModelArr.includes(selectedModel)){
             if (!isValidFileSize) {
-                alert("GPT-4o accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
+                alert("GPT-4 accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
             } else {
-                alert("The uploaded file type is not accepted. GPT-4o accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
+                alert("The uploaded file type is not accepted. GPT-4 accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
             }
         } else if (selectedModel == "aws-claude2"){
             if (!isValidFileSize) {
@@ -288,7 +288,7 @@ $(document).ready(function(){
 	});
 
     var selectedModel = $("#model option:selected").val(); //console.log("selectedModel: " + selectedModel);
-    var gpt4AttachmentTooltip ="Document types accepted for GPT-4o include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4o does not support Excel or CSV files.";
+    var gpt4AttachmentTooltip ="Document types accepted for GPT-4 include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4 does not support Excel or CSV files.";
     var claudeAttachmentTooltip ="Document types accepted for Claude 2.1 include CSV, Excel, PDF, Text, Word. Please notes that Claude 2.1 does not support images.";
     if (selectedModel == "azure-dall-e-3") {
         $("#attachmentIcon").hide();
