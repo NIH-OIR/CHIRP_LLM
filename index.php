@@ -217,7 +217,7 @@ foreach(array_keys($models) as $m) {
                             if (isAdminUser($_SESSION['user_data']['userid'])) {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             } else if (!isAdminUser($_SESSION['user_data']['userid']) 
-                                        && $m != 'gemini-1.5-pro' && $m != 'azure-gpt4-1') {
+                                        && $m != 'gemini-1.5-pro') {
                                 echo '<option value="'.$m.'"'.$sel.' title="'.$tooltip.'">'.$label.'</option>'."\n";
                             }
                         }
