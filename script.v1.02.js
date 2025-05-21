@@ -149,7 +149,7 @@ function submitEdit(chatId) {
         }
     });
 }
-
+const gptTextModelArr = ["azure-gpt4", "azure-gpt4-1"];
 function fileUpload() {
     var selectedModel = $("#model option:selected").val();
     var fileUpload = $('input[type=file]')[0];
@@ -160,7 +160,10 @@ function fileUpload() {
     var isValidFileName = false;
     var isValidFileSize = false;
     var isImage = false;
-    if (selectedModel == "azure-gpt4" && filename.length > 0 
+
+    // if (selectedModel == "azure-gpt4" && filename.length > 0 
+    //     && /\.(pdf|docx|txt|md|json|xml|png|jpg|jpeg|gif)$/i.test(filename)) {
+    if (gptTextModelArr.includes(selectedModel) && filename.length > 0 
         && /\.(pdf|docx|txt|md|json|xml|png|jpg|jpeg|gif)$/i.test(filename)) {
         isValidFileName = true;
     } 
@@ -176,11 +179,12 @@ function fileUpload() {
     }
     $("#uploadedFilename").val(filename);
     if (!isValidFileName) {
-        if (selectedModel == "azure-gpt4"){
+        // if (selectedModel == "azure-gpt4"){
+        if (gptTextModelArr.includes(selectedModel)){
             if (!isValidFileSize) {
-                alert("GPT-4o accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
+                alert("GPT-4 accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown. And the file size limit is " + fileSizeLimit + "MB. Please check the uploaded file type and size.")
             } else {
-                alert("The uploaded file type is not accepted. GPT-4o accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
+                alert("The uploaded file type is not accepted. GPT-4 accepted document types are as follows: PDF, XML, JSON, Word, Text, and Markdown.");
             }
         } else if (selectedModel == "aws-claude2"){
             if (!isValidFileSize) {
@@ -284,7 +288,7 @@ $(document).ready(function(){
 	});
 
     var selectedModel = $("#model option:selected").val(); //console.log("selectedModel: " + selectedModel);
-    var gpt4AttachmentTooltip ="Document types accepted for GPT-4o include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4o does not support Excel or CSV files.";
+    var gpt4AttachmentTooltip ="Document types accepted for GPT-4 include PDF, XML, JSON, Word, Text, JPG, JPEG, PNG, GIF, and Markdown. GPT-4 does not support Excel or CSV files.";
     var claudeAttachmentTooltip ="Document types accepted for Claude 2.1 include CSV, Excel, PDF, Text, Word. Please notes that Claude 2.1 does not support images.";
     if (selectedModel == "azure-dall-e-3") {
         $("#attachmentIcon").hide();
@@ -439,9 +443,11 @@ $(document).ready(function(){
                     var deployment = jsonResponse['deployment'];
                     var error = jsonResponse['error'];
                     var userMessage = jsonResponse['userMessage'];
-                    //console.log(error)
-                    //console.log(deployment)
-                    //console.log(gpt_response)
+                    var chat_title = jsonResponse['chat_title'];
+                    //console.log(error);
+                    //console.log(deployment);
+                    //console.log(gpt_response);
+                    //console.log(chat_title);
 
 
                     // Check if gpt_response is a JSON string, and if so, parse it
@@ -458,8 +464,26 @@ $(document).ready(function(){
                         gpt_response = formatCodeBlocks(gpt_response);
                     }
                     if (jsonResponse.new_chat_id) {
-                        //console.log(jsonResponse)
-                        window.location.href = "/" + jsonResponse.new_chat_id;
+                        console.log(jsonResponse.new_chat_id)
+                        // window.location.href = "/" + jsonResponse.new_chat_id;
+                        if ($("#chat-"+jsonResponse.new_chat_id).length) {
+                            $("#chat-"+jsonResponse.new_chat_id + " > a").text(chat_title);
+                            $("#chat-"+jsonResponse.new_chat_id + " > a").prop("title", chat_title);
+                        } else {
+                            var newChatElement = $(`<div class="chat-item current-chat" id="chat-`+jsonResponse.new_chat_id+`">
+                                <a class="chat-link chat-title" title="`+chat_title+`" href="`+jsonResponse.new_chat_id+`">`+chat_title+`</a>
+                                <svg class="chat-icon edit-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" 
+                                    aria-label="Rename" data-bs-original-title="Rename" style="visibility: hidden;">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" 
+                                    d="M13.2929 4.29291C15.0641 2.52167 17.9359 2.52167 19.7071 4.2929C21.4784 6.06414 21.4784 8.93588 19.7071 10.7071L18.7073 11.7069L11.6135 18.8007C10.8766 19.5376 9.92793 20.0258 8.89999 20.1971L4.16441 20.9864C3.84585 21.0395 3.52127 20.9355 3.29291 20.7071C3.06454 20.4788 2.96053 20.1542 3.01362 19.8356L3.80288 15.1C3.9742 14.0721 4.46243 13.1234 5.19932 12.3865L13.2929 4.29291ZM13 7.41422L6.61353 13.8007C6.1714 14.2428 5.87846 14.8121 5.77567 15.4288L5.21656 18.7835L8.57119 18.2244C9.18795 18.1216 9.75719 17.8286 10.1993 17.3865L16.5858 11L13 7.41422ZM18 9.5858L14.4142 6.00001L14.7071 5.70712C15.6973 4.71693 17.3027 4.71693 18.2929 5.70712C19.2831 6.69731 19.2831 8.30272 18.2929 9.29291L18 9.5858Z" fill="currentColor"></path>
+                                </svg>
+                                <svg class="chat-icon delete-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Delete" data-bs-original-title="Delete" style="visibility: hidden;">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5555 4C10.099 4 9.70052 4.30906 9.58693 4.75114L9.29382 5.8919H14.715L14.4219 4.75114C14.3083 4.30906 13.9098 4 13.4533 4H10.5555ZM16.7799 5.8919L16.3589 4.25342C16.0182 2.92719 14.8226 2 13.4533 2H10.5555C9.18616 2 7.99062 2.92719 7.64985 4.25342L7.22886 5.8919H4C3.44772 5.8919 3 6.33961 3 6.8919C3 7.44418 3.44772 7.8919 4 7.8919H4.10069L5.31544 19.3172C5.47763 20.8427 6.76455 22 8.29863 22H15.7014C17.2354 22 18.5224 20.8427 18.6846 19.3172L19.8993 7.8919H20C20.5523 7.8919 21 7.44418 21 6.8919C21 6.33961 20.5523 5.8919 20 5.8919H16.7799ZM17.888 7.8919H6.11196L7.30423 19.1057C7.3583 19.6142 7.78727 20 8.29863 20H15.7014C16.2127 20 16.6417 19.6142 16.6958 19.1057L17.888 7.8919ZM10 10C10.5523 10 11 10.4477 11 11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11C9 10.4477 9.44772 10 10 10ZM14 10C14.5523 10 15 10.4477 15 11V16C15 16.5523 14.5523 17 14 17C13.4477 17 13 16.5523 13 16V11C13 10.4477 13.4477 10 14 10Z" fill="currentColor"></path>
+                                </svg>
+                            </div>`);
+
+                            $(".left-nav-chat-list").prepend(newChatElement);
+                        }
                     }
 
                     // Check if the deployment configuration exists
