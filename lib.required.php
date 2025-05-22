@@ -95,6 +95,8 @@ if (!verify_user_chat($user, $chat_id)){
 }
 
 $models_str = $config['azure']['deployments'];
+$models_str .= ",".$config['azure']['old-models'];
+error_log("DEBUG lib.required.php models_str: ".$models_str);
 $models_a = explode(",",$models_str);
 
 $models = array();
