@@ -82,3 +82,5 @@ CREATE TABLE `registration` (
     `registration_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `is_moved_to_users` BOOLEAN DEFAULT false
 );
+--increase title size
+ALTER TABLE chat MODIFY title VARCHAR(512);
