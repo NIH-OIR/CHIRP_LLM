@@ -84,7 +84,7 @@ $user = $_SESSION['user_data']['userid'];
 
 $application_path = (!empty($config['app']['application_path'])) ? $config['app']['application_path'] : "";
 
-$gptModels = array("azure-gpt4", "azure-gpt4-1", "azure-dall-e-3");
+$gptModels = array("azure-gpt4-1", "azure-dall-e-3");
 
 // Verify that there is a chat with this id for this user
 // If a 'chat_id' parameter was passed, store its value as an integer in the session variable 'chat_id'
